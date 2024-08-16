@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Noto+Sans+JP:wght@500&display=swap');
+
+:root {
+  --sig: #FFCA36;
+  --bg: #161728;
+  --bg-sideBar: #23263D;
+  --bg-topBar: #4552b4;
+  --font-white: #DDDDDD;
+  --font-black: #161728;
+}
+
+* {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--font-white);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  user-select: none;
+  /* Standard */
+  -webkit-user-select: none;
+  /* Safari */
+
+  transition-duration: 0.2s;
+  animation-duration: 0.2s;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  opacity: 1;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--font-white);
+  background-color: var(--bg-input);
+  border: 0.5px solid var(--border-input);
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  background: none;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75em 1.5em;
+  background-color: var(--bg-button);
+}
+
+.btn {
+  background: none;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75em 1.5em;
+  background-color: var(--bg-button);
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-text {
+  background: none;
+}
+
+.btn-sig {
+  background-color: var(--sig);
+  font-weight: 800;
+  color: var(--bg);
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: lighter;
+}
+
+h2 {
+  font-size: 1.8em;
+  font-weight: lighter;
+}
+
+h3 {
+  font-size: 1.6em;
+  font-weight: lighter;
+}
+
+h4 {
+  font-size: 1.4em;
+  font-weight: lighter;
+}
+
+h5 {
+  font-size: 1.2em;
+  font-weight: lighter;
+}
+
+@media (min-width: 720px) {
+  h1 {
+    font-size: 1em;
+  }
+}
+
+.little-rounded {
+  border-radius: 5px;
+}
+
+.middle-rounded {
+  border-radius: 10px;
+}
+
+.much-rounded {
+  border-radius: 15px;
+}
+
+.text-warn {
+  color: var(--font-red);
+}
+
+.bg-warn {
+  background-color: var(--font-red);
+}
+
+.text-sig {
+  color: var(--sig);
+}
+
+.text-blur {
+  color: var(--font-light-gray);
+}
+
+.bg-sig {
+  background-color: var(--sig);
+}
+
+.border-thin {
+  border-width: 0.5px;
+}
+
+.border-average {
+  border-width: 0.8px;
+}
+
+.border-thick {
+  border-width: 1px;
+}
