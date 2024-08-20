@@ -15,7 +15,7 @@
 		background-color: var(--bg-sideBar);
 		display: grid;
 		grid-template-rows: 60px 8fr 1fr;
-		gap: 40px;
+		gap : 10px;
 		padding: 20px 0;
 		.logo {
 			display: flex;
