@@ -3,13 +3,16 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev --port 2128",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
+	},
+	"sciprtsComments": {
+		"dev": "dev mode에서는 mkcert를 root CA로 사용하는데 node에서는 browser처럼 system root CA를 인식하지 못한다. node에 root CA의 인증서를 명시해주는 방법도 있지만, 그냥 인증서를 검증하지 않도록했다."
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
