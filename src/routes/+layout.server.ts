@@ -11,8 +11,9 @@ export const load: Load = async ({ fetch }) => {
         const redirectURL = new URL('/', import.meta.env.VITE_CLIENT_SERVER_DOMAIN);
         const loginURL = new URL("/auth/login", import.meta.env.VITE_AUTH_SERVER_DOMAIN);
         loginURL.searchParams.append("continue", redirectURL.toString());
+
         redirect(302, loginURL);
     }
 
-    return { user: data.user };
+    return { user: data };
 };
