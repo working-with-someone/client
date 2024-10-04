@@ -1,5 +1,7 @@
 <script>
 	import Nav from './Nav.svelte';
+	import Avatar from '../profile/Avatar.svelte';
+	export let user;
 </script>
 
 <section id="side-bar">
@@ -7,6 +9,7 @@
 		<img src="/favicon.png" alt="" />
 	</div>
 	<Nav />
+	<Avatar {user} />
 </section>
 
 <style lang="scss">
@@ -14,8 +17,8 @@
 		grid-area: sidebar;
 		background-color: var(--bg-sideBar);
 		display: grid;
-		grid-template-rows: 60px 8fr 1fr;
-		gap : 10px;
+		grid-template-rows: 60px 8fr 50px;
+		gap: 10px;
 		padding: 20px 0;
 		.logo {
 			display: flex;
