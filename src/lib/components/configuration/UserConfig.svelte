@@ -1,5 +1,5 @@
 <script>
-	import { VITE_API_SERVER_DOMAIN } from '$env/static/private';
+import { PUBLIC_API_SERVER_DOMAIN } from "$env/static/public";
 	export let user;
 </script>
 
@@ -7,7 +7,7 @@
   <div class="header">My Profile</div>
 	<div class="profile">
 		<div class="pfp">
-			<img src={`${VITE_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
+			<img src={`${PUBLIC_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
 		</div>
 		<div class="name">
 			<p class = "text-blur">username</p>

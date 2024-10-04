@@ -1,5 +1,5 @@
 <script>
-	import { VITE_API_SERVER_DOMAIN } from '$env/static/private';
+import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import Modal from '../util/Modal.svelte';
 	import UserConfig from '../configuration/UserConfig.svelte';
 	export let user;
@@ -14,7 +14,7 @@
 	}}
 >
 	<div class="pfp">
-		<img src={`${VITE_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
+		<img src={`${PUBLIC_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
 	</div>
 </div>
 
