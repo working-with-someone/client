@@ -1,7 +1,7 @@
 import { redirect, type Load } from "@sveltejs/kit";
 
 export const load: Load = async ({ fetch }) => {
-    const getUserSelfURL = new URL('/v1/users/self', import.meta.env.VITE_API_SERVER_DOMAIN);
+    const getUserSelfURL = new URL('/users/self', import.meta.env.VITE_API_SERVER_DOMAIN);
 
     const res = await fetch(getUserSelfURL);
 
