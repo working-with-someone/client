@@ -1,11 +1,12 @@
 <script>
 	import '../app.css';
 	import SideBar from '../lib/components/sidebar/SideBar.svelte';
-	import TopBar from '../lib/components/topbar/TopBar.svelte';
+	export let data;
+	const user = data.user;
 </script>
 
 <main>
-	<SideBar />
+	<SideBar {user} />
 	<div class="content">
 		<slot />
 	</div>
