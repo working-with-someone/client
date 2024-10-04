@@ -1,10 +1,12 @@
-<script>
-	export let showModal;
+<script lang="ts">
+	export let showModal:boolean;
 </script>
 
 {#if showModal}
 	<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-	<div class="modal-bg">
+	<div class="modal-bg" on:click = {() => {
+		showModal = false;
+	}}>
 		<div class="modal">
 			<slot></slot>
 		</div>

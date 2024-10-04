@@ -4,13 +4,15 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import UserConfig from '../configuration/UserConfig.svelte';
 	export let user;
 
-	let showModal = false;
+	let showUserConfigModal = false;
+
+	
 </script>
 
 <div
 	class="avatar"
 	on:click={() => {
-		showModal = true;
+		showUserConfigModal = true;
 	}}
 >
 	<div class="pfp">
@@ -18,8 +20,8 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	</div>
 </div>
 
-<Modal {showModal}>
-	<UserConfig {user}></UserConfig>
+<Modal bind:showModal = {showUserConfigModal}>
+	<UserConfig {user}/>
 </Modal>
 
 <style lang="scss">
