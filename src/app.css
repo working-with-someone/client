@@ -82,7 +82,6 @@ button {
 
 .btn-sig {
   background-color: var(--sig);
-  font-weight: 800;
   color: var(--bg);
 }
 
