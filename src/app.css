@@ -49,10 +49,9 @@ input {
   padding: 8px 12px;
   color: var(--font-white);
   background-color: var(--bg-input);
-  border: 0.5px solid var(--border-input);
 }
 
-input:focus {
+input:focus{
   outline: none;
 }
 
