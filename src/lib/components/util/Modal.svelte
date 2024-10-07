@@ -1,14 +1,25 @@
 <script lang="ts">
 	export let showModal:boolean;
+
+	const closeModal = () => showModal = false;
 </script>
 
 {#if showModal}
 	<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-	<div class="modal-bg" on:click = {() => {
-		showModal = false;
-	}}>
+	<div class="modal-bg" on:click|self = {closeModal}>
 		<div class="modal">
-			<slot></slot>
+			<div class="header">
+				<slot name = "modal-header">
+				</slot>
+			</div>
+			<div class="body">
+				<slot name = "modal-body">
+				</slot>
+			</div>
+			<div class="footer">
+				<slot name = "modal-footer">
+				</slot>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -28,7 +39,7 @@
 			left: 50%;
 			transform: translate(-50%, -50%);
 			background-color: var(--bg);
-			padding: 2em;
+			padding: 10px;
 			border-radius: 15px;
 		}
 	}

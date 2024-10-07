@@ -21,7 +21,7 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 </div>
 
 <Modal bind:showModal = {showUserConfigModal}>
-	<UserConfig {user}/>
+	<UserConfig slot="modal-body" {user}/>
 </Modal>
 
 <style lang="scss">
