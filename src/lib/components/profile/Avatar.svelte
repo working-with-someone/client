@@ -3,6 +3,7 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import Modal from '../util/Modal.svelte';
 	import UserConfig from '../configuration/UserConfig.svelte';
 	export let user;
+	export let data;
 
 	let showUserConfigModal = false;
 
@@ -16,7 +17,7 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	}}
 >
 	<div class="pfp">
-		<img src={`${PUBLIC_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
+		<img src={`${PUBLIC_API_SERVER_DOMAIN}${user.pfp.curr}`} />
 	</div>
 </div>
 
