@@ -24,5 +24,9 @@
 		grid-template-areas:
 			'sidebar topbar'
 			'sidebar content';
+
+		.content{
+			padding : 40px;
+		}
 	}
 </style>

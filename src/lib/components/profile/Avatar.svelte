@@ -1,13 +1,15 @@
 <script>
-import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import Modal from '../util/Modal.svelte';
 	import UserConfig from '../configuration/UserConfig.svelte';
 	export let user;
 	export let data;
 
-	let showUserConfigModal = false;
+	function closeUserConfigModal() {
+		showUserConfigModal = false;
+	}
 
-	
+	let showUserConfigModal = false;
 </script>
 
 <div
@@ -21,8 +23,8 @@ import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	</div>
 </div>
 
-<Modal bind:showModal = {showUserConfigModal}>
-	<UserConfig slot="modal-body" {user}/>
+<Modal bind:showModal={showUserConfigModal}>
+	<UserConfig slot="modal-body" {user} on:closeUserConfigModal={closeUserConfigModal}/>
 </Modal>
 
 <style lang="scss">

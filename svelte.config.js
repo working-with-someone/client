@@ -17,7 +17,7 @@ const config = {
         "default-src": ["self", "https://*.wws.com"],
         "style-src": ["https://fonts.googleapis.com"],
         "font-src": ["https://fonts.gstatic.com"],
-        "img-src": ["self", "https://*.wws.com", "data:"],
+        "img-src": ["self", "https://*.wws.com", "data:", "*"],
       },
     },
 	},

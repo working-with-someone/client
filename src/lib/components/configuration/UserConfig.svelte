@@ -1,10 +1,15 @@
 <script lang="ts">
-	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import wwsfetch from '$lib/utils/wwsfetch';
 	export let user;
+	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	let pfp: HTMLImageElement;
 	let pfpInput: HTMLInputElement;
-	let username: string;
+	let username: string = user.username;
 
 	const togglePfpInput = () => pfpInput.click();
 	const resetConfig = () => {
@@ -13,21 +18,40 @@
 		pfpInput.value = '';
 	};
 
-	const changeConfig = () => {
+	const changePfpPreview = () => {
+		const reader = new FileReader();
+
+		if (pfpInput.files) {
+			reader.onload = function (e) {
+				if (e?.target?.result) {
+					pfp.src = e.target.result.toString();
+				}
+			};
+
+			reader.readAsDataURL(pfpInput.files[0]);
+		}
+	};
+
+	const updateConfig = () => {
 		const formData = new FormData();
-		formData.append("username", username);
+		formData.append('username', username);
 
 		// file이 입력되었다면
-		if(pfpInput.files){
-			formData.append("pfp", pfpInput.files[0]);
+		if (pfpInput.files) {
+			formData.append('pfp', pfpInput.files[0]);
 		}
 
-		const updateSelfURL = new URL("/users/self", PUBLIC_API_SERVER_DOMAIN);
+		wwsfetch(`/users/${user.id}`, {
+			method: 'put',
+			body: formData,
 
-		fetch(updateSelfURL, {
-			method : 'put',
-			body : formData
 		})
+			.then((data) => {
+				dispatch("closeUserConfigModal");
+			})
+			.catch((err) => {
+				console.log('update user failed: ' + err);
+			});
 	};
 </script>
 
@@ -36,16 +60,22 @@
 		<div class="header">My Profile</div>
 		<div class="body">
 			<div class="pfp" on:click|stopPropagation={togglePfpInput}>
-				<img src={`${PUBLIC_API_SERVER_DOMAIN}/media/images/${user.pfp.curr}`} />
-				<input type="file" hidden bind:this={pfpInput} accept="images/*" />
+				<img src={`${PUBLIC_API_SERVER_DOMAIN}${user.pfp.curr}`} bind:this={pfp} />
+				<input
+					on:change={changePfpPreview}
+					type="file"
+					hidden
+					bind:this={pfpInput}
+					accept="images/*"
+				/>
 			</div>
 			<div class="name">
 				<p>username</p>
-				<input type="text" name="username" id="" value={user.username} />
+				<input type="text" name="username" id="" bind:value={username}/>
 			</div>
 		</div>
 		<div class="footer">
-			<button on:click={changeConfig} class="update btn-sig">update</button>
+			<button on:click={updateConfig} class="update btn-sig">update</button>
 			<button on:click={resetConfig} class="cancel btn-cancel">reset</button>
 		</div>
 	</div>
