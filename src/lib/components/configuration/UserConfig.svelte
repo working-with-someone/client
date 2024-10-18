@@ -1,6 +1,8 @@
 <script lang="ts">
 	import wwsfetch from '$lib/utils/wwsfetch';
-	export let user;
+	import { getContext } from 'svelte';
+	const user: any = getContext('user');
+
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 
 	import { createEventDispatcher } from 'svelte';
@@ -9,12 +11,12 @@
 
 	let pfp: HTMLImageElement;
 	let pfpInput: HTMLInputElement;
-	let username: string = user.username;
+	let username: string = $user.username;
 
 	const togglePfpInput = () => pfpInput.click();
 	const resetConfig = () => {
-		pfpInput.src = user.pfp;
-		username = user.username;
+		pfpInput.src = $user.pfp;
+		username = $user.username;
 		pfpInput.value = '';
 	};
 
@@ -41,13 +43,13 @@
 			formData.append('pfp', pfpInput.files[0]);
 		}
 
-		wwsfetch(`/users/${user.id}`, {
+		wwsfetch(`/users/${$user.id}`, {
 			method: 'put',
-			body: formData,
-
+			body: formData
 		})
 			.then((data) => {
-				dispatch("closeUserConfigModal");
+				user.update(() => data);
+				dispatch('closeUserConfigModal');
 			})
 			.catch((err) => {
 				console.log('update user failed: ' + err);
@@ -60,7 +62,7 @@
 		<div class="header">My Profile</div>
 		<div class="body">
 			<div class="pfp" on:click|stopPropagation={togglePfpInput}>
-				<img src={`${PUBLIC_API_SERVER_DOMAIN}${user.pfp.curr}`} bind:this={pfp} />
+				<img src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`} bind:this={pfp} />
 				<input
 					on:change={changePfpPreview}
 					type="file"
@@ -71,7 +73,7 @@
 			</div>
 			<div class="name">
 				<p>username</p>
-				<input type="text" name="username" id="" bind:value={username}/>
+				<input type="text" name="username" id="" bind:value={username} />
 			</div>
 		</div>
 		<div class="footer">
@@ -85,7 +87,7 @@
 			<div class="email">
 				<p>Email</p>
 				<p class="text-blur">
-					{user.email}
+					{$user.email}
 				</p>
 			</div>
 		</div>

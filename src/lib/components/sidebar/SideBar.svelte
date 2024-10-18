@@ -1,7 +1,9 @@
 <script>
 	import Nav from './Nav.svelte';
 	import Avatar from '../profile/Avatar.svelte';
-	export let user;
+	import { getContext } from 'svelte';
+
+	const user = getContext('user');
 </script>
 
 <section id="side-bar">
@@ -9,7 +11,7 @@
 		<img src="/favicon.png" alt="" />
 	</div>
 	<Nav />
-	<Avatar {user} />
+	<Avatar />
 </section>
 
 <style lang="scss">

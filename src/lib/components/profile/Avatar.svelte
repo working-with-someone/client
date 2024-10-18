@@ -2,8 +2,10 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import Modal from '../util/Modal.svelte';
 	import UserConfig from '../configuration/UserConfig.svelte';
-	export let user;
-	export let data;
+	import { getContext } from 'svelte';
+	import { setContext } from 'svelte';
+	
+	const user = getContext('user');
 
 	function closeUserConfigModal() {
 		showUserConfigModal = false;
@@ -19,12 +21,12 @@
 	}}
 >
 	<div class="pfp">
-		<img src={`${PUBLIC_API_SERVER_DOMAIN}${user.pfp.curr}`} />
+		<img src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`} />
 	</div>
 </div>
 
 <Modal bind:showModal={showUserConfigModal}>
-	<UserConfig slot="modal-body" {user} on:closeUserConfigModal={closeUserConfigModal}/>
+	<UserConfig slot="modal-body" on:closeUserConfigModal={closeUserConfigModal}/>
 </Modal>
 
 <style lang="scss">

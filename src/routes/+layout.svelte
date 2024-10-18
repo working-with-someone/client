@@ -1,12 +1,18 @@
 <script>
+	import { page } from '$app/stores';
 	import '../app.css';
 	import SideBar from '../lib/components/sidebar/SideBar.svelte';
+	import { setContext } from 'svelte';
+	import { writable } from 'svelte/store';
+
 	export let data;
-	const user = data.user;
+	const user = writable();
+	$: user.set(data.user);
+	setContext('user', user);
 </script>
 
 <main>
-	<SideBar {user} />
+	<SideBar/>
 	<div class="content">
 		<slot />
 	</div>

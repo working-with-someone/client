@@ -1,8 +1,11 @@
 <script>
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import { getContext } from 'svelte';
+
 	export let data;
 
 	const { targetUser } = data;
+	const user = getContext('user');
 </script>
 
 <section id="user">
