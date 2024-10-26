@@ -6,6 +6,7 @@
 
 	const { targetUser } = data;
 	const user = getContext('user');
+	const isSelf = $user.id == targetUser.id;
 </script>
 
 <section id="user">
@@ -17,11 +18,13 @@
 			<div class="username">
 				<span>{targetUser.username}</span>
 			</div>
-			<div class="subscribe">
-				<button class="btn-sig"
-					><span class="material-symbols-outlined"> notifications </span></button
-				>
-			</div>
+			{#if !isSelf}
+				<div class="subscribe">
+					<button class="btn-sig"
+						><span class="material-symbols-outlined"> notifications </span></button
+					>
+				</div>
+			{/if}
 			<div class="join-info">
 				<div class="icon">
 					<span class="material-symbols-outlined"> groups </span>
