@@ -27,15 +27,15 @@
 					<span class="material-symbols-outlined"> groups </span>
 				</div>
 				<div class="joiner">
-					<span class="count">384</span>
-					<a class="link" href="#">joiner</a>
+					<span class="count">{targetUser.followers_count}</span>
+					<a class="link" href="#">followers</a>
 				</div>
 				<div class="seperator">
 					<span>·</span>
 				</div>
 				<div class="joining">
-					<span class="count">3</span>
-					<a class="link" href="#">joining</a>
+					<span class="count">{targetUser.followings_count}</span>
+					<a class="link" href="#">following</a>
 				</div>
 			</div>
 		</div>
