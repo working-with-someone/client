@@ -47,7 +47,10 @@
 			method: 'put',
 			body: formData
 		})
-			.then((data) => {
+			.then((res) => {
+				return res.json();
+			})
+			.then((data:any) => {
 				user.update(() => data);
 				dispatch('closeUserConfigModal');
 			})

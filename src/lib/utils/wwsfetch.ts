@@ -35,9 +35,7 @@ async function wwsfetch(path:string, options:Option) {
     // must handle other error codes as needed
   }
 
-  const parsedBody = await res.json();
-
-  return parsedBody;
+  return res;
 }
 
 export default wwsfetch;
