@@ -23,8 +23,7 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
     const getSelfEndpoint = new URL('/users/self', PUBLIC_API_SERVER_DOMAIN);
-
-    const getSelfRes = await fetch(getSelfEndpoint)
+    const getSelfRes = await event.fetch(getSelfEndpoint)
 
     const userSelf = await getSelfRes.json();
 
