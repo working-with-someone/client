@@ -28,7 +28,6 @@
 
 <style lang="scss">
 	section#home {
-		padding: 20px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
