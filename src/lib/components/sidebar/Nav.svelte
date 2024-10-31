@@ -5,31 +5,31 @@
 		{
 			name: 'home',
 			url: '/',
-			icon: `<span class="menu-icon material-symbols-outlined">home</span>`,
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">home</span>`,
 			selected: false
 		},
 		{
 			name: 'live',
 			url: '/live',
-			icon: `<span class="menu-icon material-symbols-outlined">bigtop_updates</span>`,
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">bigtop_updates</span>`,
+			selected: false
+		},
+		{
+			name: 'session',
+			url: '/session',
+			icon: `<span class="material-symbols-outlined" style="font-size : 30px;">play_circle</span>`,
 			selected: false
 		},
 		{
 			name: 'calendar',
 			url: '/calendar',
-			icon: `<span class="menu-icon material-symbols-outlined">calendar_month</span>`,
-			selected: false
-		},
-		{
-			name: 'someone',
-			url: '/someone',
-			icon: `<span class="menu-icon material-symbols-outlined">group</span>`,
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">calendar_month</span>`,
 			selected: false
 		},
 		{
 			name: 'sound',
 			url: '/sound',
-			icon: `<span class="menu-icon material-symbols-outlined">hearing</span>`,
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">hearing</span>`,
 			selected: false
 		}
 	];
@@ -100,11 +100,8 @@
 						background-color: $selected-color;
 					}
 
-					.menu-icon{
-						font-size: 50px;
-            color: white;
-            margin-bottom: 5px;
-            transition: color 0.3s ease-in-out;
+					.material-symbols-outlined{
+						font-size : 40px;
 					}
 				}
 				p {
