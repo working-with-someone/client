@@ -6,6 +6,7 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 
 	import { createEventDispatcher } from 'svelte';
+	import { reloadUser } from '$lib/store/user';
 
 	const dispatch = createEventDispatcher();
 
@@ -51,7 +52,7 @@
 				return res.json();
 			})
 			.then((data:any) => {
-				user.update(() => data);
+				reloadUser();
 				dispatch('closeUserConfigModal');
 			})
 			.catch((err) => {

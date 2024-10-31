@@ -3,8 +3,7 @@
 	import Modal from '../util/Modal.svelte';
 	import UserConfig from '../configuration/UserConfig.svelte';
 	import { getContext } from 'svelte';
-	import { setContext } from 'svelte';
-	
+
 	const user = getContext('user');
 
 	function closeUserConfigModal() {
@@ -26,7 +25,7 @@
 </div>
 
 <Modal bind:showModal={showUserConfigModal}>
-	<UserConfig slot="modal-body" on:closeUserConfigModal={closeUserConfigModal}/>
+	<UserConfig slot="modal-body" on:closeUserConfigModal={closeUserConfigModal} />
 </Modal>
 
 <style lang="scss">

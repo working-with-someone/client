@@ -1,14 +1,14 @@
 <script>
-	import { page } from '$app/stores';
 	import '../app.css';
 	import SideBar from '../lib/components/sidebar/SideBar.svelte';
 	import { setContext } from 'svelte';
-	import { writable } from 'svelte/store';
-
+	import { user } from '$lib/store/user';
+	
 	export let data;
-	const user = writable();
+
 	$: user.set(data.user);
 	setContext('user', user);
+	
 </script>
 
 <main>
