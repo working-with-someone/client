@@ -1,12 +1,53 @@
 <script>
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import wwsfetch from '$lib/utils/wwsfetch';
 	import { getContext } from 'svelte';
-
 	export let data;
 
-	const { targetUser } = data;
+	let { targetUser, isFollowing } = data;
 	const user = getContext('user');
 	const isSelf = $user.id == targetUser.id;
+
+	function reloadTarget(){
+		wwsfetch(`/users/${targetUser.id}`, {})
+      .then((res) => res.json())
+      .then(data => {
+        targetUser = data;
+      })
+      .catch((err) => {
+        console.log('Failed to fetch user data');
+      });
+	}
+
+	function follow() {
+		wwsfetch(`/users/${$user.id}/followings/${targetUser.id}`, {
+			method: 'POST'
+		})
+			.then((res) => {
+				if (res.status === 201) {
+					isFollowing = true;
+					reloadTarget();
+				}
+			})
+			.catch((err) => {
+				console.log('failed following user');
+			});
+	}
+
+	function unfollow() {
+		wwsfetch(`/users/${$user.id}/followings/${targetUser.id}`, {
+			method: 'DELETE'
+		})
+			.then((res) => {
+				if (res.status === 204) {
+					isFollowing = false;
+					reloadTarget();
+				}
+			})
+			.catch((err) => {
+				console.log('failed unfollowing user');
+			});
+	}
 </script>
 
 <section id="user">
@@ -19,10 +60,16 @@
 				<span>{targetUser.username}</span>
 			</div>
 			{#if !isSelf}
-				<div class="subscribe">
-					<button class="btn-sig"
-						><span class="material-symbols-outlined"> notifications </span></button
-					>
+				<div class="follow">
+					{#if isFollowing}
+						<button class="btn-gray" on:click={unfollow}>
+							<span>following</span>
+						</button>
+					{:else}
+						<button class="btn-sig" on:click={follow}>
+							<span> follow </span></button
+						>
+					{/if}
 				</div>
 			{/if}
 			<div class="join-info">
@@ -122,11 +169,15 @@
 					object-fit: cover;
 				}
 			}
-			.subscribe {
+			.follow {
 				width: 50%;
 				button {
 					width: 100%;
+					display : flex;
+					align-items: center;
+					justify-content: center;
 					span {
+						font-size : 1.2em;
 						color: var(--bg);
 					}
 				}
