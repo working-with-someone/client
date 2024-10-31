@@ -3,16 +3,15 @@
 	import SideBar from '../lib/components/sidebar/SideBar.svelte';
 	import { setContext } from 'svelte';
 	import { user } from '$lib/store/user';
-	
+
 	export let data;
 
 	$: user.set(data.user);
 	setContext('user', user);
-	
 </script>
 
 <main>
-	<SideBar/>
+	<SideBar />
 	<div class="content">
 		<slot />
 	</div>
@@ -25,14 +24,10 @@
 		background-color: var(--bg);
 		border: 0.1px solid rgba(92, 109, 255, 0.2);
 		display: grid;
-		grid-template-rows: 60px 10fr;
 		grid-template-columns: 100px auto;
-		grid-template-areas:
-			'sidebar topbar'
-			'sidebar content';
-
-		.content{
-			padding : 40px;
+		grid-template-areas: 'sidebar content';
+		.content {
+			padding: 40px;
 		}
 	}
 </style>
