@@ -1,11 +1,11 @@
 <script lang="ts">
 	export let data;
 	import SessionDeck from '$lib/components/session/SessionDeck.svelte';
-	import SearchBar from '$lib/components/searchbar/SearchBar.svelte';
+	import TopBar from '$lib/components/topbar/TopBar.svelte';
 </script>
 
 <section id="sessions">
-	<SearchBar />
+	<TopBar />
 	<div class="decks">
 		{#each data.categorizedSessionsList as categorizedSessions}
 			<SessionDeck {categorizedSessions}></SessionDeck>

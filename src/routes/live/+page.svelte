@@ -1,11 +1,11 @@
 <script>
 	export let data;
 	import SessionDeck from '$lib/components/session/SessionDeck.svelte';
-	import SearchBar from '$lib/components/searchbar/SearchBar.svelte';
+	import TopBar from '$lib/components/topbar/TopBar.svelte';
 </script>
 
 <section id="live-sessions">
-	<SearchBar />
+	<TopBar />
 	<div class="decks">
 		{#each data.categorizedSessionsList as categorizedLiveSessions}
 			<SessionDeck categorizedSessions={categorizedLiveSessions} />
@@ -15,7 +15,7 @@
 
 <style lang="scss">
 	section#live-sessions {
-		display : flex;
+		display: flex;
 		flex-direction: column;
 
 		.decks {
