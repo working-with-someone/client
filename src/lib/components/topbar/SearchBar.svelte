@@ -12,7 +12,6 @@
 	section#search-bar {
 		display : flex;
 		justify-content: center;
-		margin-bottom : 20px;
 		.search-box {
 			width: 300px;
 			padding: 2px 0;
