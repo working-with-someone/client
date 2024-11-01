@@ -46,7 +46,7 @@ a {
 input {
   border: none;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 4px 6px;
   color: var(--font-white);
   background-color: var(--bg-input);
 }

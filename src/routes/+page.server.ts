@@ -10,7 +10,7 @@ export const load: Load = async () => {
         title: "seo의 study with me",
         thumbnail: 'https://cdn.prod.website-files.com/60babc2f4a97cece9858d8e7/61fdcbc2eba8184b4ea8b6ff_hq720.jpeg',
         time: 230,
-        isLive : false,
+        isLive : true,
         user: {
           id: 5,
           username: "minjung",
@@ -95,7 +95,7 @@ export const load: Load = async () => {
         title: "seo의 study with me",
         thumbnail: 'https://i.ytimg.com/vi/_Fc7_1mPt6c/hq720.jpg?sqp=-oaymwEXCK4FEIIDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAfGKd7h7x5A-3oGRpnJC_UnkyvZw',
         time: 230,
-        isLive : false,
+        isLive : true,
         user: {
           id: 5,
           username: "minjung",
@@ -108,7 +108,7 @@ export const load: Load = async () => {
         title: "개방장의 read me with me",
         thumbnail: 'https://i.ytimg.com/vi/WVInz6L8aQk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDQyPBcBonCjsZz3mHR2sOia5nAQA',
         time: 153,
-        isLive : false,
+        isLive : true,
         user: {
           id: 5,
           username: "minjung",

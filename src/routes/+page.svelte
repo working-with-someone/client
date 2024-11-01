@@ -1,45 +1,27 @@
 <script>
 	import SearchBar from '$lib/components/searchbar/SearchBar.svelte';
+	import SessionDeck from '$lib/components/session/SessionDeck.svelte';
+	export let data;
 </script>
 
 <section id="home">
 	<SearchBar></SearchBar>
-
-	<section class="content" id="home-live">
-    <div class="title">
-      <span class="material-symbols-outlined"> bigtop_updates </span>
-    </div>
-	</section>
-
-	<section class="content" id="home-study">
-    <div class="title">
-      <span class="material-symbols-outlined"> edit </span>
-      <span>study</span>
-		</div>
-	</section>
-
-	<section class="content" id="home-ready">
-		<div class="title">
-			<span class="material-symbols-outlined"> congenital </span> 
-			<span>get ready</span> 
-		</div>
-	</section>
+	<div class="decks">
+		{#each data.categorizedSessionsList as categorizedSessions}
+			<SessionDeck {categorizedSessions}></SessionDeck>
+		{/each}
+	</div>
 </section>
 
 <style lang="scss">
 	section#home {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 30px;
 
-		.content {
-			.title {
-        display : flex;
-        align-items: center;
-        gap : 10px;
-				padding: 5px;
-			}
+		.decks{
+			display: flex;
+			flex-direction: column;
+			gap : 20px;
 		}
 	}
 </style>

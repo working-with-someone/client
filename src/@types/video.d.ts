@@ -5,6 +5,12 @@ export interface Session {
   thumbnail : string;
   time : number;
   user : PublicUserInfo
+  isLive : boolean;
+}
+
+export interface CategorizedSessions {
+  category : string;
+  sessions : Session[];
 }
 
 export interface LiveSession extends Session {
