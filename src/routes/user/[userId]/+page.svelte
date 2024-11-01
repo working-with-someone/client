@@ -2,21 +2,22 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import wwsfetch from '$lib/utils/wwsfetch';
 	import { getContext } from 'svelte';
+
 	export let data;
 
 	let { targetUser, isFollowing } = data;
 	const user = getContext('user');
 	const isSelf = $user.id == targetUser.id;
 
-	function reloadTarget(){
+	function reloadTarget() {
 		wwsfetch(`/users/${targetUser.id}`, {})
-      .then((res) => res.json())
-      .then(data => {
-        targetUser = data;
-      })
-      .catch((err) => {
-        console.log('Failed to fetch user data');
-      });
+			.then((res) => res.json())
+			.then((data) => {
+				targetUser = data;
+			})
+			.catch((err) => {
+				console.log('Failed to fetch user data');
+			});
 	}
 
 	function follow() {
@@ -66,9 +67,7 @@
 							<span>following</span>
 						</button>
 					{:else}
-						<button class="btn-sig" on:click={follow}>
-							<span> follow </span></button
-						>
+						<button class="btn-sig" on:click={follow}> <span> follow </span></button>
 					{/if}
 				</div>
 			{/if}
@@ -173,11 +172,11 @@
 				width: 50%;
 				button {
 					width: 100%;
-					display : flex;
+					display: flex;
 					align-items: center;
 					justify-content: center;
 					span {
-						font-size : 1.2em;
+						font-size: 1.2em;
 						color: var(--bg);
 					}
 				}
