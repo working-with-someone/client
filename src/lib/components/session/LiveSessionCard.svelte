@@ -33,7 +33,6 @@
 <style lang="scss">
 	.card {
 		background-color: var(--bg);
-		border: 0.5px solid var(--font-red);
 		overflow: hidden;
 		flex: 0 0 300px;
 		width: 301px;
@@ -55,7 +54,7 @@
 				padding: 5px 10px;
 				font-size: 20px;
 				border-radius: 20px;
-				color: var(--font-red);
+				color: var(--sig);
 				background-color: rgba(0, 0, 0, 0.6);
 			}
 		}
