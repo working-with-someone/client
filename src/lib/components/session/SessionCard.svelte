@@ -3,21 +3,10 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	export let session: Session;
 
-	function convertMinutesToHHMMSS(minutes: number) {
-		// 초 단위로 변환
-		const totalSeconds = Math.floor(minutes * 60);
-
-		// 시간, 분, 초 계산
-		const hours = Math.floor(totalSeconds / 3600);
-		const minutesLeft = Math.floor((totalSeconds % 3600) / 60);
-		const seconds = totalSeconds % 60;
-
-		// 두 자리 형식으로 변환
-		const formattedHours = String(hours).padStart(2, '0');
-		const formattedMinutes = String(minutesLeft).padStart(2, '0');
-		const formattedSeconds = String(seconds).padStart(2, '0');
-
-		return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+	function formatMinutesToHoursAndMinutes(minutes: number) {
+		const hours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+		return `${hours}h ${remainingMinutes}m`;
 	}
 </script>
 
@@ -25,24 +14,41 @@
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img src={session.thumbnail} alt="" class="thumbnail" />
-			<p class="duration middle-roundedn">{convertMinutesToHHMMSS(session.time)}</p>
 		</div>
 	</div>
 	<div class="footer">
-		<div
-			class="pfp-wrapper"
-			on:click={() => {
-				window.location.href = `/user/${session.user.id}`;
-			}}
-		>
-			<img
-				src={new URL(`${session?.user?.pfp?.curr}`, PUBLIC_API_SERVER_DOMAIN).toString()}
-				alt=""
-			/>
+		<div class="session-info">
+			<table>
+				<tr>
+					<th>Duration</th>
+					<td>{formatMinutesToHoursAndMinutes(session.time)}</td>
+				</tr>
+				<tr>
+					<th>Breaks</th>
+					<td>x</td>
+				</tr>
+				<tr>
+					<th>Sound</th>
+					<td><span>기다린만큼, 더 - 카더가든</span></td>
+				</tr>
+			</table>
 		</div>
-		<div class="info">
-			<p class="title">{session.title}</p>
-			<p class="username">{session.user.username}</p>
+		<div class="user-info">
+			<div
+				class="pfp-wrapper"
+				on:click={() => {
+					window.location.href = `/user/${session.user.id}`;
+				}}
+			>
+				<img
+					src={new URL(`${session?.user?.pfp?.curr}`, PUBLIC_API_SERVER_DOMAIN).toString()}
+					alt=""
+				/>
+			</div>
+			<div class="info">
+				<p class="title">{session.title}</p>
+				<p class="username">{session.user.username}</p>
+			</div>
 		</div>
 	</div>
 </div>
@@ -53,35 +59,46 @@
 		overflow: hidden;
 		flex: 0 0 300px;
 		width: 301px;
+
 		.body {
 			width: 301px;
 			height: 170px;
 			.thumbnail-wrapper {
 				width: 301px;
 				height: 170px;
-				position: relative;
 				.thumbnail {
 					width: 100%;
 				}
-			}
-			.duration {
-				position: absolute;
-				bottom: 10px;
-				right: 10px;
-				padding: 5px 10px;
-				font-size: 12px;
-				border-radius: 20px;
-				background-color: rgba(0, 0, 0, 0.7);
 			}
 		}
 
 		.footer {
 			width: 301px;
-			height: 55px;
+			height: auto;
 			display: flex;
-			flex-direction: row;
-			gap: 10px;
+			flex-direction: column;
 			padding: 10px;
+			gap: 10px;
+			.session-info {
+				font-size: 12px;
+				display: flex;
+				flex-direction: column;
+				table {
+					border-collapse: collapse;
+					tr {
+						border-bottom: 2px solid var(--bg-sideBar);
+						th {
+							padding : 5px;
+							text-align: start;
+						}
+					}
+				}
+			}
+			.user-info {
+				display: flex;
+				flex-direction: row;
+				gap: 10px;
+			}
 			.pfp-wrapper {
 				width: 30px;
 				height: 30px;
@@ -97,7 +114,6 @@
 			}
 			.info {
 				width: 241px;
-				height: 55px;
 				.title {
 					width: 100%;
 					font-size: 12px;
