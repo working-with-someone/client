@@ -15,7 +15,7 @@
 		"dev": "dev mode에서는 mkcert를 root CA로 사용하는데 node에서는 browser처럼 system root CA를 인식하지 못한다. node에 root CA의 인증서를 명시해주는 방법도 있지만, 그냥 인증서를 검증하지 않도록했다."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-node": "^5.2.9",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^9.6.0",
