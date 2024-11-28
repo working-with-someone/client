@@ -3,8 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev --port 2128",
+		"dev": "vite dev",
 		"build": "vite build",
+		"start" : "dotenvx run --env-file=.env -- node build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -34,5 +35,7 @@
 		"vite": "^5.0.3"
 	},
 	"type": "module",
-	"dependencies": {}
+	"dependencies": {
+		"@dotenvx/dotenvx": "^1.25.1"
+	}
 }
