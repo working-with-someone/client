@@ -180,6 +180,7 @@
 				textarea {
 					background-color: var(--bg);
 					font-size: 15px;
+					height: 100px;
 					&::placeholder {
 						color: var(--font-dark-gray);
 					}
