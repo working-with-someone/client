@@ -54,18 +54,15 @@
 </div>
 
 <style lang="scss">
+	$card-width: 320px;
+	$card-ratio: 16 / 9;
 	.card {
 		background-color: var(--bg);
 		overflow: hidden;
-		flex: 0 0 300px;
-		width: 301px;
-
+		flex: 0 0 $card-width;
+		width: $card-width;
 		.body {
-			width: 301px;
-			height: 170px;
 			.thumbnail-wrapper {
-				width: 301px;
-				height: 170px;
 				.thumbnail {
 					width: 100%;
 				}
@@ -73,11 +70,9 @@
 		}
 
 		.footer {
-			width: 301px;
-			height: auto;
 			display: flex;
 			flex-direction: column;
-			padding: 10px;
+			padding: 0px 10px;
 			gap: 10px;
 			.session-info {
 				font-size: 12px;
@@ -88,7 +83,7 @@
 					tr {
 						border-bottom: 2px solid var(--bg-sideBar);
 						th {
-							padding : 5px;
+							padding: 5px;
 							text-align: start;
 						}
 					}
