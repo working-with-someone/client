@@ -1,5 +1,7 @@
 import type { PublicUserInfo } from "./user";
 
+export type SessionMode = "live" | "video"
+
 export interface Session {
   title : string;
   thumbnail : string;
