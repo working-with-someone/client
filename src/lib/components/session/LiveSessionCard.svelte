@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Session } from '../../../@types/video';
+	import type { Session } from '../../../@types/session';
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	export let session: Session;
 </script>

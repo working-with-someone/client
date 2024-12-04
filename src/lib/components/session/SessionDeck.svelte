@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CategorizedSessions } from '../../../@types/video';
+	import type { CategorizedSessions } from '../../../@types/session';
 	import SessionCard from './SessionCard.svelte';
 	import LiveSessionCard from './LiveSessionCard.svelte';
 

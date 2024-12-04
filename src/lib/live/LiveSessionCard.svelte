@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LiveSession } from '../../@types/video';
+	import type { LiveSession } from '../../@types/session';
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	export let liveSession: LiveSession;
 </script>
