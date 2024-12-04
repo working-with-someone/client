@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Modal from '../util/Modal.svelte';
+	import SessionLiveConfig from '../configuration/SessionLiveConfig.svelte';
 	import SessionUploadConfig from '../configuration/SessionUploadConfig.svelte';
-	import LiveConfig from '../configuration/LiveConfig.svelte';
 
 	function closeSessionUploadModal() {
 		showSessionUploadModal = false;
@@ -13,11 +13,11 @@
 
 	let showSessionUploadModal = false;
 
-	function openLiveConfigModal(){
+	function openLiveConfigModal() {
 		showLiveConfigModal = true;
 	}
 
-	function closeLiveConfigModal(){
+	function closeLiveConfigModal() {
 		showLiveConfigModal = false;
 	}
 
@@ -26,7 +26,7 @@
 
 <div class="activation-menus">
 	<button class="menu-item open-session" on:click={openLiveConfigModal}>
-			<span class="material-symbols-outlined"> radio_button_checked </span>
+		<span class="material-symbols-outlined"> radio_button_checked </span>
 	</button>
 
 	<button class="menu-item upload-session" on:click={openSessionUploadModal}>
@@ -40,7 +40,8 @@
 </Modal>
 
 <Modal bind:showModal={showLiveConfigModal}>
-	<LiveConfig slot="modal-body" on:closeLiveConfigModal = {closeLiveConfigModal}></LiveConfig>
+	<SessionLiveConfig slot="modal-body" on:closeLiveConfigModal={closeLiveConfigModal}
+	></SessionLiveConfig>
 </Modal>
 
 <style lang="scss">
