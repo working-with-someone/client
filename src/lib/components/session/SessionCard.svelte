@@ -72,7 +72,7 @@
 		.footer {
 			display: flex;
 			flex-direction: column;
-			padding: 0px 10px;
+			padding: 0px 0px 10px 10px;
 			gap: 10px;
 			.session-info {
 				font-size: 12px;

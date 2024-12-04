@@ -48,18 +48,16 @@
 </div>
 
 <style lang="scss">
+	$card-width: 320px;
+	$card-ratio: 16 / 9;
 	.card {
 		background-color: var(--bg);
 		overflow: hidden;
-		flex: 0 0 300px;
-		width: 301px;
-		border: 2px solid var(--sig);
+		flex: 0 0 $card-width;
+		width: $card-width;
+		border: 1px solid var(--sig);
 		.body {
-			width: 301px;
-			height: 170px;
 			.thumbnail-wrapper {
-				width: 301px;
-				height: 170px;
 				.thumbnail {
 					width: 100%;
 				}
@@ -67,11 +65,9 @@
 		}
 
 		.footer {
-			width: 301px;
-			height: auto;
 			display: flex;
 			flex-direction: column;
-			padding: 10px;
+			padding: 0px 0px 10px 10px;
 			gap: 10px;
 			.session-info {
 				font-size: 12px;

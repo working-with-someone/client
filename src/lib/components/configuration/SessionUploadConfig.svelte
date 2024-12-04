@@ -193,6 +193,7 @@
 
 				.thumbnail-wrapper {
 					width: 150px;
+					aspect-ratio: 16/9;
 					border: 1px solid var(--font-light-gray);
 					overflow: hidden;
 
