@@ -13,7 +13,7 @@
 
 	let showThumbnailPrompt = true;
 
-	const changePfpPreview = () => {
+	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
 			const reader = new FileReader();
 			showThumbnailPrompt = false;
@@ -133,7 +133,7 @@
 		accept="image/*"
 		bind:this={thumbnailImgInput}
 		hidden
-		on:change={changePfpPreview}
+		on:change={changeThumbnailPreview}
 	/>
 </section>
 
@@ -152,6 +152,8 @@
 			flex-direction: column;
 			justify-content: space-around;
 			gap: 30px;
+			max-height: 500px;
+			overflow-y: scroll;
 
 			.config {
 				display: flex;
