@@ -114,9 +114,7 @@
 				</label>
 				<label class="radio">
 					<span class="privacy-tag">Private</span>
-					<span class="privacy-desc"
-						>( Only you can see this video )</span
-					>
+					<span class="privacy-desc">( Only you can see this video )</span>
 
 					<input type="radio" name="radio" />
 					<span class="checkmark"></span>
@@ -195,7 +193,6 @@
 
 				.thumbnail-wrapper {
 					width: 150px;
-					height: 150px;
 					border: 1px solid var(--font-light-gray);
 					overflow: hidden;
 
@@ -230,50 +227,7 @@
 					}
 				}
 			}
-			.category {
-				.select-box {
-					position: relative;
-					width: 70%;
-
-					&:hover {
-						cursor: pointer;
-					}
-
-					&::before,
-					::after {
-						--size: 0.3rem;
-						position: absolute;
-						content: '';
-						right: 1rem;
-						pointer-events: none;
-					}
-					&::after {
-						border-left: var(--size) solid transparent;
-						border-right: var(--size) solid transparent;
-						border-top: var(--size) solid var(--font-white);
-						top: 55%;
-					}
-
-					&::before {
-						border-left: var(--size) solid transparent;
-						border-right: var(--size) solid transparent;
-						border-bottom: var(--size) solid var(--font-white);
-						top: 40%;
-					}
-				}
-
-				select {
-					appearance: none;
-					width: 100%;
-					font-size: 13px;
-					padding: 10px 10px;
-					background-color: var(--bg);
-					border: 1px solid var(--font-light-gray);
-					color: var(--font-white);
-				}
-			}
 		}
-
 		.footer {
 			display: flex;
 			justify-content: end;
@@ -285,74 +239,5 @@
 				font-size: 12px;
 			}
 		}
-	}
-
-	/* The radio */
-	.radio {
-		display: block;
-		position: relative;
-		padding-left: 30px;
-		margin-bottom: 12px;
-		cursor: pointer;
-		font-size: 14px;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-
-		.privacy-desc {
-			color : var(--font-light-gray);
-		}
-	}
-
-	/* Hide the browser's default radio button */
-	.radio input {
-		position: absolute;
-		opacity: 0;
-		cursor: pointer;
-	}
-
-	/* Create a custom radio button */
-	.checkmark {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 18px;
-		width: 18px;
-		border: 1px solid var(--font-light-gray);
-		background-color: var(--bg);
-		border-radius: 50%;
-	}
-
-	/* On mouse-over, add a grey background color */
-	.radio:hover input ~ .checkmark {
-		background-color: var(--font-light-gray);
-	}
-
-	/* When the radio button is checked, add a blue background */
-	.radio input:checked ~ .checkmark {
-		border: 1px solid var(--font-light-gray);
-	}
-
-	/* Create the indicator (the dot/circle - hidden when not checked) */
-	.checkmark:after {
-		content: '';
-		position: absolute;
-		display: none;
-	}
-
-	/* Show the indicator (dot/circle) when checked */
-	.radio input:checked ~ .checkmark:after {
-		display: block;
-	}
-
-	/* Style the indicator (dot/circle) */
-	.radio .checkmark:after {
-		top: 3px;
-		left: 3px;
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		background: var(--font-white);
 	}
 </style>
