@@ -1,12 +1,11 @@
-import {
-	PUBLIC_API_SERVER_DOMAIN,
-	PUBLIC_AUTH_SERVER_DOMAIN,
-	PUBLIC_CLIENT_SERVER_DOMAIN
-} from '$env/static/public';
+import { PUBLIC_AUTH_SERVER_DOMAIN, PUBLIC_CLIENT_SERVER_DOMAIN } from '$env/static/public';
+
+import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
+
 import { redirect, type Load } from '@sveltejs/kit';
 
 export const load: Load = async ({ fetch }) => {
-	const getUserSelfURL = new URL('/users/self', PUBLIC_API_SERVER_DOMAIN);
+	const getUserSelfURL = new URL('/users/self', PRIVATE_API_SERVER_DOMAIN);
 
 	const res = await fetch(getUserSelfURL);
 
