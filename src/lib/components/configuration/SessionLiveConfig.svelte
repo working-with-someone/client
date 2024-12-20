@@ -1,4 +1,6 @@
 <script lang="ts">
+	import wwsfetch from '$lib/utils/wwsfetch';
+	import { onMount } from 'svelte';
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
@@ -9,10 +11,23 @@
 	let thumbnailImg: HTMLImageElement;
 
 	// must be fetch categories
-	const categories = ['study', 'read', 'code', 'working'];
+	let categories: string[] = [];
 
 	let showThumbnailPrompt = true;
 
+	onMount(() => {
+		loadCategories();
+	});
+
+	function loadCategories() {
+		wwsfetch('/categories', {})
+			.then((res) => res.json())
+			.then((data) => {
+				data.forEach((category: any) => {
+					categories = [...categories, category.label];
+				});
+			});
+	}
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
 			const reader = new FileReader();
