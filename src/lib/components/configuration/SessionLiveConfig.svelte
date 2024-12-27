@@ -15,6 +15,11 @@
 
 	let showThumbnailPrompt = true;
 
+	let title: string;
+	let description: string;
+	let category: string;
+	let is_private = false;
+
 	onMount(() => {
 		loadCategories();
 	});
@@ -23,11 +28,13 @@
 		wwsfetch('/categories', {})
 			.then((res) => res.json())
 			.then((data) => {
+				category = data[0].label;
 				data.forEach((category: any) => {
 					categories = [...categories, category.label];
 				});
 			});
 	}
+
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
 			const reader = new FileReader();
@@ -42,6 +49,28 @@
 			reader.readAsDataURL(thumbnailImgInput.files[0]);
 		}
 	};
+
+	function startLiveSession() {
+		const formData = new FormData();
+
+		formData.append('title', title);
+		formData.append('description', description);
+		formData.append('is_private', is_private.toString());
+		formData.append('category', category);
+
+		if (thumbnailImgInput.files) {
+			formData.append('thumbnail', thumbnailImgInput.files[0]);
+		}
+
+		wwsfetch('/sessions/live', {
+			method: 'POST',
+			body: formData
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				window.location.href = `/session/live/${data.id}`;
+			});
+	}
 </script>
 
 <section id="session-upload-config">
@@ -53,7 +82,13 @@
 				<p>Details</p>
 			</div>
 			<InnerLabelInput label={'title (required)'}>
-				<input type="text" name="title" id="" placeholder="title of your live session" />
+				<input
+					type="text"
+					name="title"
+					id=""
+					placeholder="title of your live session"
+					bind:value={title}
+				/>
 			</InnerLabelInput>
 
 			<InnerLabelInput label={'description'}>
@@ -63,6 +98,7 @@
 					cols="30"
 					rows="10"
 					placeholder="description of your live session"
+					bind:value={description}
 				></textarea>
 			</InnerLabelInput>
 		</div>
@@ -100,6 +136,7 @@
 					id=""
 					class="category-input middle-rounded"
 					placeholder="select category of live session"
+					bind:value={category}
 				>
 					{#each categories as category}
 						<option value={category}>{category}</option>
@@ -118,7 +155,12 @@
 				<label class="radio">
 					<span class="privacy-tag">Public</span>
 					<span class="privacy-desc">( all users can join this live session )</span>
-					<input type="radio" checked={true} name="radio" />
+					<input
+						type="radio"
+						on:change={() => (is_private = false)}
+						checked={!is_private}
+						name="radio"
+					/>
 					<span class="checkmark"></span>
 				</label>
 				<label class="radio">
@@ -132,7 +174,12 @@
 					<span class="privacy-desc"
 						>( Only you and user you have specified can join this live session )</span
 					>
-					<input type="radio" name="radio" />
+					<input
+						type="radio"
+						on:change={() => (is_private = true)}
+						checked={is_private}
+						name="radio"
+					/>
 					<span class="checkmark"></span>
 				</label>
 			</div>
@@ -140,7 +187,7 @@
 	</div>
 	<div class="footer">
 		<span class="info">pressing 'start' doesn’t immediately begin the broadcast!</span>
-		<button class="next-button">start</button>
+		<button on:click={startLiveSession} class="next-button">start</button>
 	</div>
 
 	<input
