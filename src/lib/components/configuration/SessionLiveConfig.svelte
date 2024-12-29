@@ -18,7 +18,7 @@
 	let title: string;
 	let description: string;
 	let category: string;
-	let is_private = false;
+	let accessLevel = 1;
 
 	onMount(() => {
 		loadCategories();
@@ -55,7 +55,7 @@
 
 		formData.append('title', title);
 		formData.append('description', description);
-		formData.append('is_private', is_private.toString());
+		formData.append('access_level', accessLevel.toString());
 		formData.append('category', category);
 
 		if (thumbnailImgInput.files) {
@@ -157,8 +157,8 @@
 					<span class="privacy-desc">( all users can join this live session )</span>
 					<input
 						type="radio"
-						on:change={() => (is_private = false)}
-						checked={!is_private}
+						on:change={() => (accessLevel = 1)}
+						checked={accessLevel === 1}
 						name="radio"
 					/>
 					<span class="checkmark"></span>
@@ -166,7 +166,14 @@
 				<label class="radio">
 					<span class="privacy-tag">Followers Only</span>
 					<span class="privacy-desc">( only your followers can join this live session )</span>
-					<input type="radio" name="radio" />
+					<input
+						type="radio"
+						on:change={() => {
+							accessLevel = 2;
+						}}
+						checked={accessLevel === 2}
+						name="radio"
+					/>
 					<span class="checkmark"></span>
 				</label>
 				<label class="radio">
@@ -176,8 +183,10 @@
 					>
 					<input
 						type="radio"
-						on:change={() => (is_private = true)}
-						checked={is_private}
+						on:change={() => {
+							accessLevel = 3;
+						}}
+						checked={accessLevel === 3}
 						name="radio"
 					/>
 					<span class="checkmark"></span>
