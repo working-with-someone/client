@@ -50,7 +50,7 @@
 		}
 	};
 
-	function startLiveSession() {
+	function createLiveSession() {
 		const formData = new FormData();
 
 		formData.append('title', title);
@@ -73,7 +73,7 @@
 	}
 </script>
 
-<section id="session-upload-config">
+<section id="live-session-creation-config">
 	<div class="header">Start Live Session</div>
 
 	<div class="body">
@@ -196,7 +196,7 @@
 	</div>
 	<div class="footer">
 		<span class="info">pressing 'start' doesn’t immediately begin the broadcast!</span>
-		<button on:click={startLiveSession} class="next-button">start</button>
+		<button on:click={createLiveSession} class="next-button">start</button>
 	</div>
 
 	<input
@@ -211,7 +211,7 @@
 </section>
 
 <style lang="scss">
-	section#session-upload-config {
+	section#live-session-creation-config {
 		width: 700px;
 
 		.header {
