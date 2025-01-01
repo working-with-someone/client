@@ -37,15 +37,15 @@
 		<div class="info-confirm">
 			<div class="title">
 				<p class="label">title</p>
-				<p>{liveSession.title}</p>
+				<p class="value">{liveSession.title}</p>
 			</div>
 			<div class="description">
 				<p class="label">description</p>
-				<p>{liveSession.description}</p>
+				<p class="value">{liveSession.description}</p>
 			</div>
 			<div class="access-level">
 				<p class="label">access level</p>
-				<p>
+				<p class="value">
 					{#if liveSession.access_level === accessLevel.public}
 						public
 					{:else if liveSession.access_level === accessLevel.followersOnly}
@@ -104,6 +104,9 @@
 					color: var(--font-light-gray);
 					padding-bottom: 5px;
 					font-size: 13px;
+				}
+				.value {
+					font-size: 14px;
 				}
 			}
 		}
