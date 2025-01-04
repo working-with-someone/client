@@ -1,10 +1,15 @@
 <script lang="ts">
-  export let label;
+  interface Props {
+    label: any;
+    children?: import('svelte').Snippet;
+  }
+
+  let { label, children }: Props = $props();
 </script>
 
 <div class="inner-label-input middle-rounded">
   <span>{label}</span>
-  <slot></slot>
+  {@render children?.()}
 </div>
 
 <style lang="scss">

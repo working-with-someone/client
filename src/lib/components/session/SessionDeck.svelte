@@ -3,7 +3,10 @@
 	import SessionCard from './SessionCard.svelte';
 	import LiveSessionCard from './LiveSessionCard.svelte';
 
-	export let categorizedSessions: CategorizedSessions;
+	interface Props {
+		categorizedSessions: CategorizedSessions;
+	}
+	let { categorizedSessions }: Props = $props();
 
 	const { category, sessions } = categorizedSessions;
 </script>

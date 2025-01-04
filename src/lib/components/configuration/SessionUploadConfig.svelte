@@ -11,7 +11,7 @@
 	// must be fetch categories
 	const categories = ['study', 'read', 'code', 'working'];
 
-	let showThumbnailPrompt = true;
+	let showThumbnailPrompt = $state(true);
 
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
@@ -58,7 +58,7 @@
 			</div>
 			<div class="thumbnail-wrapper middle-rounded">
 				{#if showThumbnailPrompt}
-					<div class="thumbnail-prompt" on:click={toggleThumbnailInput}>
+					<div class="thumbnail-prompt" onclick={toggleThumbnailInput}>
 						<span class="material-symbols-outlined"> upload_file </span>
 						<p>upload file</p>
 					</div>
@@ -133,7 +133,7 @@
 		accept="image/*"
 		bind:this={thumbnailImgInput}
 		hidden
-		on:change={changeThumbnailPreview}
+		onchange={changeThumbnailPreview}
 	/>
 </section>
 

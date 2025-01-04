@@ -1,28 +1,21 @@
 <script lang="ts">
-	export let showModal:boolean;
-
-	const closeModal = () => showModal = false;
+	let { closeModal } = $props();
 </script>
 
-{#if showModal}
-	<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-	<div class="modal-bg" on:click|self = {closeModal}>
-		<div class="modal">
-			<div class="header">
-				<slot name = "modal-header">
-				</slot>
-			</div>
-			<div class="body">
-				<slot name = "modal-body">
-				</slot>
-			</div>
-			<div class="footer">
-				<slot name = "modal-footer">
-				</slot>
-			</div>
+<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
+<div class="modal-bg" on:click|self={closeModal}>
+	<div class="modal">
+		<div class="header">
+			<slot name="modal-header"></slot>
+		</div>
+		<div class="body">
+			<slot name="modal-body"></slot>
+		</div>
+		<div class="footer">
+			<slot name="modal-footer"></slot>
 		</div>
 	</div>
-{/if}
+</div>
 
 <style lang="scss">
 	.modal-bg {

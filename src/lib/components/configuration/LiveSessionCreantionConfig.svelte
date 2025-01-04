@@ -11,14 +11,14 @@
 	let thumbnailImg: HTMLImageElement;
 
 	// must be fetch categories
-	let categories: string[] = [];
+	let categories: string[] = $state([]);
 
-	let showThumbnailPrompt = true;
+	let showThumbnailPrompt = $state(true);
 
-	let title: string;
-	let description: string;
-	let category: string;
-	let accessLevel = 1;
+	let title = $state('');
+	let description = $state('');
+	let category = $state('');
+	let accessLevel = $state(1);
 
 	onMount(() => {
 		loadCategories();
@@ -74,7 +74,7 @@
 </script>
 
 <section id="live-session-creation-config">
-	<div class="header">Start Live Session</div>
+	<div class="header">Create Live Session</div>
 
 	<div class="body">
 		<div class="detail config">
@@ -109,10 +109,10 @@
 			</div>
 			<div class="thumbnail-wrapper middle-rounded">
 				{#if showThumbnailPrompt}
-					<div class="thumbnail-prompt" on:click={toggleThumbnailInput}>
+					<button class="btn-text thumbnail-prompt" onclick={toggleThumbnailInput}>
 						<span class="material-symbols-outlined"> upload_file </span>
 						<p>upload file</p>
-					</div>
+					</button>
 				{:else}
 					<div class="thumbnail-preview">
 						<img
@@ -157,7 +157,7 @@
 					<span class="privacy-desc">( all users can join this live session )</span>
 					<input
 						type="radio"
-						on:change={() => (accessLevel = 1)}
+						onchange={() => (accessLevel = 1)}
 						checked={accessLevel === 1}
 						name="radio"
 					/>
@@ -168,7 +168,7 @@
 					<span class="privacy-desc">( only your followers can join this live session )</span>
 					<input
 						type="radio"
-						on:change={() => {
+						onchange={() => {
 							accessLevel = 2;
 						}}
 						checked={accessLevel === 2}
@@ -183,7 +183,7 @@
 					>
 					<input
 						type="radio"
-						on:change={() => {
+						onchange={() => {
 							accessLevel = 3;
 						}}
 						checked={accessLevel === 3}
@@ -196,7 +196,7 @@
 	</div>
 	<div class="footer">
 		<span class="info">pressing 'start' doesn’t immediately begin the broadcast!</span>
-		<button on:click={createLiveSession} class="next-button">start</button>
+		<button onclick={createLiveSession} class="next-button">start</button>
 	</div>
 
 	<input
@@ -206,7 +206,7 @@
 		accept="image/*"
 		bind:this={thumbnailImgInput}
 		hidden
-		on:change={changeThumbnailPreview}
+		onchange={changeThumbnailPreview}
 	/>
 </section>
 

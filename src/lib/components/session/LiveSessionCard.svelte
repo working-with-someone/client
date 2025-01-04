@@ -13,32 +13,34 @@
 	<div class="footer">
 		<div class="session-info">
 			<table>
-				<tr>
-					<th>Duration</th>
-					<td><span class="material-symbols-outlined live-icon"> bigtop_updates </span></td>
-				</tr>
-				<tr>
-					<th>Breaks</th>
-					<td>x</td>
-				</tr>
-				<tr>
-					<th>Sound</th>
-					<td><span>기다린만큼, 더 - 카더가든</span></td>
-				</tr>
+				<tbody>
+					<tr>
+						<th>Duration</th>
+						<td><span class="material-symbols-outlined live-icon"> bigtop_updates </span></td>
+					</tr>
+					<tr>
+						<th>Breaks</th>
+						<td>x</td>
+					</tr>
+					<tr>
+						<th>Sound</th>
+						<td><span>기다린만큼, 더 - 카더가든</span></td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 		<div class="user-info">
-			<div
-				class="pfp-wrapper"
+			<button
+				class="btn-div pfp-wrapper"
 				on:click={() => {
 					window.location.href = `/user/${session.user.id}`;
 				}}
 			>
 				<img
 					src={new URL(`${session?.user?.pfp?.curr}`, PUBLIC_API_SERVER_DOMAIN).toString()}
-					alt=""
+					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
 				/>
-			</div>
+			</button>
 			<div class="info">
 				<p class="title">{session.title}</p>
 				<p class="username">{session.user.username}</p>

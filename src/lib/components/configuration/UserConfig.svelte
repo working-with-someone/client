@@ -5,14 +5,13 @@
 
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 
-	import { createEventDispatcher } from 'svelte';
 	import { reloadUser } from '$lib/store/user';
 
-	const dispatch = createEventDispatcher();
+	let { closeUserConfigModal } = $props();
 
 	let pfp: HTMLImageElement;
 	let pfpInput: HTMLInputElement;
-	let username: string = $user.username;
+	let username: string = $state($user.username);
 
 	const togglePfpInput = () => pfpInput.click();
 	const resetConfig = () => {
@@ -51,12 +50,9 @@
 			.then((res) => {
 				return res.json();
 			})
-			.then((data:any) => {
+			.then((data: any) => {
 				reloadUser();
-				dispatch('closeUserConfigModal');
-			})
-			.catch((err) => {
-				console.log('update user failed: ' + err);
+				closeUserConfigModal();
 			});
 	};
 </script>
@@ -65,24 +61,28 @@
 	<div class="profile">
 		<div class="header">My Profile</div>
 		<div class="body">
-			<div class="pfp" on:click|stopPropagation={togglePfpInput}>
-				<img src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`} bind:this={pfp} />
+			<button class="btn-div pfp" onclick={togglePfpInput} aria-hidden="true">
+				<img
+					src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`}
+					bind:this={pfp}
+					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
+				/>
 				<input
-					on:change={changePfpPreview}
+					onchange={changePfpPreview}
 					type="file"
 					hidden
 					bind:this={pfpInput}
 					accept="images/*"
 				/>
-			</div>
+			</button>
 			<div class="name">
 				<p>username</p>
 				<input type="text" name="username" id="" bind:value={username} />
 			</div>
 		</div>
 		<div class="footer">
-			<button on:click={updateConfig} class="update btn-sig">update</button>
-			<button on:click={resetConfig} class="cancel btn-cancel">reset</button>
+			<button onclick={updateConfig} class="update btn-sig">update</button>
+			<button onclick={resetConfig} class="cancel btn-cancel">reset</button>
 		</div>
 	</div>
 	<div class="security">

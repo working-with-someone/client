@@ -1,7 +1,8 @@
 <script>
-	export let data;
 	import SessionDeck from '$lib/components/session/SessionDeck.svelte';
 	import TopBar from '$lib/components/topbar/TopBar.svelte';
+
+	let { data } = $props();
 </script>
 
 <section id="live-sessions">

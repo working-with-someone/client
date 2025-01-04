@@ -3,9 +3,9 @@
 	import wwsfetch from '$lib/utils/wwsfetch';
 	import { getContext } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
-	let { targetUser, isFollowing } = data;
+	let { targetUser, isFollowing } = $state(data);
 	const user = getContext('user');
 	const isSelf = $user.id == targetUser.id;
 
@@ -63,11 +63,11 @@
 			{#if !isSelf}
 				<div class="follow">
 					{#if isFollowing}
-						<button class="btn-gray" on:click={unfollow}>
+						<button class="btn-gray" onclick={unfollow}>
 							<span>following</span>
 						</button>
 					{:else}
-						<button class="btn-sig" on:click={follow}> <span> follow </span></button>
+						<button class="btn-sig" onclick={follow}> <span> follow </span></button>
 					{/if}
 				</div>
 			{/if}

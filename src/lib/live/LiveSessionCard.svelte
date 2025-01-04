@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { LiveSession } from '../../@types/session';
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	export let liveSession: LiveSession;
+	interface Props {
+		liveSession: LiveSession;
+	}
+
+	let { liveSession }: Props = $props();
 </script>
 
 <div class="card middle-rounded">
@@ -14,7 +18,7 @@
 	<div class="footer">
 		<div
 			class="pfp-wrapper"
-			on:click={() => {
+			onclick={() => {
 				window.location.href = `/user/${liveSession.user.id}`;
 			}}
 		>

@@ -115,6 +115,10 @@ button:hover {
   color: var(--font-white);
 }
 
+.btn-div {
+  all: unset;
+}
+
 button:hover {
   cursor: pointer;
 }

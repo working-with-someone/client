@@ -1,7 +1,7 @@
 <script lang="ts">
 	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
-	import Modal from '$lib/components/util/Modal.svelte';
-	export let data;
+
+	let { data } = $props();
 
 	const liveSession = data.liveSession;
 

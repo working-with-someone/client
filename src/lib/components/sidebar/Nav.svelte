@@ -49,7 +49,7 @@
 		{#each menus as menu}
 			<li class="menu-item {menu.name} {menu.selected ? 'selected' : ''}">
 				<button
-					on:click={() => {
+					onclick={() => {
 						window.location.href = menu.url;
 					}}
 				>

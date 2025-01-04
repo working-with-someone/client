@@ -6,27 +6,31 @@
 
 	const user = getContext('user');
 
+	let showUserConfigModal = $state(false);
+
 	function closeUserConfigModal() {
 		showUserConfigModal = false;
 	}
 
-	let showUserConfigModal = false;
+	function openUserConfigModal() {
+		showUserConfigModal = true;
+	}
 </script>
 
-<div
-	class="avatar"
-	on:click={() => {
-		showUserConfigModal = true;
-	}}
->
+<button class="avatar" onclick={openUserConfigModal} aria-hidden="true">
 	<div class="pfp">
-		<img src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`} />
+		<img
+			src={`${PUBLIC_API_SERVER_DOMAIN}${$user.pfp.curr}`}
+			alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
+		/>
 	</div>
-</div>
+</button>
 
-<Modal bind:showModal={showUserConfigModal}>
-	<UserConfig slot="modal-body" on:closeUserConfigModal={closeUserConfigModal} />
-</Modal>
+{#if showUserConfigModal}
+	<Modal closeModal={closeUserConfigModal}>
+		<UserConfig slot="modal-body" {closeUserConfigModal} />
+	</Modal>
+{/if}
 
 <style lang="scss">
 	.avatar {

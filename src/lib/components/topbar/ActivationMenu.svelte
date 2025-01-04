@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from '../util/Modal.svelte';
-	import SessionLiveConfig from '../configuration/LiveSessionCreantionConfig.svelte';
+	import LiveSessionCreationConfig from '../configuration/LiveSessionCreantionConfig.svelte';
 	import SessionUploadConfig from '../configuration/SessionUploadConfig.svelte';
 
 	function closeSessionUploadModal() {
@@ -11,38 +11,40 @@
 		showSessionUploadModal = true;
 	}
 
-	let showSessionUploadModal = false;
+	let showSessionUploadModal = $state(false);
 
-	function openLiveConfigModal() {
+	function openLiveSessionConfigModal() {
 		showLiveConfigModal = true;
 	}
 
-	function closeLiveConfigModal() {
+	function closeLiveSessionConfigModal() {
 		showLiveConfigModal = false;
 	}
 
-	let showLiveConfigModal = false;
+	let showLiveConfigModal = $state(false);
 </script>
 
 <div class="activation-menus">
-	<button class="menu-item open-session" on:click={openLiveConfigModal}>
+	<button class="menu-item open-session" onclick={openLiveSessionConfigModal}>
 		<span class="material-symbols-outlined"> radio_button_checked </span>
 	</button>
 
-	<button class="menu-item upload-session" on:click={openSessionUploadModal}>
+	<button class="menu-item upload-session" onclick={openSessionUploadModal}>
 		<span class="material-symbols-outlined"> video_call </span>
 	</button>
 </div>
 
-<Modal bind:showModal={showSessionUploadModal}>
-	<SessionUploadConfig slot="modal-body" on:closeSessionUploadModal={closeSessionUploadModal}
-	></SessionUploadConfig>
-</Modal>
+{#if showSessionUploadModal}
+	<Modal closeModal={closeSessionUploadModal}>
+		<SessionUploadConfig slot="modal-body"></SessionUploadConfig>
+	</Modal>
+{/if}
 
-<Modal bind:showModal={showLiveConfigModal}>
-	<SessionLiveConfig slot="modal-body" on:closeLiveConfigModal={closeLiveConfigModal}
-	></SessionLiveConfig>
-</Modal>
+{#if showLiveConfigModal}
+	<Modal closeModal={closeLiveSessionConfigModal}>
+		<LiveSessionCreationConfig slot="modal-body"></LiveSessionCreationConfig>
+	</Modal>
+{/if}
 
 <style lang="scss">
 	.activation-menus {

@@ -2,7 +2,7 @@
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { accessLevel } from '../../../enums/session';
 
-	export let liveSession;
+	let { liveSession } = $props();
 
 	let currAudioDeviceId: string;
 	let currVideoDeviceId: string;

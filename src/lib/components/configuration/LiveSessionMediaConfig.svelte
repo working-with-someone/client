@@ -5,15 +5,19 @@
 
 	const user: any = getContext('user');
 
-	export let liveSession;
 
-	export let currAudioDeviceId: string;
-	export let currVideoDeviceId: string;
+	interface Props {
+		liveSession: any;
+		currAudioDeviceId: string;
+		currVideoDeviceId: string;
+	}
+
+	let { liveSession, currAudioDeviceId = $bindable(), currVideoDeviceId = $bindable() }: Props = $props();
 
 	const dispatch = createEventDispatcher();
 
-	let videoDevices: MediaDeviceInfo[] = [];
-	let audioDevices: MediaDeviceInfo[] = [];
+	let videoDevices: MediaDeviceInfo[] = $state([]);
+	let audioDevices: MediaDeviceInfo[] = $state([]);
 
 	onMount(() => {
 		loadDevices();
@@ -48,7 +52,7 @@
 						id=""
 						class="video-device-select"
 						bind:value={currVideoDeviceId}
-						on:change={() => dispatch('generateMediaStream')}
+						onchange={() => dispatch('generateMediaStream')}
 					>
 						{#each videoDevices as videoDevice}
 							<option value={videoDevice.deviceId}>
@@ -65,7 +69,7 @@
 						id=""
 						class="audio-device-select"
 						bind:value={currAudioDeviceId}
-						on:change={() => dispatch('generateMediaStream')}
+						onchange={() => dispatch('generateMediaStream')}
 					>
 						{#each audioDevices as audioDevice}
 							<option value={audioDevice.deviceId}>
