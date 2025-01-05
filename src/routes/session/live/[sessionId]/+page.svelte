@@ -1,15 +1,10 @@
 <script lang="ts">
 	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
+	import { LiveSession } from '../liveSession.svelte';
 
 	let { data } = $props();
 
-	const liveSession = data.liveSession;
-
-	let showMediaConfiguration: boolean;
-
-	if (liveSession.session_live.status === 1) {
-		showMediaConfiguration = true;
-	}
+	const liveSession = $state<LiveSession>(new LiveSession(data.liveSession));
 </script>
 
 <section id="live-session">

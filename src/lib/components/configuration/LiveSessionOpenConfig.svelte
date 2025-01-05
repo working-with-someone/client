@@ -1,26 +1,18 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { accessLevel } from '../../../enums/session';
+	import { LiveSession } from '../../../routes/session/live/liveSession.svelte';
 
-	let { liveSession } = $props();
+	interface Props {
+		liveSession: LiveSession;
+	}
 
-	let currAudioDeviceId: string;
-	let currVideoDeviceId: string;
+	let { liveSession }: Props = $props();
 
 	let previewVideo: HTMLVideoElement;
 
 	async function generateMediaStream() {
-		const constraints: MediaStreamConstraints = {
-			audio: {
-				deviceId: currAudioDeviceId
-			},
-			video: {
-				deviceId: currVideoDeviceId,
-				aspectRatio: 1.7777777778
-			}
-		};
-
-		const stream = await navigator.mediaDevices.getUserMedia(constraints);
+		const stream = await liveSession.generateMediaStream();
 		previewVideo.srcObject = stream;
 	}
 </script>
@@ -57,12 +49,7 @@
 			</div>
 		</div>
 		<div class="media-config">
-			<LiveSessionMediaConfig
-				{currAudioDeviceId}
-				{currVideoDeviceId}
-				on:generateMediaStream={generateMediaStream}
-				{liveSession}
-			/>
+			<LiveSessionMediaConfig on:generateMediaStream={generateMediaStream} {liveSession} />
 		</div>
 	</div>
 	<div class="footer"><button class="btn-sig">start</button></div>

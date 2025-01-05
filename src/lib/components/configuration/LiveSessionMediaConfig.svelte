@@ -2,17 +2,13 @@
 	import { getContext } from 'svelte';
 	import { onMount } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
-
-	const user: any = getContext('user');
-
+	import { LiveSession } from '../../../routes/session/live/liveSession.svelte.js';
 
 	interface Props {
-		liveSession: any;
-		currAudioDeviceId: string;
-		currVideoDeviceId: string;
+		liveSession: LiveSession;
 	}
 
-	let { liveSession, currAudioDeviceId = $bindable(), currVideoDeviceId = $bindable() }: Props = $props();
+	let { liveSession }: Props = $props();
 
 	const dispatch = createEventDispatcher();
 
@@ -30,11 +26,11 @@
 		for (const device of devices)
 			switch (device.kind) {
 				case 'videoinput':
-					if (!videoDevices.length) currVideoDeviceId = device.deviceId;
+					if (!videoDevices.length) liveSession.mediaController.currVideoDeviceId = device.deviceId;
 					videoDevices = [...videoDevices, device];
 					break;
 				case 'audioinput':
-					if (!audioDevices.length) currAudioDeviceId = device.deviceId;
+					if (!audioDevices.length) liveSession.audioDeviceId = device.deviceId;
 					audioDevices = [...audioDevices, device];
 					break;
 			}
@@ -51,7 +47,7 @@
 						name="video-device"
 						id=""
 						class="video-device-select"
-						bind:value={currVideoDeviceId}
+						bind:value={liveSession.mediaStreamConstraints.video.deviceId}
 						onchange={() => dispatch('generateMediaStream')}
 					>
 						{#each videoDevices as videoDevice}
@@ -68,7 +64,7 @@
 						name="audio-device"
 						id=""
 						class="audio-device-select"
-						bind:value={currAudioDeviceId}
+						bind:value={liveSession.mediaStreamConstraints.audio.deviceId}
 						onchange={() => dispatch('generateMediaStream')}
 					>
 						{#each audioDevices as audioDevice}
