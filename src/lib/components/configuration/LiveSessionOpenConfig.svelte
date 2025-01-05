@@ -1,20 +1,23 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { accessLevel } from '../../../enums/session';
-	import { LiveSession } from '../../../routes/session/live/liveSession.svelte';
+	import { LiveSessionManager } from '../../../routes/session/live/liveSessionManager.svelte';
+	import { MediaController } from '../../../routes/session/live/mediaController.svelte';
 
 	interface Props {
-		liveSession: LiveSession;
+		liveSessionManager: LiveSessionManager;
+		mediaController: MediaController;
 	}
 
-	let { liveSession }: Props = $props();
+	let { liveSessionManager, mediaController }: Props = $props();
 
 	let previewVideo: HTMLVideoElement;
 
-	async function generateMediaStream() {
-		const stream = await liveSession.generateMediaStream();
-		previewVideo.srcObject = stream;
-	}
+	$effect(() => {
+		mediaController.generateMediaStream().then((stream) => {
+			previewVideo.srcObject = stream;
+		});
+	});
 </script>
 
 <section id="live-session-open-config">
@@ -29,30 +32,31 @@
 		<div class="info-confirm">
 			<div class="title">
 				<p class="label">title</p>
-				<p class="value">{liveSession.title}</p>
+				<p class="value">{liveSessionManager.title}</p>
 			</div>
 			<div class="description">
 				<p class="label">description</p>
-				<p class="value">{liveSession.description}</p>
+				<p class="value">{liveSessionManager.description}</p>
 			</div>
 			<div class="access-level">
 				<p class="label">access level</p>
 				<p class="value">
-					{#if liveSession.access_level === accessLevel.public}
+					{#if liveSessionManager.access_level === accessLevel.public}
 						public
-					{:else if liveSession.access_level === accessLevel.followersOnly}
+					{:else if liveSessionManager.access_level === accessLevel.followersOnly}
 						followers only
-					{:else if liveSession.access_level === accessLevel.private}
+					{:else if liveSessionManager.access_level === accessLevel.private}
 						private
 					{/if}
 				</p>
 			</div>
 		</div>
 		<div class="media-config">
-			<LiveSessionMediaConfig on:generateMediaStream={generateMediaStream} {liveSession} />
+			<LiveSessionMediaConfig {mediaController} />
 		</div>
 	</div>
-	<div class="footer"><button class="btn-sig">start</button></div>
+	<!-- this에 click event가 binding되지 않도록 -->
+	<div class="footer"><button class="btn-sig" onclick = {() => {liveSessionManager.open()}}>start</button></div>
 </section>
 
 <style lang="scss">
@@ -65,9 +69,6 @@
 		flex-direction: column;
 		gap: 20px;
 		border-radius: 10px;
-
-		.header {
-		}
 
 		.body {
 			.preview {

@@ -1,17 +1,28 @@
 <script lang="ts">
 	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
-	import { LiveSession } from '../liveSession.svelte';
+	import { onMount } from 'svelte';
+	import { LiveSessionManager } from '../liveSessionManager.svelte';
+	import { MediaController } from '../mediaController.svelte';
+	import { liveSessionStatus } from '../../../../enums/session';
 
 	let { data } = $props();
+	
+	const liveSessionManager = $state(new LiveSessionManager(data.liveSession));
+	const mediaController = $state(new MediaController())
 
-	const liveSession = $state<LiveSession>(new LiveSession(data.liveSession));
+	onMount(() => {
+		mediaController.loadDevices();
+	})
 </script>
 
 <section id="live-session">
+	{#if liveSessionManager.status === liveSessionStatus.ready}
 	<div class="live-session-open-config">
-		<LiveSessionOpenConfig {liveSession} />
+		<LiveSessionOpenConfig {liveSessionManager} {mediaController} />
 	</div>
-	<div class="session"></div>
+	{:else if liveSessionManager.status === liveSessionStatus.opened}
+	<div class="session"> session </div>
+	{/if}
 </section>
 
 <style lang="scss">

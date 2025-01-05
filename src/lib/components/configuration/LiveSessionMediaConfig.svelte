@@ -1,40 +1,11 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import { onMount } from 'svelte';
-	import { createEventDispatcher } from 'svelte';
-	import { LiveSession } from '../../../routes/session/live/liveSession.svelte.js';
+	import { MediaController } from "../../../routes/session/live/mediaController.svelte";
 
 	interface Props {
-		liveSession: LiveSession;
+		mediaController: MediaController;
 	}
 
-	let { liveSession }: Props = $props();
-
-	const dispatch = createEventDispatcher();
-
-	let videoDevices: MediaDeviceInfo[] = $state([]);
-	let audioDevices: MediaDeviceInfo[] = $state([]);
-
-	onMount(() => {
-		loadDevices();
-		dispatch('generateMediaStream');
-	});
-
-	async function loadDevices() {
-		const devices = await navigator.mediaDevices.enumerateDevices();
-
-		for (const device of devices)
-			switch (device.kind) {
-				case 'videoinput':
-					if (!videoDevices.length) liveSession.mediaController.currVideoDeviceId = device.deviceId;
-					videoDevices = [...videoDevices, device];
-					break;
-				case 'audioinput':
-					if (!audioDevices.length) liveSession.audioDeviceId = device.deviceId;
-					audioDevices = [...audioDevices, device];
-					break;
-			}
-	}
+	let { mediaController }: Props = $props();
 </script>
 
 <section id="live-session-media-config">
@@ -47,10 +18,9 @@
 						name="video-device"
 						id=""
 						class="video-device-select"
-						bind:value={liveSession.mediaStreamConstraints.video.deviceId}
-						onchange={() => dispatch('generateMediaStream')}
+						bind:value={mediaController.currVideoDeviceId}
 					>
-						{#each videoDevices as videoDevice}
+						{#each mediaController.videoDevices as videoDevice}
 							<option value={videoDevice.deviceId}>
 								{videoDevice.label}
 							</option>
@@ -59,15 +29,14 @@
 				</div>
 
 				<div class="device-selection audio-device">
-					<p class="label">audio device</p>
+					<p class="label">audio input</p>
 					<select
 						name="audio-device"
 						id=""
 						class="audio-device-select"
-						bind:value={liveSession.mediaStreamConstraints.audio.deviceId}
-						onchange={() => dispatch('generateMediaStream')}
+						bind:value={mediaController.currAudioInputDeviceId}
 					>
-						{#each audioDevices as audioDevice}
+						{#each mediaController.audioInputDevices as audioDevice}
 							<option value={audioDevice.deviceId}>
 								{audioDevice.label}
 							</option>
