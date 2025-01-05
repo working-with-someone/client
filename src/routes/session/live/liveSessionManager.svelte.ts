@@ -26,7 +26,7 @@ export class SessionManager {
 }
 
 export class LiveSessionManager extends SessionManager {
-	status?: liveSessionStatus = $state<liveSessionStatus>();
+	private status?: liveSessionStatus = $state<liveSessionStatus>();
 	started_at: Date;
 
 	constructor(liveSession) {
@@ -41,22 +41,22 @@ export class LiveSessionManager extends SessionManager {
 			throw new Error("can not open session");
 		}
 
-		const res = await wwsfetch(`/sessions/live/${this.id}/status`, {
-			method: "PUT",
-			body: new URLSearchParams({
-				'status': liveSessionStatus.opened.toString()
-			})
-		})
+		const status = await this.changeStatus(liveSessionStatus.opened)
 
-		if(res.status !== 200){
-			throw new Error("failed to open session : " + res.body)
-		}
+		this.status = status;
+	}
 
-		const status = await res.json()
+	private async changeStatus(status:liveSessionStatus){
+			const res = await wwsfetch(`/sessions/live/${this.id}/status`, {
+				method : "PUT",
+				body: new URLSearchParams({
+					'status': status.toString()
+				})
+			});
 
-		if(status == liveSessionStatus.opened){
-			this.status = status
-		}
+			const _status = await res.json();
+
+			return _status;
 	}
 
 	get isReady() {
