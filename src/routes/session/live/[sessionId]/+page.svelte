@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { LiveSessionManager } from '../liveSessionManager.svelte';
 	import { MediaController } from '../mediaController.svelte';
+	import LiveSession from './LiveSession.svelte';
 
 	let { data } = $props();
 
@@ -17,7 +18,9 @@
 <section id="live-session">
 	{#if liveSessionManager.isReady}
 		<LiveSessionOpenConfig {liveSessionManager} {mediaController} />
-	{:else if liveSessionManager.isOpened}{/if}
+	{:else if liveSessionManager.isOpened}
+		<LiveSession {liveSessionManager} {mediaController} />
+	{/if}
 </section>
 
 <style lang="scss">
