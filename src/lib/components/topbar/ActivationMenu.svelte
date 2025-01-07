@@ -48,6 +48,8 @@
 
 <style lang="scss">
 	.activation-menus {
+		display: flex;
+		flex-direction: row;
 		.menu-item.open-session {
 			&:hover {
 				span {
