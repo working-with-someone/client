@@ -76,6 +76,9 @@ button {
   border-radius: 10px;
   padding: 0.75em 1.5em;
   background-color: var(--bg-button);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn {
