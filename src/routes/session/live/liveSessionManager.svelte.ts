@@ -59,6 +59,11 @@ export class LiveSessionManager extends SessionManager {
 			})
 		});
 
+		// failed
+		if (res.status !== httpStatusCodes.OK) {
+			throw new Error('can not change status of session');
+		}
+
 		const _status = await res.json();
 
 		this.status = _status;
