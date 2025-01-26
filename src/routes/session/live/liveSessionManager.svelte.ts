@@ -1,5 +1,7 @@
+import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import wwsfetch from '$lib/utils/wwsfetch';
 import { liveSessionStatus, type accessLevel } from '../../../enums/session';
+import io, { Socket } from 'socket.io-client';
 
 export class SessionManager {
 	id: string;
@@ -28,11 +30,15 @@ export class SessionManager {
 export class LiveSessionManager extends SessionManager {
 	private status?: liveSessionStatus = $state<liveSessionStatus>();
 	started_at: Date;
+	socket: Socket;
 
 	constructor(liveSession) {
 		super(liveSession);
 		this.status = liveSession.session_live.status;
 		this.started_at = new Date(liveSession.session_live.started_at);
+		this.socket = io(PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.id, {
+			withCredentials: true
+		});
 	}
 
 	async open() {
