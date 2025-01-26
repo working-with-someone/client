@@ -2,6 +2,7 @@ import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import wwsfetch from '$lib/utils/wwsfetch';
 import { liveSessionStatus, type accessLevel } from '../../../enums/session';
 import io, { Socket } from 'socket.io-client';
+import httpStatusCodes from 'http-status-codes';
 
 export class SessionManager {
 	id: string;
@@ -47,9 +48,7 @@ export class LiveSessionManager extends SessionManager {
 			throw new Error('can not open session');
 		}
 
-		const status = await this.changeStatus(liveSessionStatus.opened);
-
-		this.status = status;
+		await this.changeStatus(liveSessionStatus.opened);
 	}
 
 	private async changeStatus(status: liveSessionStatus) {
@@ -61,6 +60,8 @@ export class LiveSessionManager extends SessionManager {
 		});
 
 		const _status = await res.json();
+
+		this.status = _status;
 
 		return _status;
 	}
