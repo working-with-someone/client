@@ -14,7 +14,7 @@
 	let liveStream: MediaStream | undefined = $state();
 
 	$effect(() => {
-		mediaController.generateMediaStream().then((stream) => {
+		mediaController.getOrGenerateMediaStream().then((stream) => {
 			liveStream = stream;
 		});
 	});

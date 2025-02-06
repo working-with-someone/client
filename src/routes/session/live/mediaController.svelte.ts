@@ -8,6 +8,7 @@ export class MediaController {
 	currAudioInputDeviceId?: string = $state();
 	videoDevices: MediaDeviceInfo[] = $state([]);
 	audioInputDevices: MediaDeviceInfo[] = $state([]);
+	mediaStream?: MediaStream = $state();
 
 	constructor() {}
 
@@ -32,7 +33,11 @@ export class MediaController {
 			this.currAudioInputDeviceId = this.audioInputDevices[0].deviceId;
 	}
 
-	async generateMediaStream(config?: MediaStreamConfig) {
+	async getOrGenerateMediaStream(config?: MediaStreamConfig) {
+		if (this.mediaStream) {
+			return this.mediaStream;
+		}
+
 		const mediaStreamConstraints: MediaStreamConstraints = {
 			video: {
 				deviceId: this.currVideoDeviceId,
@@ -47,6 +52,8 @@ export class MediaController {
 		};
 
 		const mediaStream = await navigator.mediaDevices.getUserMedia(mediaStreamConstraints);
+
+		this.mediaStream = mediaStream;
 
 		return mediaStream;
 	}
