@@ -30,8 +30,9 @@ export class SessionManager {
 
 export class LiveSessionManager extends SessionManager {
 	private status?: liveSessionStatus = $state<liveSessionStatus>();
-	started_at: Date;
-	socket: Socket;
+	private started_at: Date;
+	private socket: Socket;
+	private mediaRecorder?: MediaRecorder;
 
 	constructor(liveSession) {
 		super(liveSession);
@@ -42,13 +43,62 @@ export class LiveSessionManager extends SessionManager {
 		});
 	}
 
+	// ready, pause 상태에서만 open이 가능하다.
 	async open() {
-		// closed, opened 상태에서는 open할 수 없다.
-		if (this.isClosed || this.isOpened) {
-			throw new Error('can not open session');
-		}
+		if (this.isClosed || this.isOpened) throw new Error('can not open session');
 
 		await this.changeStatus(liveSessionStatus.opened);
+	}
+
+	async pause() {
+		// open 상태에서만 pause가 가능하다.
+		if (!this.isOpened) throw new Error('session does not opened');
+		await this.changeStatus(liveSessionStatus.opened);
+	}
+
+	async close() {
+		// ready, open, pause 상태에서만 close가 가능하다.
+		if (this.isClosed) throw new Error('can not exit session');
+
+		await this.changeStatus(liveSessionStatus.closed);
+	}
+
+	async publish(mediaStream: MediaStream) {
+		// open 상태가 아니라면 publish가 불가능하다.
+		if (!this.isOpened) {
+			throw new Error('live session is not opened');
+		}
+
+		this.mediaRecorder = new MediaRecorder(mediaStream, {
+			mimeType: 'video/webm; codecs=vp8,opus'
+		});
+
+		// event의 data attribute에 recorded media data가 Blob으로 제공된다.
+		this.mediaRecorder.addEventListener('dataavailable', (e) => {
+			if (!this.socket.connected) {
+				return;
+			}
+
+			if (e.data.size > 0) {
+				// file이나 raw data buffer
+				const reader = new FileReader();
+
+				// file이 성공적으로 read되었을 때 emit되는 load event의 handler
+				reader.onload = () => {
+					const buffer = reader.result;
+
+					this.socket.emit('stream:push', buffer, (resp) => {
+						console.log(resp);
+					});
+				};
+
+				// Blob으로부터 file을 읽는다, 완료되면 reader의 result attribute가 file data의 Array buffer를 포함하게된다.
+				reader.readAsArrayBuffer(e.data);
+			}
+		});
+
+		// 300ms timeslice를 specify해 300ms마다 seperate chunk를 capture한다.
+		this.mediaRecorder.start(500);
 	}
 
 	private async changeStatus(status: liveSessionStatus) {

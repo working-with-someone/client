@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy, onMount } from 'svelte';
 	import type { LiveSessionManager } from '../liveSessionManager.svelte';
 	import type { MediaController } from '../mediaController.svelte';
 	import ControlPanel from './ControlPanel.svelte';
@@ -11,12 +12,12 @@
 
 	let { liveSessionManager, mediaController }: Props = $props();
 
-	let liveStream: MediaStream | undefined = $state();
+	let liveStream = mediaController.mediaStream;
 
-	$effect(() => {
-		mediaController.getOrGenerateMediaStream().then((stream) => {
-			liveStream = stream;
-		});
+	onMount(() => {
+		if (liveSessionManager.isOpened) {
+			liveSessionManager.publish(mediaController.mediaStream);
+		}
 	});
 </script>
 

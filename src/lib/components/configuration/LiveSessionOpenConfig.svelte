@@ -3,6 +3,7 @@
 	import { accessLevel } from '../../../enums/session';
 	import { LiveSessionManager } from '../../../routes/session/live/liveSessionManager.svelte';
 	import { MediaController } from '../../../routes/session/live/mediaController.svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		liveSessionManager: LiveSessionManager;
@@ -13,10 +14,8 @@
 
 	let previewVideo: HTMLVideoElement;
 
-	$effect(() => {
-		mediaController.generateMediaStream().then((stream) => {
-			previewVideo.srcObject = stream;
-		});
+	onMount(() => {
+		previewVideo.srcObject = mediaController.mediaStream;
 	});
 </script>
 
@@ -26,7 +25,7 @@
 	<div class="body">
 		<div class="preview">
 			<div class="preview-media">
-				<video id="preview-video" autoplay src="" bind:this={previewVideo} controls={true}></video>
+				<video id="preview-video" autoplay bind:this={previewVideo} controls={true}></video>
 			</div>
 		</div>
 		<div class="info-confirm">
@@ -56,7 +55,14 @@
 		</div>
 	</div>
 	<!-- this에 click event가 binding되지 않도록 -->
-	<div class="footer"><button class="btn-sig" onclick = {() => {liveSessionManager.open()}}>start</button></div>
+	<div class="footer">
+		<button
+			class="btn-sig"
+			onclick={() => {
+				liveSessionManager.open();
+			}}>start</button
+		>
+	</div>
 </section>
 
 <style lang="scss">

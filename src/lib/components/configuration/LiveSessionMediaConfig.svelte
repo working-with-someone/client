@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MediaController } from "../../../routes/session/live/mediaController.svelte";
+	import { MediaController } from '../../../routes/session/live/mediaController.svelte';
 
 	interface Props {
 		mediaController: MediaController;
@@ -18,10 +18,16 @@
 						name="video-device"
 						id=""
 						class="video-device-select"
-						bind:value={mediaController.currVideoDeviceId}
+						onchange={(e) =>
+							mediaController.setVideoTrackConstraints({
+								deviceId: (e.target as HTMLSelectElement).value
+							})}
 					>
-						{#each mediaController.videoDevices as videoDevice}
-							<option value={videoDevice.deviceId}>
+						{#each mediaController.videoInputDevices as videoDevice}
+							<option
+								value={videoDevice.deviceId}
+								selected={mediaController.currVideoInputDeviceId == videoDevice.deviceId}
+							>
 								{videoDevice.label}
 							</option>
 						{/each}
@@ -34,10 +40,16 @@
 						name="audio-device"
 						id=""
 						class="audio-device-select"
-						bind:value={mediaController.currAudioInputDeviceId}
+						onchange={(e) =>
+							mediaController.setAudioTrackConstraints({
+								deviceId: (e.target as HTMLSelectElement).value
+							})}
 					>
 						{#each mediaController.audioInputDevices as audioDevice}
-							<option value={audioDevice.deviceId}>
+							<option
+								value={audioDevice.deviceId}
+								selected={mediaController.currVideoInputDeviceId == audioDevice.deviceId}
+							>
 								{audioDevice.label}
 							</option>
 						{/each}
