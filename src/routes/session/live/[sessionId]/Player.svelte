@@ -21,7 +21,7 @@
 <style lang="scss">
 	#player {
 		flex: 1;
-		background-color: var(--bg);
+		background-color: black;
 		position: relative;
 		video {
 			position: absolute;
