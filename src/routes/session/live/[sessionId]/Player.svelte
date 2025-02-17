@@ -16,25 +16,21 @@
 
 <div id="player">
 	<video src="" bind:this={video} autoplay={true}></video>
-	<div class="progress"></div>
 </div>
 
 <style lang="scss">
 	#player {
 		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 		background-color: var(--bg);
+		position: relative;
 		video {
+			position: absolute;
+			top: 50%;
+			left: 50%;
 			width: 100%;
-			max-height: 785px;
-		}
-
-		.progress {
-			width: 100%;
-			height: 5px;
-			background-color: var(--sig);
+			height: 100%;
+			object-fit: contain;
+			transform: translate(-50%, -50%);
 		}
 	}
 </style>
