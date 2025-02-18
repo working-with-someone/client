@@ -4,8 +4,9 @@
 	import { LiveSessionManager } from '../liveSessionManager.svelte';
 	import { MediaController } from '../mediaController.svelte';
 	import LiveSession from './LiveSession.svelte';
+	import type { PageData } from './$types';
 
-	let { data } = $props();
+	let { data }: { data: PageData } = $props();
 
 	const liveSessionManager: LiveSessionManager = $state(new LiveSessionManager(data.liveSession));
 	let mediaController = $state(new MediaController());
@@ -27,7 +28,7 @@
 			<!-- end -->
 		{:else}
 			<!-- open, pause -->
-			<LiveSession {liveSessionManager} {mediaController} />
+			<LiveSession {liveSessionManager} {mediaController} {data} />
 		{/if}
 	{/if}
 </section>

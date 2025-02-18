@@ -1,11 +1,26 @@
 <script lang="ts">
+	import type { PageData } from './$types';
+	import { timeDifference } from '$lib/utils/time';
+
 	interface Props {
 		mediaStream?: MediaStream;
+		data: PageData;
 	}
 
-	let { mediaStream }: Props = $props();
+	let { mediaStream, data }: Props = $props();
 
 	let video: HTMLVideoElement;
+
+	let duration = $state('00:00:00');
+
+	setInterval(() => {
+		const { hours, minutes, seconds } = timeDifference(
+			Date.now(),
+			new Date(data.liveSession.session_live.started_at)
+		);
+
+		duration = `${hours}:${minutes}:${seconds}`;
+	}, 1000);
 
 	$effect(() => {
 		if (mediaStream) {
@@ -16,6 +31,13 @@
 
 <div id="player">
 	<video src="" bind:this={video} autoplay={true}></video>
+
+	<div class="overlay">
+		<div class="duration">
+			<span class="icon material-symbols-outlined" style="font-size : 30px;">bigtop_updates</span>
+			<span>{duration}</span>
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
@@ -31,6 +53,23 @@
 			height: 100%;
 			object-fit: contain;
 			transform: translate(-50%, -50%);
+		}
+
+		.overlay {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			.duration {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				background-color: rgba(0, 0, 0, 0.5);
+				padding: 10px;
+				border-radius: 10px;
+				.icon {
+					color: var(--sig);
+				}
+			}
 		}
 	}
 </style>

@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { LiveSessionManager } from '../liveSessionManager.svelte';
 	import type { MediaController } from '../mediaController.svelte';
 	import ControlPanel from './ControlPanel.svelte';
 	import Player from './Player.svelte';
+	import type { PageData } from './$types';
 
 	interface Props {
 		liveSessionManager: LiveSessionManager;
 		mediaController: MediaController;
+		data: PageData;
 	}
 
-	let { liveSessionManager, mediaController }: Props = $props();
+	let { liveSessionManager, mediaController, data }: Props = $props();
 
 	let liveStream = mediaController.mediaStream;
 
@@ -23,7 +25,7 @@
 
 <section id="live-session-organizer">
 	<div class="left">
-		<Player mediaStream={liveStream} />
+		<Player mediaStream={liveStream} {data} />
 		<ControlPanel {mediaController} />
 	</div>
 	<div class="right">
