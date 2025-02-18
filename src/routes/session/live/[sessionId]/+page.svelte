@@ -26,6 +26,7 @@
 			<LiveSessionOpenConfig {liveSessionManager} {mediaController} />
 		{:else if liveSessionManager.isClosed}
 			<!-- end -->
+			live session is closed
 		{:else}
 			<!-- open, pause -->
 			<LiveSession {liveSessionManager} {mediaController} {data} />

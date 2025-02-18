@@ -1,11 +1,14 @@
 <script lang="ts">
+	import type { LiveSessionManager } from '../liveSessionManager.svelte';
 	import type { MediaController } from '../mediaController.svelte';
+	import Modal from '$lib/components/util/Modal.svelte';
 
 	interface Props {
 		mediaController: MediaController;
+		liveSessionManager: LiveSessionManager;
 	}
 
-	let { mediaController } = $props();
+	let { mediaController, liveSessionManager }: Props = $props();
 </script>
 
 <div class="control-panel">
@@ -18,7 +21,11 @@
 	</div>
 	<div class="session-control">
 		<div class="quit">
-			<button>stop session</button>
+			<button
+				onclick={() => {
+					liveSessionManager.close();
+				}}>stop session</button
+			>
 		</div>
 	</div>
 </div>
@@ -59,6 +66,7 @@
 					background-color: var(--font-red);
 					color: var(--bg);
 					padding: 5px 15px;
+					font-weight: 900;
 				}
 			}
 		}

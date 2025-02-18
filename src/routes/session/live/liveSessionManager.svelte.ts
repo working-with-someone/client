@@ -61,9 +61,17 @@ export class LiveSessionManager extends SessionManager {
 		if (this.isClosed) throw new Error('can not exit session');
 
 		await this.changeStatus(liveSessionStatus.closed);
+
+		this.unpublish();
 	}
 
-	async publish(mediaStream: MediaStream) {
+	unpublish() {
+		if (this.mediaRecorder?.state === 'recording') {
+			this.mediaRecorder.stop();
+		}
+	}
+
+	publish(mediaStream: MediaStream) {
 		// open 상태가 아니라면 publish가 불가능하다.
 		if (!this.isOpened) {
 			throw new Error('live session is not opened');

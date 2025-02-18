@@ -26,7 +26,7 @@
 <section id="live-session-organizer">
 	<div class="left">
 		<Player mediaStream={liveStream} {data} />
-		<ControlPanel {mediaController} />
+		<ControlPanel {mediaController} {liveSessionManager} />
 	</div>
 	<div class="right">
 		<div class="body">
