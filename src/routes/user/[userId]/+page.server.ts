@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 	);
 	const isFollowingRes = await fetch(isFollowingEndpoint, { method: 'GET' });
 
-	const isFollowing = isFollowingRes.status === 204 ? true : false;
+	const isFollowing = isFollowingRes.status === 200 ? true : false;
 
 	return {
 		targetUser,
