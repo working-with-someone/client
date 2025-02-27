@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { LiveSessionManager } from '../liveSessionManager.svelte';
-	import type { MediaController } from '../mediaController.svelte';
+	import type { LiveSessionManager } from './liveSessionManager.svelte';
+	import type { MediaController } from './mediaController.svelte';
 	import Modal from '$lib/components/util/Modal.svelte';
 
 	interface Props {

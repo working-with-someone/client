@@ -1,8 +1,8 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { accessLevel } from '../../../enums/session';
-	import { LiveSessionManager } from '../../../routes/session/live/liveSessionManager.svelte';
-	import { MediaController } from '../../../routes/session/live/mediaController.svelte';
+	import { LiveSessionManager } from '../../../routes/session/live/[sessionId]/studio/liveSessionManager.svelte';
+	import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
 	import { onMount } from 'svelte';
 
 	interface Props {

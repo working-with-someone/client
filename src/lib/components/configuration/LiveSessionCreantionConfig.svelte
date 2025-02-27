@@ -68,7 +68,7 @@
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				window.location.href = `/session/live/${data.id}`;
+				window.location.href = `/session/live/${data.id}/studio`;
 			});
 	}
 </script>

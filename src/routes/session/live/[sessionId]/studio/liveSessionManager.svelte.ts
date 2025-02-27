@@ -1,6 +1,6 @@
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import wwsfetch from '$lib/utils/wwsfetch';
-import { liveSessionStatus, type accessLevel } from '../../../enums/session';
+import { liveSessionStatus, type accessLevel } from '../../../../../enums/session';
 import io, { Socket } from 'socket.io-client';
 import httpStatusCodes from 'http-status-codes';
 

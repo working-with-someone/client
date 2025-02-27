@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { LiveSessionManager } from '../liveSessionManager.svelte';
-	import type { MediaController } from '../mediaController.svelte';
-	import ControlPanel from './ControlPanel.svelte';
+	import type { LiveSessionManager } from './liveSessionManager.svelte';
+	import type { MediaController } from './mediaController.svelte';
 	import Player from './Player.svelte';
-	import type { PageData } from './$types';
+	import ControlPanel from './ControlPanel.svelte';
+
+	import type { PageData } from '../$types';
 
 	interface Props {
 		liveSessionManager: LiveSessionManager;

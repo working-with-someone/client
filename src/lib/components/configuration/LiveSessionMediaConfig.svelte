@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MediaController } from '../../../routes/session/live/mediaController.svelte';
+	import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
 
 	interface Props {
 		mediaController: MediaController;

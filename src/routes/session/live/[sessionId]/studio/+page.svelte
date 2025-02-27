@@ -1,10 +1,11 @@
 <script lang="ts">
 	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { LiveSessionManager } from '../liveSessionManager.svelte';
-	import { MediaController } from '../mediaController.svelte';
+	import { LiveSessionManager } from './liveSessionManager.svelte';
+	import { MediaController } from './mediaController.svelte';
 	import LiveSession from './LiveSession.svelte';
-	import type { PageData } from './$types';
+
+	import type { PageData } from '../$types';
 
 	let { data }: { data: PageData } = $props();
 
