@@ -3,6 +3,8 @@ import wwsfetch from '$lib/utils/wwsfetch';
 import { liveSessionStatus, type accessLevel } from '../../../../../enums/session';
 import io, { Socket } from 'socket.io-client';
 import httpStatusCodes from 'http-status-codes';
+import { timeDifference } from '$lib/utils/time';
+import { error } from '@sveltejs/kit';
 
 export class SessionManager {
 	id: string;
@@ -30,7 +32,7 @@ export class SessionManager {
 
 export class LiveSessionManager extends SessionManager {
 	private status?: liveSessionStatus = $state<liveSessionStatus>();
-	private started_at: Date;
+	private started_at;
 	private socket: Socket;
 	private mediaRecorder?: MediaRecorder;
 
@@ -42,6 +44,21 @@ export class LiveSessionManager extends SessionManager {
 			withCredentials: true
 		});
 	}
+
+	async sync() {
+		const res = await wwsfetch(`/sessions/live/${this.id}`, {});
+
+		if (res.status != 200) {
+			error(res.status);
+		}
+
+		const session = await res.json();
+
+		this.status = session.session_live.status;
+		this.started_at = session.session_live.started_at;
+	}
+
+	async fetch() {}
 
 	// ready, pause 상태에서만 open이 가능하다.
 	async open() {
@@ -122,11 +139,7 @@ export class LiveSessionManager extends SessionManager {
 			throw new Error('can not change status of session');
 		}
 
-		const _status = await res.json();
-
-		this.status = _status;
-
-		return _status;
+		this.sync();
 	}
 
 	get isReady() {
@@ -143,5 +156,11 @@ export class LiveSessionManager extends SessionManager {
 
 	get isClosed() {
 		return this.status === liveSessionStatus.closed;
+	}
+
+	get elapsedTime() {
+		const { hours, minutes, seconds } = timeDifference(Date.now(), new Date(this.started_at));
+
+		return { hours, minutes, seconds };
 	}
 }

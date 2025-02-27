@@ -1,23 +1,21 @@
 <script lang="ts">
 	import type { PageData } from '../$types';
-	import { timeDifference } from '$lib/utils/time';
+	import { LiveSessionManager } from './liveSessionManager.svelte';
 
 	interface Props {
+		liveSessionManager: LiveSessionManager;
 		mediaStream?: MediaStream;
 		data: PageData;
 	}
 
-	let { mediaStream, data }: Props = $props();
+	let { mediaStream, liveSessionManager, data }: Props = $props();
 
 	let video: HTMLVideoElement;
 
 	let duration = $state('00:00:00');
 
 	setInterval(() => {
-		const { hours, minutes, seconds } = timeDifference(
-			Date.now(),
-			new Date(data.liveSession.session_live.started_at)
-		);
+		const { hours, minutes, seconds } = liveSessionManager.elapsedTime;
 
 		duration = `${hours}:${minutes}:${seconds}`;
 	}, 1000);
