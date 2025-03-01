@@ -60,21 +60,21 @@ export class LiveSessionManager extends SessionManager {
 
 	async fetch() {}
 
-	// ready, pause 상태에서만 open이 가능하다.
+	// ready, break 상태에서만 open이 가능하다.
 	async open() {
 		if (this.isClosed || this.isOpened) throw new Error('can not open session');
 
 		await this.changeStatus(liveSessionStatus.opened);
 	}
 
-	async pause() {
-		// open 상태에서만 pause가 가능하다.
+	async break() {
+		// open 상태에서만 break가 가능하다.
 		if (!this.isOpened) throw new Error('session does not opened');
 		await this.changeStatus(liveSessionStatus.opened);
 	}
 
 	async close() {
-		// ready, open, pause 상태에서만 close가 가능하다.
+		// ready, open, break 상태에서만 close가 가능하다.
 		if (this.isClosed) throw new Error('can not exit session');
 
 		await this.changeStatus(liveSessionStatus.closed);
@@ -150,8 +150,8 @@ export class LiveSessionManager extends SessionManager {
 		return this.status === liveSessionStatus.opened;
 	}
 
-	get isPaused() {
-		return this.status === liveSessionStatus.paused;
+	get isBreaked() {
+		return this.status === liveSessionStatus.breaked;
 	}
 
 	get isClosed() {

@@ -29,7 +29,7 @@
 			<!-- end -->
 			live session is closed
 		{:else}
-			<!-- open, pause -->
+			<!-- opened, breaked -->
 			<LiveSession {liveSessionManager} {mediaController} {data} />
 		{/if}
 	{/if}
