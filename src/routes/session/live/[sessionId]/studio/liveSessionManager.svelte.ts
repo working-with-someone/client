@@ -38,8 +38,8 @@ export class LiveSessionManager extends SessionManager {
 
 	constructor(liveSession) {
 		super(liveSession);
-		this.status = liveSession.session_live.status;
-		this.started_at = new Date(liveSession.session_live.started_at);
+		this.status = liveSession.status;
+		this.started_at = new Date(liveSession.started_at);
 		this.socket = io(PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.id, {
 			withCredentials: true
 		});
@@ -54,8 +54,8 @@ export class LiveSessionManager extends SessionManager {
 
 		const session = await res.json();
 
-		this.status = session.session_live.status;
-		this.started_at = session.session_live.started_at;
+		this.status = session.status;
+		this.started_at = session.started_at;
 	}
 
 	async fetch() {}
