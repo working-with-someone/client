@@ -1,16 +1,16 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { accessLevel } from '../../../enums/session';
-	import { LiveSessionManager } from '../../../routes/session/live/[sessionId]/studio/liveSessionManager.svelte';
 	import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
 	import { onMount } from 'svelte';
+	import { Studio } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
 
 	interface Props {
-		liveSessionManager: LiveSessionManager;
+		studio: Studio;
 		mediaController: MediaController;
 	}
 
-	let { liveSessionManager, mediaController }: Props = $props();
+	let { studio, mediaController }: Props = $props();
 
 	let previewVideo: HTMLVideoElement;
 
@@ -31,20 +31,20 @@
 		<div class="info-confirm">
 			<div class="title">
 				<p class="label">title</p>
-				<p class="value">{liveSessionManager.title}</p>
+				<p class="value">{studio.liveSession.title}</p>
 			</div>
 			<div class="description">
 				<p class="label">description</p>
-				<p class="value">{liveSessionManager.description}</p>
+				<p class="value">{studio.liveSession.description}</p>
 			</div>
 			<div class="access-level">
 				<p class="label">access level</p>
 				<p class="value">
-					{#if liveSessionManager.access_level === accessLevel.public}
+					{#if studio.liveSession.access_level === accessLevel.public}
 						public
-					{:else if liveSessionManager.access_level === accessLevel.followersOnly}
+					{:else if studio.liveSession.access_level === accessLevel.followersOnly}
 						followers only
-					{:else if liveSessionManager.access_level === accessLevel.private}
+					{:else if studio.liveSession.access_level === accessLevel.private}
 						private
 					{/if}
 				</p>
@@ -59,7 +59,7 @@
 		<button
 			class="btn-sig"
 			onclick={() => {
-				liveSessionManager.open();
+				studio.open();
 			}}>start</button
 		>
 	</div>

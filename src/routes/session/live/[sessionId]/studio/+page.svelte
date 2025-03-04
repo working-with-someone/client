@@ -1,15 +1,16 @@
 <script lang="ts">
 	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { LiveSessionManager } from './liveSessionManager.svelte';
 	import { MediaController } from './mediaController.svelte';
-	import LiveSession from './LiveSession.svelte';
+	import Main from './Main.svelte';
+	import { Studio } from './studio.svelte';
 
 	import type { PageData } from '../$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const liveSessionManager: LiveSessionManager = $state(new LiveSessionManager(data.liveSession));
+	const studio = new Studio(data.liveSession);
+
 	let mediaController = $state(new MediaController());
 
 	onMount(() => {
@@ -23,14 +24,14 @@
 <section id="live-session">
 	<!-- ready -->
 	{#if mediaController.initialized}
-		{#if liveSessionManager.isReady}
-			<LiveSessionOpenConfig {liveSessionManager} {mediaController} />
-		{:else if liveSessionManager.isClosed}
+		{#if studio.liveSession.isReady}
+			<LiveSessionOpenConfig {studio} {mediaController} />
+		{:else if studio.liveSession.isClosed}
 			<!-- end -->
 			live session is closed
 		{:else}
 			<!-- opened, breaked -->
-			<LiveSession {liveSessionManager} {mediaController} {data} />
+			<Main {studio} {mediaController} />
 		{/if}
 	{/if}
 </section>

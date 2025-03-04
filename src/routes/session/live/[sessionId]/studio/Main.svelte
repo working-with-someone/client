@@ -1,33 +1,32 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { LiveSessionManager } from './liveSessionManager.svelte';
 	import type { MediaController } from './mediaController.svelte';
-	import Player from './Player.svelte';
+	import Preview from './Preview.svelte';
 	import ControlPanel from './ControlPanel.svelte';
+	import { Studio } from './studio.svelte';
 
 	import type { PageData } from '../$types';
 
 	interface Props {
-		liveSessionManager: LiveSessionManager;
+		studio: Studio;
 		mediaController: MediaController;
-		data: PageData;
 	}
 
-	let { liveSessionManager, mediaController, data }: Props = $props();
+	let { studio, mediaController }: Props = $props();
 
 	let liveStream = mediaController.mediaStream;
 
 	onMount(() => {
-		if (liveSessionManager.isOpened) {
-			liveSessionManager.publish(mediaController.mediaStream);
+		if (studio.liveSession.isOpened) {
+			studio.publish(mediaController.mediaStream);
 		}
 	});
 </script>
 
 <section id="live-session-organizer">
 	<div class="left">
-		<Player {liveSessionManager} mediaStream={liveStream} {data} />
-		<ControlPanel {mediaController} {liveSessionManager} />
+		<Preview {studio} mediaStream={liveStream} />
+		<ControlPanel {mediaController} {studio} />
 	</div>
 	<div class="right">
 		<div class="body">
