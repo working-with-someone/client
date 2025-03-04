@@ -1,21 +1,19 @@
 <script lang="ts">
-	import type { PageData } from '../$types';
-	import { LiveSessionManager } from './liveSessionManager.svelte';
+	import type { Studio } from './studio.svelte';
 
 	interface Props {
-		liveSessionManager: LiveSessionManager;
+		studio: Studio;
 		mediaStream?: MediaStream;
-		data: PageData;
 	}
 
-	let { mediaStream, liveSessionManager, data }: Props = $props();
+	let { mediaStream, studio }: Props = $props();
 
 	let video: HTMLVideoElement;
 
 	let duration = $state('00:00:00');
 
 	setInterval(() => {
-		const { hours, minutes, seconds } = liveSessionManager.elapsedTime;
+		const { hours, minutes, seconds } = studio.elapsedTime;
 
 		duration = `${hours}:${minutes}:${seconds}`;
 	}, 1000);
