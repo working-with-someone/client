@@ -56,6 +56,7 @@ select {
   border-radius: 10px;
   background-color: var(--bg-input);
   color: var(--font-white);
+  resize : none;
 }
 
 input,
@@ -64,11 +65,10 @@ textarea:focus {
   outline: none;
 }
 
-input,
-select,
-textarea:hover {
+select:hover {
   cursor: pointer;
 }
+
 
 button {
   background: none;

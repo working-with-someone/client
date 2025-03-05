@@ -6,6 +6,7 @@
 	import { Studio } from './studio.svelte';
 
 	import type { PageData } from '../$types';
+	import ChatRoom from '../../../../../lib/components/Chat/ChatRoom.svelte';
 
 	interface Props {
 		studio: Studio;
@@ -30,20 +31,7 @@
 	</div>
 	<div class="right">
 		<div class="body">
-			<div class="chatroom">
-				<ul class="chat-list">
-					<li class="chat">
-						<div class="pfp">
-							<img
-								src="https://yt3.ggpht.com/UbQKBZo90ej_FI_Rvps-n05TFPKEXiUz3QHYdGPsq58PxxN6DYZGHkfnZ-wDyZUL1fo-sW3k=s88-c-k-c0x00ffffff-no-rj"
-								alt=""
-							/>
-						</div>
-						<div class="username">seungho-hub</div>
-						<div class="text">let's get it</div>
-					</li>
-				</ul>
-			</div>
+			<ChatRoom />
 		</div>
 	</div>
 </section>
@@ -75,27 +63,6 @@
 				height: 100%;
 				padding: 10px;
 				border-radius: 0 10px 10px 0;
-				.chatroom {
-					.chat-list {
-						.chat {
-							display: flex;
-							flex-direction: row;
-							gap: 10px;
-							font-size: 12px;
-							.pfp {
-								width: 24px;
-								height: 24px;
-								border-radius: 12px;
-								img {
-									width: 100%;
-								}
-							}
-							.username {
-								color: var(--font-light-gray);
-							}
-						}
-					}
-				}
 			}
 		}
 	}
