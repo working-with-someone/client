@@ -1,6 +1,11 @@
 const WS_CHANNELS = {
-	chat: 'chat',
-	broadcast: 'chat:broadcast'
+	chat: {
+		broadCastSend: 'chat:broadcast:send',
+		broadCastRecive: 'chat:broadcast:receive'
+	},
+	stream: {
+		push: 'stream:push'
+	}
 };
 
 export default WS_CHANNELS;

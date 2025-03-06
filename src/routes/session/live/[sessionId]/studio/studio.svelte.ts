@@ -6,10 +6,11 @@ import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from './organizerChatManager.svelte';
+import WS_CHANNELS from '$lib/constants/channels';
 
 export class Studio {
 	liveSession: LiveSession;
-	chatManager: OrganizerChatManager
+	chatManager: OrganizerChatManager;
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
@@ -62,7 +63,7 @@ export class Studio {
 				reader.onload = () => {
 					const buffer = reader.result;
 
-					this.socket.emit('stream:push', buffer, (resp) => {
+					this.socket.emit(WS_CHANNELS.stream.push, buffer, (resp) => {
 						console.log(resp);
 					});
 				};

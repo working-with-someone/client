@@ -13,15 +13,15 @@ export class OrganizerChatManager implements ChatManager {
 	}
 
 	chat(msg: string) {
-		this.socket.emit(WS_CHANNELS.chat, msg);
+		this.socket.emit(WS_CHANNELS.chat.broadCastSend, msg);
 	}
 
 	listenBroadCast() {
-		if (this.socket.hasListeners(WS_CHANNELS.broadcast)) {
-			this.socket.removeListener(WS_CHANNELS.broadcast);
+		if (this.socket.hasListeners(WS_CHANNELS.chat.broadCastRecive)) {
+			this.socket.removeListener(WS_CHANNELS.chat.broadCastRecive);
 		}
 
-		this.socket.on(WS_CHANNELS.broadcast, (data) => {
+		this.socket.on(WS_CHANNELS.chat.broadCastRecive, (data) => {
 			this.chatLogs.push(data);
 		});
 	}
