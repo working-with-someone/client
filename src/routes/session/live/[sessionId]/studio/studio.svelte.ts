@@ -5,11 +5,11 @@ import { liveSessionStatus } from '../../../../../enums/session';
 import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
-import { ChatManager } from './chatManager.svelte';
+import { OrganizerChatManager } from './organizerChatManager.svelte';
 
 export class Studio {
 	liveSession: LiveSession;
-	chatManager: ChatManager;
+	chatManager: OrganizerChatManager
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
@@ -23,7 +23,7 @@ export class Studio {
 			}
 		);
 
-		this.chatManager = new ChatManager(this.socket);
+		this.chatManager = new OrganizerChatManager(this.socket);
 	}
 
 	async open() {

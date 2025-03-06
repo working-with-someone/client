@@ -1,8 +1,9 @@
 import type { ChatLog } from '../../../../../@types/chat';
 import { Socket } from 'socket.io-client';
 import WS_CHANNELS from '$lib/constants/channels';
+import type { ChatManager } from '../chatManager';
 
-export class ChatManager {
+export class OrganizerChatManager implements ChatManager {
 	chatLogs = $state<Array<ChatLog>>([]);
 	socket: Socket;
 	constructor(socket: Socket) {

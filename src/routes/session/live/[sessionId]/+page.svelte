@@ -1,8 +1,11 @@
 <script lang="ts">
 	import HlsPlayer from '$lib/components/HlsPlayer/HlsPlayer.svelte';
 	import type { PageData } from './$types';
+	import { ClientChatManager } from './clientChatManager.svelte';
+	import ChatRoom from './ChatRoom.svelte';
 
 	const { data }: { data: PageData } = $props();
+	const clientChatManager = new ClientChatManager(data.liveSession.id);
 </script>
 
 <section id="live-session">
@@ -11,20 +14,7 @@
 	</div>
 	<div class="right">
 		<div class="body">
-			<div class="chatroom">
-				<ul class="chat-list">
-					<li class="chat">
-						<div class="pfp">
-							<img
-								src="https://yt3.ggpht.com/UbQKBZo90ej_FI_Rvps-n05TFPKEXiUz3QHYdGPsq58PxxN6DYZGHkfnZ-wDyZUL1fo-sW3k=s88-c-k-c0x00ffffff-no-rj"
-								alt=""
-							/>
-						</div>
-						<div class="username">seungho-hub</div>
-						<div class="text">let's get it</div>
-					</li>
-				</ul>
-			</div>
+			<ChatRoom {clientChatManager} />
 		</div>
 	</div>
 </section>
