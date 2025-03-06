@@ -1,26 +1,37 @@
 <script lang="ts">
+	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import { Studio } from './studio.svelte';
+	import { slide } from 'svelte/transition';
 	let chatInput: HTMLTextAreaElement;
 
-	function sendChat() {
-		const message = chatInput.value;
-		chatInput.value = '';
+	interface Props {
+		studio: Studio;
+	}
 
+	const { studio }: Props = $props();
+
+	function sendChat() {
+		const msg = chatInput.value;
+		studio.chatManager.chat(msg);
+
+		chatInput.value = '';
 		chatInput.focus();
 	}
 </script>
 
 <div class="chatroom">
 	<ul class="chat-log-list">
-		<li class="chat-log">
-			<div class="pfp">
-				<img
-					src="https://yt3.ggpht.com/UbQKBZo90ej_FI_Rvps-n05TFPKEXiUz3QHYdGPsq58PxxN6DYZGHkfnZ-wDyZUL1fo-sW3k=s88-c-k-c0x00ffffff-no-rj"
-					alt=""
-				/>
-			</div>
-			<div class="username">seungho-hub</div>
-			<div class="text">let's get it</div>
-		</li>
+		{#each studio.chatManager.chatLogs as chatLog}
+			<li class="chat-log" transition:slide>
+				<div class="pfp">
+					<img src={`${PUBLIC_API_SERVER_DOMAIN}${chatLog.user.pfp}`} alt="" />
+				</div>
+				<div class="message">
+					<span class="username">{chatLog.user.username}</span>
+					<span class="text">{chatLog.msg}</span>
+				</div>
+			</li>
+		{/each}
 	</ul>
 
 	<div class="chat-form">
@@ -49,28 +60,49 @@
 </div>
 
 <style lang="scss">
+	$chat-width: 330px;
+	$pfp-width: 26px;
 	.chatroom {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		width: 100%;
 		.chat-log-list {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			overflow: scroll;
 			flex-grow: 1;
+			justify-content: end;
+			margin-bottom: 20px;
 			.chat-log {
 				display: flex;
 				flex-direction: row;
 				gap: 10px;
 				font-size: 12px;
+				width: $chat-width;
+
 				.pfp {
-					width: 24px;
-					height: 24px;
-					border-radius: 12px;
+					width: $pfp-width;
+					height: $pfp-width;
+					border-radius: calc($pfp-width / 2);
+					overflow: hidden;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					img {
 						width: 100%;
 					}
 				}
-				.username {
-					color: var(--font-light-gray);
+				.message {
+					width: calc($chat-width - $pfp-width);
+					white-space: normal;
+					word-wrap: break-word;
+					overflow-wrap: break-word;
+
+					.username {
+						color: var(--font-light-gray);
+					}
 				}
 			}
 		}

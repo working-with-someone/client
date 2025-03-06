@@ -5,8 +5,7 @@
 	import ControlPanel from './ControlPanel.svelte';
 	import { Studio } from './studio.svelte';
 
-	import type { PageData } from '../$types';
-	import ChatRoom from '../../../../../lib/components/Chat/ChatRoom.svelte';
+	import ChatRoom from './ChatRoom.svelte';
 
 	interface Props {
 		studio: Studio;
@@ -31,7 +30,7 @@
 	</div>
 	<div class="right">
 		<div class="body">
-			<ChatRoom />
+			<ChatRoom {studio} />
 		</div>
 	</div>
 </section>
@@ -47,6 +46,7 @@
 		display: grid;
 		grid-template-areas: 'left right';
 		grid-template-columns: auto $chat-width;
+		grid-template-rows: 100% 100%;
 		padding: 10px;
 		gap: 10px;
 		.left {
@@ -56,7 +56,6 @@
 		}
 		.right {
 			grid: right;
-			display: flex;
 			flex-direction: column;
 			.body {
 				background-color: var(--bg);
