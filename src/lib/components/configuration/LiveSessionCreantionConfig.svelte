@@ -2,6 +2,7 @@
 	import wwsfetch from '$lib/utils/wwsfetch';
 	import { onMount } from 'svelte';
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
+	import Switch from '../input/ToggleSwitch.svelte';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -9,7 +10,7 @@
 
 	// must be fetch categories
 	let thumbnailImg: HTMLImageElement;
-
+	let enableBreakTime = $state(true);
 	// must be fetch categories
 	let categories: string[] = $state([]);
 
@@ -19,6 +20,9 @@
 	let description = $state('');
 	let category = $state('');
 	let accessLevel = $state(1);
+
+	let breakTimeInterval: string = '50';
+	let breakTimeDuration: string = '10';
 
 	onMount(() => {
 		loadCategories();
@@ -50,7 +54,7 @@
 		}
 	};
 
-	function createLiveSession() {
+	async function createLiveSession() {
 		const formData = new FormData();
 
 		formData.append('title', title);
@@ -62,14 +66,22 @@
 			formData.append('thumbnail', thumbnailImgInput.files[0]);
 		}
 
-		wwsfetch('/sessions/live', {
+		const liveSession = await wwsfetch('/sessions/live', {
 			method: 'POST',
 			body: formData
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				window.location.href = `/session/live/${data.id}/studio`;
+		}).then((res) => res.json());
+
+		if (enableBreakTime) {
+			const breakTime = await wwsfetch(`/sessions/live/${liveSession.id}/break_time`, {
+				method: 'POST',
+				body: new URLSearchParams({
+					interval: breakTimeInterval,
+					duration: breakTimeDuration
+				})
 			});
+		}
+
+		window.location.href = `/session/live/${liveSession.id}/studio`;
 	}
 </script>
 
@@ -78,7 +90,7 @@
 
 	<div class="body">
 		<div class="detail config">
-			<div class="header-sub header-sub2">
+			<div class="header-sub">
 				<p>Details</p>
 			</div>
 			<InnerLabelInput label={'title (required)'}>
@@ -103,7 +115,7 @@
 			</InnerLabelInput>
 		</div>
 		<div class="thumbnail config">
-			<div class="header-sub header-sub2">
+			<div class="header-sub">
 				<p>Thumbnail</p>
 				<span>select thumbnail for live session</span>
 			</div>
@@ -126,7 +138,7 @@
 		</div>
 
 		<div class="category config">
-			<div class="header-sub header-sub2">
+			<div class="header-sub">
 				<p>Category</p>
 				<span>select category</span>
 			</div>
@@ -146,7 +158,7 @@
 		</div>
 
 		<div class="privacy config">
-			<div class="header-sub header-sub2">
+			<div class="header-sub">
 				<p>Privacy</p>
 				<span>who can join your session?</span>
 			</div>
@@ -193,6 +205,38 @@
 				</label>
 			</div>
 		</div>
+
+		<hr />
+		<div class="break-time config">
+			<div class="header-sub">
+				<p>Break Time</p>
+				<Switch bind:toggled={enableBreakTime} />
+				{#if !enableBreakTime}
+					<span>Even if you disable the break time, a manual break is possible</span>
+				{/if}
+			</div>
+			{#if enableBreakTime}
+				<div class="minutes">
+					<span>Every</span>
+					<input
+						class="break-time-duration-input"
+						type="number"
+						min="1"
+						max="60"
+						bind:value={breakTimeDuration}
+					/>
+					<span> minute break will be taken every </span>
+					<input
+						class="break-time-interval-input"
+						type="number"
+						min="10"
+						max="600"
+						bind:value={breakTimeInterval}
+					/>
+					<span>minutes.</span>
+				</div>
+			{/if}
+		</div>
 	</div>
 	<div class="footer">
 		<span class="info">pressing 'start' doesn’t immediately begin the broadcast!</span>
@@ -233,7 +277,7 @@
 				flex-direction: column;
 				gap: 10px;
 			}
-			.header-sub2 {
+			.header-sub {
 				margin-bottom: 5px;
 				p {
 					font-size: 15px;
@@ -301,6 +345,28 @@
 							width: 100%;
 							object-fit: cover;
 						}
+					}
+				}
+			}
+
+			.break-time {
+				.header-sub {
+					display: flex;
+					flex-direction: row;
+					align-items: end;
+					gap: 10px;
+				}
+				.minutes {
+					font-size: 13px;
+					span {
+						color: var(--font-gray);
+					}
+					input {
+						background: none;
+						border: 1px solid var(--font-gray);
+						width: 50px;
+						padding: 1px 3px;
+						text-align: center;
 					}
 				}
 			}

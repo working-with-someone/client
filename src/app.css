@@ -4,6 +4,7 @@
   --sig: #FFCA36;
   --font-white: #DDDDDD;
   --font-black: #161728;
+  --font-gray: gray;
   --font-light-gray: #686868;
   --font-dark-gray: #565657;
   --font-red: #eb5a40;
@@ -13,7 +14,7 @@
   --bg-input: #000000;
   --border-input: #30363d;
   --border: #21262D;
-  --focus : #4552b4;
+  --focus: #4552b4;
 }
 
 * {
@@ -56,13 +57,25 @@ select {
   border-radius: 10px;
   background-color: var(--bg-input);
   color: var(--font-white);
-  resize : none;
+  resize: none;
 }
 
 input,
 select,
 textarea:focus {
   outline: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 select:hover {
@@ -328,4 +341,8 @@ select {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
+}
+
+hr {
+  border: 1px solid var(--font-gray);
 }
