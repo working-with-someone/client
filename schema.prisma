@@ -95,6 +95,15 @@ model live_session {
   organizer_id Int
   organizer    user                 @relation(fields: [organizer_id], references: [id], onDelete: Cascade)
   allow        live_session_allow[]
+  break_time   break_time?
+}
+
+model break_time {
+  session_id String @id
+  interval   Int
+  duration   Int
+
+  live_session live_session? @relation(fields: [session_id], references: [id], onDelete: Cascade)
 }
 
 model live_session_allow {
