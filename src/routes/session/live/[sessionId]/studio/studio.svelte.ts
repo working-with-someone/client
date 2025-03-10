@@ -14,8 +14,8 @@ export class Studio {
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
-	constructor(liveSession: Prisma.live_sessionGetPayload<true>) {
-		this.liveSession = new LiveSession(liveSession);
+	constructor(liveSession: LiveSession) {
+		this.liveSession = liveSession
 
 		this.socket = io(
 			PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.liveSession.id,
@@ -103,8 +103,9 @@ export class LiveSession implements Prisma.live_sessionGetPayload<true> {
 	updated_at: Date;
 	started_at: Date | null;
 	organizer_id: number;
+	breakTime?: Prisma.break_timeGetPayload<true>
 
-	constructor(liveSession: Prisma.live_sessionGetPayload<true>) {
+	constructor(liveSession: Prisma.live_sessionGetPayload<true>, breakTime?: Prisma.break_timeGetPayload<true>) {
 		this.id = liveSession.id;
 		this.title = liveSession.title;
 		this.description = liveSession.description;
@@ -119,6 +120,8 @@ export class LiveSession implements Prisma.live_sessionGetPayload<true> {
 		this.started_at = liveSession.started_at ? new Date(liveSession.started_at) : null;
 
 		this.organizer_id = liveSession.organizer_id;
+
+		this.breakTime = breakTime;
 	}
 
 	get isReady() {
@@ -135,6 +138,10 @@ export class LiveSession implements Prisma.live_sessionGetPayload<true> {
 
 	get isClosed() {
 		return this.status === liveSessionStatus.closed;
+	}
+
+	get breakTimeEnabled() {
+		return this.breakTime ? true : false;
 	}
 
 	async fetch() {
