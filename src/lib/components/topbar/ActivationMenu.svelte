@@ -50,6 +50,7 @@
 	.activation-menus {
 		display: flex;
 		flex-direction: row;
+		gap: 5px;
 		.menu-item.open-session {
 			&:hover {
 				span {
