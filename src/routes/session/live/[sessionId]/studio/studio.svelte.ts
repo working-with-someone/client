@@ -7,15 +7,17 @@ import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from './organizerChatManager.svelte';
 import WS_CHANNELS from '$lib/constants/channels';
+import Schedular from './Schedular.svelte';
 
 export class Studio {
 	liveSession: LiveSession;
 	chatManager: OrganizerChatManager;
+	schedular: Schedular;
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
 	constructor(liveSession: LiveSession) {
-		this.liveSession = liveSession
+		this.liveSession = liveSession;
 
 		this.socket = io(
 			PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.liveSession.id,
@@ -25,6 +27,7 @@ export class Studio {
 		);
 
 		this.chatManager = new OrganizerChatManager(this.socket);
+		this.schedular = new Schedular();
 	}
 
 	async open() {
@@ -103,9 +106,12 @@ export class LiveSession implements Prisma.live_sessionGetPayload<true> {
 	updated_at: Date;
 	started_at: Date | null;
 	organizer_id: number;
-	breakTime?: Prisma.break_timeGetPayload<true>
+	breakTime?: Prisma.break_timeGetPayload<true>;
 
-	constructor(liveSession: Prisma.live_sessionGetPayload<true>, breakTime?: Prisma.break_timeGetPayload<true>) {
+	constructor(
+		liveSession: Prisma.live_sessionGetPayload<true>,
+		breakTime?: Prisma.break_timeGetPayload<true>
+	) {
 		this.id = liveSession.id;
 		this.title = liveSession.title;
 		this.description = liveSession.description;
