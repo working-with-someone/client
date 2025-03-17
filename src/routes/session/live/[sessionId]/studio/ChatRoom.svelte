@@ -20,6 +20,13 @@
 </script>
 
 <div class="chatroom">
+	{#if studio.liveSession.isBreaked}
+		<div class="chat-lock">
+			<p class="material-symbols-outlined">lock</p>
+			<p>Focus on your task</p>
+		</div>
+	{/if}
+
 	<ul class="chat-log-list">
 		{#each studio.chatManager.chatLogs as chatLog}
 			<li class="chat-log" transition:slide>
@@ -62,11 +69,29 @@
 <style lang="scss">
 	$chat-width: 330px;
 	$pfp-width: 26px;
+
 	.chatroom {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		width: 100%;
+
+		.chat-lock {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.9);
+			z-index: 10;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 20px;
+		}
+
 		.chat-log-list {
 			display: flex;
 			flex-direction: column;
