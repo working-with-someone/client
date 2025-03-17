@@ -16,10 +16,13 @@
 
 	let liveStream = mediaController.mediaStream;
 
-	onMount(() => {
-		if (studio.liveSession.isOpened) {
-			studio.publish(mediaController.mediaStream);
+	onMount(async () => {
+		if (!studio.liveSession.isOpened) {
+			await studio.open();
 		}
+
+		studio.publish(mediaController.mediaStream);
+		studio.startBreakTimeSchedular();
 	});
 </script>
 
