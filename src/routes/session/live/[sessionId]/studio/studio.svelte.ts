@@ -2,7 +2,7 @@ import wwsfetch from '$lib/utils/wwsfetch';
 import type { Prisma } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import { liveSessionStatus } from '../../../../../enums/session';
-import { timeDifference } from '$lib/utils/time';
+import { timeDifference, toMilliseconds } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from './organizerChatManager.svelte';
@@ -28,6 +28,8 @@ export class Studio {
 
 		this.chatManager = new OrganizerChatManager(this.socket);
 		this.schedular = new Schedular();
+
+		this.startBreakTimeSchedular();
 	}
 
 	async open() {
@@ -90,6 +92,29 @@ export class Studio {
 		const { hours, minutes, seconds } = timeDifference(Date.now(), this.liveSession.started_at!);
 
 		return { hours, minutes, seconds };
+	}
+
+	startBreakTimeSchedular() {
+		if (this.liveSession.breakTime) {
+			const intervalMs = toMilliseconds(this.liveSession.breakTime.interval, 'm');
+			const durationMs = toMilliseconds(this.liveSession.breakTime.duration, 'm');
+
+			this.schedular.set(intervalMs, () => {
+				this.break();
+
+				this.schedular.set(durationMs, () => {
+					this.open();
+				});
+
+				this.schedular.setInterval(intervalMs + durationMs, () => {
+					this.break();
+
+					this.schedular.set(durationMs, () => {
+						this.open();
+					});
+				});
+			});
+		}
 	}
 }
 

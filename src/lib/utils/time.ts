@@ -18,3 +18,25 @@ export function timeDifference(from: number | string | Date, to: number | string
 		seconds: String(seconds).padStart(2, '0')
 	};
 }
+
+export function toMilliseconds(value: number, unit: 'h' | 'm' | 's' | 'ms'): number {
+	const conversions = {
+		h: 3600000,
+		m: 60000,
+		s: 1000,
+		ms: 1
+	};
+
+	return value * (conversions[unit] || 1);
+}
+
+export function toMinutes(value: number, unit: 'h' | 'm' | 's' | 'ms'): number {
+	const conversions = {
+		h: 60,
+		m: 1,
+		s: 1 / 60,
+		ms: 1 / 60000
+	};
+
+	return value * (conversions[unit] || 1);
+}

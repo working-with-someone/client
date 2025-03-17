@@ -1,4 +1,6 @@
-class Schedular {
+import { toMilliseconds } from '$lib/utils/time';
+
+export class Schedular {
 	private schedules: Map<number, NodeJS.Timeout> = new Map();
 	private counter = 0;
 
@@ -11,6 +13,15 @@ class Schedular {
 		}, ms);
 
 		this.schedules.set(scheduleId, timeout);
+
+		return scheduleId;
+	}
+
+	setInterval(ms: number, cb: () => void): number {
+		const scheduleId = this.counter++;
+
+		const interval = setInterval(cb, ms);
+		this.schedules.set(scheduleId, interval);
 
 		return scheduleId;
 	}
