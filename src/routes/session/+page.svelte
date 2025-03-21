@@ -1,6 +1,6 @@
 <script lang="ts">
-	import SessionDeck from '$lib/components/session/SessionDeck.svelte';
-	import TopBar from '$lib/components/topbar/TopBar.svelte';
+	import SessionDeck from '$lib/components/cards/SessionDeck.svelte';
+	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 
 	let { data } = $props();
 </script>

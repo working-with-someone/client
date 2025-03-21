@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Studio } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
-	import StateTag from './live/StateTag.svelte';
+	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
 		studio: Studio;

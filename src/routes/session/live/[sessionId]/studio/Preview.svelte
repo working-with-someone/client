@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LiveSessionOverlay from '$lib/components/session/LiveSessionOverlay.svelte';
+	import LiveSessionOverlay from '$lib/components/overlay/LiveSessionOverlay.svelte';
 	import type { Studio } from './studio.svelte';
 
 	interface Props {

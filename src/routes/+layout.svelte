@@ -1,6 +1,6 @@
 <script>
 	import '../app.css';
-	import SideBar from '../lib/components/sidebar/SideBar.svelte';
+	import SideBar from '../lib/components/bar/SideBar.svelte';
 	import { setContext } from 'svelte';
 	import { user } from '$lib/store/user';
 
@@ -27,7 +27,7 @@
 		grid-template-columns: 100px calc(100% - 100px);
 		grid-template-areas: 'sidebar content';
 		.content {
-			width : 100%;
+			width: 100%;
 			overflow: scroll;
 			padding: 20px;
 		}

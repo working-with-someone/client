@@ -1,5 +1,5 @@
 <script>
-	import Nav from './Nav.svelte';
+	import Nav from './NavBar.svelte';
 	import Avatar from '../profile/Avatar.svelte';
 	import { getContext } from 'svelte';
 

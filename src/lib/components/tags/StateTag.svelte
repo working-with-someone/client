@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LiveSession } from '../../../../routes/session/live/[sessionId]/studio/studio.svelte';
+	import type { LiveSession } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
 
 	interface Props {
 		liveSession: LiveSession;

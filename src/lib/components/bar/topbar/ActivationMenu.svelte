@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Modal from '../util/Modal.svelte';
-	import LiveSessionCreationConfig from '../configuration/LiveSessionCreantionConfig.svelte';
-	import SessionUploadConfig from '../configuration/SessionUploadConfig.svelte';
+	import Modal from '../../modals/Modal.svelte';
+	import LiveSessionCreationConfig from '../../configuration/LiveSessionCreantionConfig.svelte';
+	import SessionUploadConfig from '../../configuration/SessionUploadConfig.svelte';
 
 	function closeSessionUploadModal() {
 		showSessionUploadModal = false;
