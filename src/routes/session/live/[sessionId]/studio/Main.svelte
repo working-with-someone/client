@@ -22,7 +22,6 @@
 		}
 
 		studio.publish(mediaController.mediaStream);
-		studio.startBreakTimeSchedular();
 	});
 </script>
 

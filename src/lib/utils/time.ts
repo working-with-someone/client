@@ -1,16 +1,11 @@
-export function timeDifference(from: number | string | Date, to: number | string | Date) {
-	const _from = new Date(from).getTime();
-	const _to = new Date(to).getTime();
+export function convertMillisecondsToTime(ms: number) {
+	const hours = Math.floor(ms / (1000 * 60 * 60));
+	ms -= hours * (1000 * 60 * 60);
 
-	let diff = Math.abs(_to - _from);
+	const minutes = Math.floor(ms / (1000 * 60));
+	ms -= minutes * (1000 * 60);
 
-	const hours = Math.floor(diff / (1000 * 60 * 60));
-	diff -= hours * (1000 * 60 * 60);
-
-	const minutes = Math.floor(diff / (1000 * 60));
-	diff -= minutes * (1000 * 60);
-
-	const seconds = Math.floor(diff / 1000);
+	const seconds = Math.floor(ms / 1000);
 
 	return {
 		hours: String(hours).padStart(2, '0'),
@@ -19,12 +14,30 @@ export function timeDifference(from: number | string | Date, to: number | string
 	};
 }
 
+export function timeDifference(from: number | string | Date, to: number | string | Date) {
+	const _from = new Date(from).getTime();
+	const _to = new Date(to).getTime();
+
+	const diff = Math.abs(_to - _from);
+	return convertMillisecondsToTime(diff);
+}
 export function toMilliseconds(value: number, unit: 'h' | 'm' | 's' | 'ms'): number {
 	const conversions = {
 		h: 3600000,
 		m: 60000,
 		s: 1000,
 		ms: 1
+	};
+
+	return value * (conversions[unit] || 1);
+}
+
+export function toSeconds(value: number, unit: 'h' | 'm' | 's' | 'ms'): number {
+	const conversions = {
+		h: 3600,
+		m: 60,
+		s: 1,
+		ms: 1 / 1000
 	};
 
 	return value * (conversions[unit] || 1);

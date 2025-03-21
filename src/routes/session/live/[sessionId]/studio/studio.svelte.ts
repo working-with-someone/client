@@ -2,17 +2,17 @@ import wwsfetch from '$lib/utils/wwsfetch';
 import type { Prisma } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import { liveSessionStatus } from '../../../../../enums/session';
-import { timeDifference, toMilliseconds } from '$lib/utils/time';
+import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from './organizerChatManager.svelte';
 import WS_CHANNELS from '$lib/constants/channels';
-import Schedular from './Schedular.svelte';
+import { BreakTimeSchedular } from './BreakTimeSchedular.svelte';
 
 export class Studio {
 	liveSession: LiveSession;
 	chatManager: OrganizerChatManager;
-	schedular: Schedular;
+	breakTimeSchedular?: BreakTimeSchedular;
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
@@ -27,9 +27,13 @@ export class Studio {
 		);
 
 		this.chatManager = new OrganizerChatManager(this.socket);
-		this.schedular = new Schedular();
 
-		this.startBreakTimeSchedular();
+		if (this.liveSession.breakTime) {
+			this.breakTimeSchedular = new BreakTimeSchedular({
+				interval: this.liveSession.breakTime.interval,
+				duration: this.liveSession.breakTime.duration
+			});
+		}
 	}
 
 	async open() {
@@ -80,6 +84,13 @@ export class Studio {
 
 		// 300ms timeslice를 specify해 300ms마다 seperate chunk를 capture한다.
 		this.mediaRecorder.start(500);
+
+		// break time이 설정되어있다면, break time schedule
+		if (this.breakTimeSchedular)
+			this.breakTimeSchedular.start(
+				() => this.open(),
+				() => this.break()
+			);
 	}
 
 	unpublish() {
@@ -92,29 +103,6 @@ export class Studio {
 		const { hours, minutes, seconds } = timeDifference(Date.now(), this.liveSession.started_at!);
 
 		return { hours, minutes, seconds };
-	}
-
-	startBreakTimeSchedular() {
-		if (this.liveSession.breakTime) {
-			const intervalMs = toMilliseconds(this.liveSession.breakTime.interval, 'm');
-			const durationMs = toMilliseconds(this.liveSession.breakTime.duration, 'm');
-
-			this.schedular.set(intervalMs, () => {
-				this.break();
-
-				this.schedular.set(durationMs, () => {
-					this.open();
-				});
-
-				this.schedular.setInterval(intervalMs + durationMs, () => {
-					this.break();
-
-					this.schedular.set(durationMs, () => {
-						this.open();
-					});
-				});
-			});
-		}
 	}
 }
 
