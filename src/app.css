@@ -15,6 +15,12 @@
   --border-input: #30363d;
   --border: #21262D;
   --focus: #4552b4;
+
+  --dark-green: #064e3b;
+  --light-green: #6ee7b7;
+
+  --dark-blue: #1e3a8a;
+  --light-blue: #93c5fd;
 }
 
 * {
