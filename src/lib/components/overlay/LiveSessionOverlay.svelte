@@ -41,7 +41,7 @@
 				{#if studio.liveSession.isOpened}
 					<span class="until-open">{untilBreak}</span>
 				{:else if studio.liveSession.isBreaked}
-					<span class="until-open">{untilOpen}</span>
+					<span class="until-break">{untilOpen}</span>
 				{/if}
 			</div>
 		{/if}
