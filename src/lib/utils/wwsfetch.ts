@@ -4,6 +4,8 @@ import {
 	PUBLIC_CLIENT_SERVER_DOMAIN,
 	PUBLIC_AUTH_SERVER_DOMAIN
 } from '$env/static/public';
+import { wwsError } from '$lib/error/wwsError';
+import httpStatusCode from 'http-status-codes';
 
 interface Option extends RequestInit {
 	baseUrl?: string;
@@ -16,8 +18,8 @@ async function wwsfetch(path: string, options: Option) {
 	const endPoint = new URL(path, options?.baseUrl ? options?.baseUrl : PUBLIC_API_SERVER_DOMAIN);
 
 	if (options?.queryParams) {
-		Object.entries(options.queryParams).forEach((entry) => {
-			endPoint.searchParams.append(entry[0], entry[1]);
+		Object.entries(options.queryParams).forEach(([key, value]) => {
+			endPoint.searchParams.append(key, value);
 		});
 	}
 
@@ -25,15 +27,18 @@ async function wwsfetch(path: string, options: Option) {
 		...options
 	});
 
-	switch (res.status) {
-		case 401: {
-			const redirectURL = new URL('/', PUBLIC_CLIENT_SERVER_DOMAIN);
-			const loginURL = new URL('/auth/login', PUBLIC_AUTH_SERVER_DOMAIN);
-			loginURL.searchParams.append('continue_uri', redirectURL.toString());
+	if (res.status === 401) {
+		const redirectURL = new URL('/', PUBLIC_CLIENT_SERVER_DOMAIN);
+		const loginURL = new URL('/auth/login', PUBLIC_AUTH_SERVER_DOMAIN);
+		loginURL.searchParams.append('continue_uri', redirectURL.toString());
 
-			redirect(302, loginURL);
-		}
-		// must handle other error codes as needed
+		return redirect(302, loginURL);
+	}
+
+	if (!res.ok) {
+		const errorMessage = (await res.json()) || httpStatusCode.getStatusText(res.status);
+
+		throw new wwsError(res.status, errorMessage);
 	}
 
 	return res;
