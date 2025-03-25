@@ -17,10 +17,17 @@
   --focus: #4552b4;
 
   --dark-green: #064e3b;
+  --mid-green : #22a07b;
   --light-green: #6ee7b7;
 
   --dark-blue: #1e3a8a;
+  --mid-blue : #4f67c2;
   --light-blue: #93c5fd;
+
+  --dark-red : #7f1d1d;
+  --mid-red : #d46363;
+  --light-red : #fca5a5;
+
 }
 
 * {
