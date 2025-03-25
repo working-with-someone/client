@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 	import Switch from '../input/ToggleSwitch.svelte';
+	import { error } from '@sveltejs/kit';
+	import TextError from '../error/TextError.svelte';
+	import type { wwsError } from '$lib/error/wwsError';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -24,6 +27,7 @@
 	let breakTimeInterval: string = '50';
 	let breakTimeDuration: string = '10';
 
+	let validationError = $state<App.Error>();
 	onMount(() => {
 		loadCategories();
 	});
@@ -66,22 +70,29 @@
 			formData.append('thumbnail', thumbnailImgInput.files[0]);
 		}
 
-		const liveSession = await wwsfetch('/sessions/live', {
+		wwsfetch('/sessions/live', {
 			method: 'POST',
 			body: formData
-		}).then((res) => res.json());
-
-		if (enableBreakTime) {
-			const breakTime = await wwsfetch(`/sessions/live/${liveSession.id}/break_time`, {
-				method: 'POST',
-				body: new URLSearchParams({
-					interval: breakTimeInterval,
-					duration: breakTimeDuration
-				})
+		})
+			.then((res) => res.json())
+			.then((liveSession) => {
+				if (enableBreakTime) {
+					return wwsfetch(`/sessions/live/${liveSession.id}/break_time`, {
+						method: 'POST',
+						body: new URLSearchParams({
+							interval: breakTimeInterval,
+							duration: breakTimeDuration
+						})
+					}).then(() => liveSession);
+				}
+				return liveSession;
+			})
+			.then((liveSession) => {
+				window.location.href = `/session/live/${liveSession.id}/studio`;
+			})
+			.catch((err: wwsError) => {
+				validationError = err;
 			});
-		}
-
-		window.location.href = `/session/live/${liveSession.id}/studio`;
 	}
 </script>
 
@@ -239,8 +250,12 @@
 		</div>
 	</div>
 	<div class="footer">
-		<span class="info">pressing 'start' doesn’t immediately begin the broadcast!</span>
-		<button onclick={createLiveSession} class="next-button">start</button>
+		<div class="error">
+			<TextError error={validationError} />
+		</div>
+		<div class="start">
+			<button onclick={createLiveSession} class="next-button">start</button>
+		</div>
 	</div>
 
 	<input
@@ -377,14 +392,18 @@
 			gap: 20px;
 			padding: 20px 10px 10px 10px;
 			border-top: 1px solid var(--font-light-gray);
-			.info {
-				font-size: 10px;
-				color: gray;
-			}
-			.next-button {
-				background-color: var(--sig);
-				color: var(--bg);
+			.error {
 				font-size: 12px;
+				flex-grow: 1;
+			}
+			.start {
+				flex-grow: 0;
+				flex-shrink: 0;
+				.next-button {
+					background-color: var(--sig);
+					color: var(--bg);
+					font-size: 12px;
+				}
 			}
 		}
 	}
