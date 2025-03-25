@@ -36,9 +36,9 @@ async function wwsfetch(path: string, options: Option) {
 	}
 
 	if (!res.ok) {
-		const errorMessage = (await res.json()) || httpStatusCode.getStatusText(res.status);
+		const body = (await res.json()) || httpStatusCode.getStatusText(res.status);
 
-		throw new wwsError(res.status, errorMessage);
+		throw new wwsError(res.status, body.message);
 	}
 
 	return res;
