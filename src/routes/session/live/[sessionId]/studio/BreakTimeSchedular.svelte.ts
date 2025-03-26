@@ -15,12 +15,15 @@ export class BreakTimeSchedular extends Schedular {
 		this.duration = toMilliseconds(breakTime.duration, 'm');
 		this.interval = toMilliseconds(breakTime.interval, 'm');
 
-		const now = Date.now();
-		this.nextBreakTime = now + this.interval;
-		this.nextOpenTime = this.nextBreakTime + this.duration;
+		this.nextBreakTime = Date.now();
+		this.nextOpenTime = Date.now();
 	}
 
 	start(openCb: () => void, breakCb: () => void) {
+		const now = Date.now();
+		this.nextBreakTime = now + this.interval;
+		this.nextOpenTime = this.nextBreakTime + this.duration;
+
 		const scheduleNext = () => {
 			const now = Date.now();
 
