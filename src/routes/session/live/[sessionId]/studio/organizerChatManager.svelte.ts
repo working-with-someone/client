@@ -13,7 +13,9 @@ export class OrganizerChatManager implements ChatManager {
 	}
 
 	chat(msg: string) {
-		this.socket.emit(WS_CHANNELS.chat.broadCastSend, msg);
+		this.socket.emit(WS_CHANNELS.chat.broadCastSend, msg, (resp) => {
+			console.log(resp);
+		});
 	}
 
 	listenBroadCast() {
