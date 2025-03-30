@@ -1,4 +1,4 @@
-import type { ChatLog } from '../../../../../@types/chat';
+import type { ChatLog } from '../../../../../types/chat';
 import { Socket } from 'socket.io-client';
 import WS_CHANNELS from '$lib/constants/channels';
 import type { ChatManager } from '../chatManager';

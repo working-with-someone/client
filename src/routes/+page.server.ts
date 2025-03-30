@@ -1,5 +1,5 @@
 import type { Load } from "@sveltejs/kit";
-import type { CategorizedSessions } from "../@types/session";
+import type { CategorizedSessions } from "../types/session";
 
 export const load: Load = async () => {
   // must be replacing to fetched data
