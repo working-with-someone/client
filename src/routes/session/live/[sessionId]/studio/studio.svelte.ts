@@ -38,10 +38,14 @@ export class Studio {
 
 	async open() {
 		await this.liveSession.changeStatus(liveSessionStatus.opened);
+
+		this.socket.emit(WS_CHANNELS.transition.open, () => {});
 	}
 
 	async break() {
 		await this.liveSession.changeStatus(liveSessionStatus.breaked);
+
+		this.socket.emit(WS_CHANNELS.transition.break, () => {});
 	}
 
 	async close() {
