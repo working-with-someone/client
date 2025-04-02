@@ -2,11 +2,12 @@
 	import HlsPlayer from '$lib/components/HlsPlayer/HlsPlayer.svelte';
 	import type { PageData } from './$types';
 	import ChatRoom from './ChatRoom.svelte';
-	import { LiveSession, Participant } from './Participant.svelte';
+	import { UpdatableLiveSession } from './LiveSession.svelte';
+	import { Participant } from './Participant.svelte';
 
 	const { data }: { data: PageData } = $props();
 
-	const liveSession = new LiveSession(data.liveSession, data.breakTime);
+	const liveSession = new UpdatableLiveSession(data.liveSession, data.breakTime);
 	const participant = new Participant(liveSession);
 </script>
 

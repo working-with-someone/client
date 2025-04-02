@@ -3,13 +3,14 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { MediaController } from './mediaController.svelte';
 	import Main from './Main.svelte';
-	import { LiveSession, Studio } from './studio.svelte';
+	import { Studio } from './studio.svelte';
+	import { UpdatableLiveSession } from '../LiveSession.svelte';
 
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const liveSession = new LiveSession(data.liveSession, data.breakTime);
+	const liveSession = new UpdatableLiveSession(data.liveSession, data.breakTime);
 	const studio = new Studio(liveSession);
 
 	let mediaController = $state(new MediaController());

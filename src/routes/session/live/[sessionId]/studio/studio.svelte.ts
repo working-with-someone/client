@@ -1,6 +1,4 @@
-import wwsfetch from '$lib/utils/wwsfetch';
-import type { Prisma } from '@prisma/client';
-import { error } from '@sveltejs/kit';
+import { UpdatableLiveSession } from '../LiveSession.svelte';
 import { liveSessionStatus } from '../../../../../enums/session';
 import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
@@ -10,13 +8,13 @@ import WS_CHANNELS from '$lib/constants/channels';
 import { BreakTimeSchedular } from './BreakTimeSchedular.svelte';
 
 export class Studio {
-	liveSession: LiveSession;
+	liveSession: UpdatableLiveSession;
 	chatManager: OrganizerChatManager;
 	breakTimeSchedular?: BreakTimeSchedular;
 	private mediaRecorder?: MediaRecorder;
 	private socket: Socket;
 
-	constructor(liveSession: LiveSession) {
+	constructor(liveSession: UpdatableLiveSession) {
 		this.liveSession = liveSession;
 
 		this.socket = io(
@@ -28,10 +26,10 @@ export class Studio {
 
 		this.chatManager = new OrganizerChatManager(this.socket);
 
-		if (this.liveSession.breakTime) {
+		if (this.liveSession.break_time) {
 			this.breakTimeSchedular = new BreakTimeSchedular({
-				interval: this.liveSession.breakTime.interval,
-				duration: this.liveSession.breakTime.duration
+				interval: this.liveSession.break_time.interval,
+				duration: this.liveSession.break_time.duration
 			});
 		}
 	}
@@ -39,13 +37,13 @@ export class Studio {
 	async open() {
 		await this.liveSession.changeStatus(liveSessionStatus.opened);
 
-		this.socket.emit(WS_CHANNELS.transition.open, () => {});
+		this.socket.emit(WS_CHANNELS.transition.open, () => { });
 	}
 
 	async break() {
 		await this.liveSession.changeStatus(liveSessionStatus.breaked);
 
-		this.socket.emit(WS_CHANNELS.transition.break, () => {});
+		this.socket.emit(WS_CHANNELS.transition.break, () => { });
 	}
 
 	async close() {
@@ -107,91 +105,5 @@ export class Studio {
 		const { hours, minutes, seconds } = timeDifference(Date.now(), this.liveSession.started_at!);
 
 		return { hours, minutes, seconds };
-	}
-}
-
-export class LiveSession implements Prisma.live_sessionGetPayload<true> {
-	id: string;
-	title: string;
-	description: string | null;
-	thumbnail_uri: string;
-	category: string;
-	status = $state<number>() as number;
-	stream_key: string;
-	access_level: number;
-	created_at: Date;
-	updated_at: Date;
-	started_at: Date | null;
-	organizer_id: number;
-	breakTime?: Prisma.break_timeGetPayload<true>;
-
-	constructor(
-		liveSession: Prisma.live_sessionGetPayload<true>,
-		breakTime?: Prisma.break_timeGetPayload<true>
-	) {
-		this.id = liveSession.id;
-		this.title = liveSession.title;
-		this.description = liveSession.description;
-		this.thumbnail_uri = liveSession.thumbnail_uri;
-		this.category = liveSession.category;
-		this.status = liveSession.status;
-		this.stream_key = liveSession.stream_key;
-		this.access_level = liveSession.access_level;
-		this.created_at = new Date(liveSession.created_at);
-		this.updated_at = new Date(liveSession.updated_at);
-
-		this.started_at = liveSession.started_at ? new Date(liveSession.started_at) : null;
-
-		this.organizer_id = liveSession.organizer_id;
-
-		this.breakTime = breakTime;
-	}
-
-	get isReady() {
-		return this.status === liveSessionStatus.ready;
-	}
-
-	get isOpened() {
-		return this.status === liveSessionStatus.opened;
-	}
-
-	get isBreaked() {
-		return this.status === liveSessionStatus.breaked;
-	}
-
-	get isClosed() {
-		return this.status === liveSessionStatus.closed;
-	}
-
-	get breakTimeEnabled() {
-		return this.breakTime ? true : false;
-	}
-
-	async fetch() {
-		const res = await wwsfetch(`/sessions/live/${this.id}`, {});
-
-		if (res.status != 200) {
-			error(res.status);
-		}
-
-		const liveSession = await res.json();
-
-		Object.assign(this, liveSession);
-	}
-
-	async changeStatus(status: liveSessionStatus) {
-		const res = await wwsfetch(`/sessions/live/${this.id}/status`, {
-			method: 'PUT',
-			body: new URLSearchParams({
-				status: status.toString()
-			})
-		});
-
-		// failed
-		if (!res.ok) {
-			throw new Error('can not change status of session');
-		}
-
-		await this.fetch();
 	}
 }
