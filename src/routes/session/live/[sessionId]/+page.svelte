@@ -1,11 +1,13 @@
 <script lang="ts">
 	import HlsPlayer from '$lib/components/HlsPlayer/HlsPlayer.svelte';
 	import type { PageData } from './$types';
-	import { ClientChatManager } from './clientChatManager.svelte';
 	import ChatRoom from './ChatRoom.svelte';
+	import { LiveSession, Participant } from './Participant.svelte';
 
 	const { data }: { data: PageData } = $props();
-	const clientChatManager = new ClientChatManager(data.liveSession.id);
+
+	const liveSession = new LiveSession(data.liveSession, data.breakTime);
+	const participant = new Participant(liveSession);
 </script>
 
 <section id="live-session">
@@ -14,7 +16,7 @@
 	</div>
 	<div class="right">
 		<div class="body">
-			<ChatRoom {clientChatManager} />
+			<ChatRoom {participant} />
 		</div>
 	</div>
 </section>

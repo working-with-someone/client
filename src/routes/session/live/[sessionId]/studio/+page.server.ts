@@ -1,4 +1,5 @@
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
+import { wwsError } from '$lib/error/wwsError';
 import { error, type Load } from '@sveltejs/kit';
 import httpStatusCodes from "http-status-codes";
 
@@ -13,9 +14,7 @@ export const load: Load = async ({ fetch, params }) => {
 
 
   if (getLiveSessionRes.status == 404) {
-    error(404, {
-      message: "can not found live session"
-    })
+    error(httpStatusCodes.NOT_FOUND, new wwsError(httpStatusCodes.NOT_FOUND, 'can not find live session'))
   }
 
   const liveSession = await getLiveSessionRes.json();

@@ -9,7 +9,6 @@ declare global {
 			status: number;
 			statusText: string;
 			message: string;
-			originError: any;
 		}
 		// interface Locals {}
 		// interface PageData {}
@@ -18,4 +17,4 @@ declare global {
 	}
 }
 
-export {};
+export { };

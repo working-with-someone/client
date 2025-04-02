@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	import { ClientChatManager } from './clientChatManager.svelte';
 	import { slide } from 'svelte/transition';
+	import type { Participant } from './Participant.svelte';
 	let chatInput: HTMLTextAreaElement;
 
 	interface Props {
-		clientChatManager: ClientChatManager;
+		participant: Participant;
 	}
 
-	const { clientChatManager }: Props = $props();
+	const { participant }: Props = $props();
 
 	function sendChat() {
 		const msg = chatInput.value;
-		clientChatManager.chat(msg);
+		participant.chatManager.chat(msg);
 
 		chatInput.value = '';
 		chatInput.focus();
@@ -21,7 +21,7 @@
 
 <div class="chatroom">
 	<ul class="chat-log-list">
-		{#each clientChatManager.chatLogs as chatLog}
+		{#each participant.chatManager.chatLogs as chatLog}
 			<li class="chat-log" transition:slide>
 				<div class="pfp">
 					<img src={`${PUBLIC_API_SERVER_DOMAIN}${chatLog.user.pfp}`} alt="" />
