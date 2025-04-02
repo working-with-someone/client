@@ -13,7 +13,7 @@
 
 <section id="live-session">
 	<div class="left">
-		<HlsPlayer sessionId={data.liveSession.id}></HlsPlayer>
+		<HlsPlayer {participant}></HlsPlayer>
 	</div>
 	<div class="right">
 		<div class="body">

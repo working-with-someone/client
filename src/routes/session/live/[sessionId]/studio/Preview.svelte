@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LiveSessionOverlay from '$lib/components/overlay/LiveSessionOverlay.svelte';
+	import LiveSessionOverlayForStudio from '$lib/components/overlay/LiveSessionOverlayForStudio.svelte';
 	import type { Studio } from './studio.svelte';
 
 	interface Props {
@@ -21,7 +21,7 @@
 <div id="player">
 	<video src="" bind:this={video} autoplay={true}></video>
 
-	<LiveSessionOverlay {studio} />
+	<LiveSessionOverlayForStudio {studio} />
 </div>
 
 <style lang="scss">
