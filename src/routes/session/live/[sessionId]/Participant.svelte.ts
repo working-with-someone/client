@@ -46,7 +46,7 @@ export class LiveSession implements Prisma.live_sessionGetPayload<{
   description: string | null;
   thumbnail_uri: string;
   category: string;
-  status: number;
+  status = $state<number>() as number;
   stream_key: string;
   access_level: number;
   created_at: Date;
