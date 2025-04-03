@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import type { MediaController } from './mediaController.svelte';
 	import Preview from './Preview.svelte';
 	import ControlPanel from './ControlPanel.svelte';
@@ -22,6 +22,10 @@
 		}
 
 		studio.publish(mediaController.mediaStream);
+	});
+
+	onDestroy(() => {
+		studio.unpublish();
 	});
 </script>
 
