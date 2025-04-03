@@ -1,47 +1,47 @@
-import { toMilliseconds } from "$lib/utils/time";
+import { toMilliseconds } from '$lib/utils/time';
 
 export class Schedular {
-  private schedules = new Map<number, number>();
-  private idCounter: number = 0;
+	private schedules = new Map<number, number>();
+	private idCounter: number = 0;
 
-  set(value: number, unit: 'h' | 'm' | 's' | 'ms', cb: () => void) {
-    const scheduleId = this.idCounter++;
-    const ms = toMilliseconds(value, unit);
+	set(value: number, unit: 'h' | 'm' | 's' | 'ms', cb: () => void) {
+		const scheduleId = this.idCounter++;
+		const ms = toMilliseconds(value, unit);
 
-    const timeoutId = setTimeout(() => {
-      cb();
-      this.schedules.delete(scheduleId)
-    }, ms)
+		const timeoutId = setTimeout(() => {
+			cb();
+			this.schedules.delete(scheduleId);
+		}, ms);
 
-    this.schedules.set(scheduleId, timeoutId)
+		this.schedules.set(scheduleId, timeoutId);
 
-    return scheduleId;
-  }
+		return scheduleId;
+	}
 
-  setInterval(value: number, unit: 'h' | 'm' | 's' | 'ms', cb: () => void) {
-    const scheduleId = this.idCounter++;
-    const ms = toMilliseconds(value, unit);
+	setInterval(value: number, unit: 'h' | 'm' | 's' | 'ms', cb: () => void) {
+		const scheduleId = this.idCounter++;
+		const ms = toMilliseconds(value, unit);
 
-    const intervalId = setInterval(() => {
-      cb();
-      this.schedules.delete(scheduleId)
-    }, ms)
+		const intervalId = setInterval(() => {
+			cb();
+			this.schedules.delete(scheduleId);
+		}, ms);
 
-    this.schedules.set(scheduleId, intervalId)
+		this.schedules.set(scheduleId, intervalId);
 
-    return scheduleId;
-  }
+		return scheduleId;
+	}
 
-  cancel(scheduleId: number) {
-    const schedule = this.schedules.get(scheduleId);
+	cancel(scheduleId: number) {
+		const schedule = this.schedules.get(scheduleId);
 
-    if (schedule) {
-      clearTimeout(scheduleId);
-      clearInterval(scheduleId);
+		if (schedule) {
+			clearTimeout(this.schedules.get(scheduleId));
+			clearInterval(this.schedules.get(scheduleId));
 
-      this.schedules.delete(scheduleId)
-    }
-  }
+			this.schedules.delete(scheduleId);
+		}
+	}
 }
 
 export default Schedular;
