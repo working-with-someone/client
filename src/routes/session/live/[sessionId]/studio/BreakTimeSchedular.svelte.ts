@@ -1,5 +1,5 @@
 import { convertMillisecondsToTime, toMilliseconds } from '$lib/utils/time';
-import type { break_time } from '@prisma/client';
+import type { live_session_break_time } from '@prisma/client';
 import Schedular from '../Schedular.svelte';
 
 export class BreakTimeSchedular extends Schedular {
@@ -10,7 +10,10 @@ export class BreakTimeSchedular extends Schedular {
 	private isBreakTime: boolean = false;
 	private currentScheduleId: number | null = null;
 
-	constructor(breakTime: { interval: break_time['interval']; duration: break_time['duration'] }) {
+	constructor(breakTime: {
+		interval: live_session_break_time['interval'];
+		duration: live_session_break_time['duration'];
+	}) {
 		super();
 		this.duration = toMilliseconds(breakTime.duration, 'm');
 		this.interval = toMilliseconds(breakTime.interval, 'm');

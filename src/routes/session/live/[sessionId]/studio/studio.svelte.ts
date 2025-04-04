@@ -1,5 +1,5 @@
 import { UpdatableLiveSession } from '../LiveSession.svelte';
-import { liveSessionStatus } from '../../../../../enums/session';
+import { live_session_status } from '@prisma/client';
 import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
@@ -35,19 +35,27 @@ export class Studio {
 	}
 
 	async open() {
-		await this.liveSession.changeStatus(liveSessionStatus.opened);
+		try {
+			await this.liveSession.changeStatus(live_session_status.OPENED);
 
-		this.socket.emit(WS_CHANNELS.transition.open, () => { });
+			this.socket.emit(WS_CHANNELS.transition.open, () => {});
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	async break() {
-		await this.liveSession.changeStatus(liveSessionStatus.breaked);
+		try {
+			await this.liveSession.changeStatus(live_session_status.BREAKED);
 
-		this.socket.emit(WS_CHANNELS.transition.break, () => { });
+			this.socket.emit(WS_CHANNELS.transition.break, () => {});
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	async close() {
-		await this.liveSession.changeStatus(liveSessionStatus.closed);
+		await this.liveSession.changeStatus(live_session_status.CLOSED);
 	}
 
 	publish(mediaStream: MediaStream) {
@@ -99,6 +107,8 @@ export class Studio {
 		if (this.mediaRecorder?.state === 'recording') {
 			this.mediaRecorder.stop();
 		}
+
+		this.breakTimeSchedular?.stop();
 	}
 
 	get elapsedTime() {
