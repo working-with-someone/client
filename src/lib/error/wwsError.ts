@@ -9,10 +9,10 @@ import httpStatusCode from 'http-status-codes';
 class wwsError implements App.Error {
 	status: number;
 	statusText: string;
-	originError: Error;
+	originError?: Error;
 	message: string;
 
-	constructor(status: number, message?: string, err?: any) {
+	constructor(status: number, message?: string, err?: Error) {
 		this.status = status;
 		this.statusText = httpStatusCode.getStatusText(status);
 

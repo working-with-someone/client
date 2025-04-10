@@ -3,9 +3,7 @@
 	import { onMount } from 'svelte';
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 	import Switch from '../input/ToggleSwitch.svelte';
-	import { error } from '@sveltejs/kit';
 	import TextError from '../error/TextError.svelte';
-	import type { wwsError } from '$lib/error/wwsError';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -96,7 +94,7 @@
 				console.log(liveSession);
 				window.location.href = `/session/live/${liveSession.id}/studio`;
 			})
-			.catch((err: wwsError) => {
+			.catch((err: App.Error) => {
 				validationError = err;
 			});
 	}
