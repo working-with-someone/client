@@ -47,9 +47,8 @@
 			method: 'put',
 			body: formData
 		})
-			.then((res) => {
-				return res.json();
-			})
+			.then((res) => res.json())
+			.then((body) => body.data)
 			.then((data: any) => {
 				reloadUser();
 				closeUserConfigModal();

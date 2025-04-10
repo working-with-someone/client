@@ -35,9 +35,11 @@
 	function loadCategories() {
 		wwsfetch('/categories', {})
 			.then((res) => res.json())
-			.then((data) => {
-				category = data[0].label;
-				data.forEach((category: any) => {
+			.then((body) => {
+				const _categories = body.data;
+
+				category = _categories[0].label;
+				_categories.forEach((category: any) => {
 					categories = [...categories, category.label];
 				});
 			});
@@ -75,7 +77,9 @@
 			body: formData
 		})
 			.then((res) => res.json())
-			.then((liveSession) => {
+			.then((body) => {
+				const liveSession = body.data;
+
 				if (enableBreakTime) {
 					return wwsfetch(`/sessions/live/${liveSession.id}/break_time`, {
 						method: 'POST',
@@ -83,11 +87,13 @@
 							interval: breakTimeInterval,
 							duration: breakTimeDuration
 						})
-					}).then(() => liveSession);
+					}).then((res) => liveSession);
 				}
+
 				return liveSession;
 			})
 			.then((liveSession) => {
+				console.log(liveSession);
 				window.location.href = `/session/live/${liveSession.id}/studio`;
 			})
 			.catch((err: wwsError) => {

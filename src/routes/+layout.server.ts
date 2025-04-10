@@ -17,7 +17,8 @@ export const load: Load = async ({ fetch }) => {
 		redirect(302, loginURL);
 	}
 
-	const data = await res.json();
+	const body = await res.json();
+	const user = body.data;
 
-	return { user: data };
+	return { user };
 };

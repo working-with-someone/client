@@ -75,7 +75,8 @@ export class LiveSession
 			error(res.status);
 		}
 
-		const liveSession = await res.json();
+		const body = await res.json();
+		const liveSession = body.data;
 
 		Object.assign(this, liveSession);
 	}

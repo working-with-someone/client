@@ -1,22 +1,23 @@
-import wwsfetch from "$lib/utils/wwsfetch";
-import { writable } from "svelte/store";
+import wwsfetch from '$lib/utils/wwsfetch';
+import { writable } from 'svelte/store';
 
 interface Pfp {
-  curr: string;
+	curr: string;
 }
 interface User {
-  id: number;
-  username: string;
-  pfp: Pfp
+	id: number;
+	username: string;
+	pfp: Pfp;
 }
 
-export const user = writable<User>()
+export const user = writable<User>();
 
 export function reloadUser() {
-  wwsfetch('/users/self', { method: "get" })
-    .then(res => res.json())
-    .then(data => {
-      user.set(data)
-    })
-    .catch(console.error);
+	wwsfetch('/users/self', { method: 'get' })
+		.then((res) => res.json())
+		.then((body) => body.data)
+		.then((_user) => {
+			user.set(_user);
+		})
+		.catch(console.error);
 }

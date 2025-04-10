@@ -12,8 +12,9 @@
 	function reloadTarget() {
 		wwsfetch(`/users/${targetUser.id}`, {})
 			.then((res) => res.json())
-			.then((data) => {
-				targetUser = data;
+			.then((body) => body.data)
+			.then((user) => {
+				targetUser = user;
 			})
 			.catch((err) => {
 				console.log('Failed to fetch user data');

@@ -27,7 +27,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const getSelfEndpoint = new URL('/users/self', PRIVATE_API_SERVER_DOMAIN);
 	const getSelfRes = await event.fetch(getSelfEndpoint);
 
-	const userSelf = await getSelfRes.json();
+	const body = await getSelfRes.json();
+	const userSelf = body.data;
 
 	event.locals.userId = userSelf.id;
 
