@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import wwsfetch from '$lib/utils/wwsfetch';
-import { live_session_status } from '@prisma/client';
+import { access_level, live_session_status } from '@prisma/client';
 
 import { Prisma } from '@prisma/client';
 
@@ -19,7 +19,7 @@ export class LiveSession
 	category: string;
 	status = $state<string>() as live_session_status;
 	stream_key: string;
-	access_level: number;
+	access_level: access_level;
 	created_at: Date;
 	updated_at: Date;
 	started_at: Date | null;

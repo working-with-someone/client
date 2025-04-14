@@ -4,6 +4,7 @@
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 	import Switch from '../input/ToggleSwitch.svelte';
 	import TextError from '../error/TextError.svelte';
+	import { access_level } from '@prisma/client';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -20,7 +21,7 @@
 	let title = $state('');
 	let description = $state('');
 	let category = $state('');
-	let accessLevel = $state(1);
+	let accessLevel = $state<access_level>(access_level.PUBLIC);
 
 	let breakTimeInterval: string = '50';
 	let breakTimeDuration: string = '10';
@@ -184,8 +185,8 @@
 					<span class="privacy-desc">( all users can join this live session )</span>
 					<input
 						type="radio"
-						onchange={() => (accessLevel = 1)}
-						checked={accessLevel === 1}
+						onchange={() => (accessLevel = access_level.PUBLIC)}
+						checked={accessLevel === access_level.PUBLIC}
 						name="radio"
 					/>
 					<span class="checkmark"></span>
@@ -196,9 +197,9 @@
 					<input
 						type="radio"
 						onchange={() => {
-							accessLevel = 2;
+							accessLevel = access_level.FOLLOWER_ONLY;
 						}}
-						checked={accessLevel === 2}
+						checked={accessLevel === access_level.FOLLOWER_ONLY}
 						name="radio"
 					/>
 					<span class="checkmark"></span>
@@ -211,9 +212,9 @@
 					<input
 						type="radio"
 						onchange={() => {
-							accessLevel = 3;
+							accessLevel = access_level.PRIVATE;
 						}}
-						checked={accessLevel === 3}
+						checked={accessLevel === access_level.PRIVATE}
 						name="radio"
 					/>
 					<span class="checkmark"></span>

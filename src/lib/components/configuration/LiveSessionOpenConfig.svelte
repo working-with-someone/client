@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
-	import { accessLevel } from '../../../enums/session';
+	import { access_level } from '@prisma/client';
 	import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
 	import { onMount } from 'svelte';
 	import { Studio } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
@@ -40,11 +40,11 @@
 			<div class="access-level">
 				<p class="label">access level</p>
 				<p class="value">
-					{#if studio.liveSession.access_level === accessLevel.public}
+					{#if studio.liveSession.access_level === access_level.PUBLIC}
 						public
-					{:else if studio.liveSession.access_level === accessLevel.followersOnly}
+					{:else if studio.liveSession.access_level === access_level.FOLLOWER_ONLY}
 						followers only
-					{:else if studio.liveSession.access_level === accessLevel.private}
+					{:else if studio.liveSession.access_level === access_level.PRIVATE}
 						private
 					{/if}
 				</p>
