@@ -5,6 +5,7 @@
 	import Switch from '../input/ToggleSwitch.svelte';
 	import TextError from '../error/TextError.svelte';
 	import { access_level } from '@prisma/client';
+	import ComboBox from '../input/ComboBox.svelte';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -32,15 +33,21 @@
 	});
 
 	function loadCategories() {
-		wwsfetch('/categories', {})
+		wwsfetch('/categories', {
+			queryParams: {
+				page: '1',
+				per_page: '10'
+			}
+		})
 			.then((res) => res.json())
 			.then((body) => {
 				const _categories = body.data;
 
-				category = _categories[0].label;
-				_categories.forEach((category: any) => {
-					categories = [...categories, category.label];
-				});
+				if (_categories.length) {
+					_categories.forEach((category: any) => {
+						categories = [...categories, category.label];
+					});
+				}
 			});
 	}
 
@@ -158,19 +165,14 @@
 				<p>Category</p>
 				<span>select category</span>
 			</div>
-			<div class="select-box middle-rounded">
-				<select
-					name="category"
-					id=""
-					class="category-input middle-rounded"
-					placeholder="select category of live session"
-					bind:value={category}
-				>
-					{#each categories as category}
-						<option value={category}>{category}</option>
-					{/each}
-				</select>
-			</div>
+			<ComboBox
+				changeInput={(value) => {
+					category = value;
+				}}
+				options={categories}
+				placeholder={'input or select category'}
+				value={category}
+			></ComboBox>
 		</div>
 
 		<div class="privacy config">
