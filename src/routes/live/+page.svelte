@@ -1,15 +1,20 @@
 <script>
-	import SessionDeck from '$lib/components/cards/SessionDeck.svelte';
+	import LiveSessionDeck from '$lib/components/cards/LiveSessionDeck.svelte';
 	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 
 	let { data } = $props();
+
+	const categorizedLiveSessionList = data.categorizedLiveSessionsList;
 </script>
 
 <section id="live-sessions">
 	<TopBar />
 	<div class="decks">
-		{#each data.categorizedSessionsList as categorizedLiveSessions}
-			<SessionDeck categorizedSessions={categorizedLiveSessions} />
+		{#each categorizedLiveSessionList as categorizedLiveSessions}
+			<LiveSessionDeck
+				category={categorizedLiveSessions[0]}
+				liveSessions={categorizedLiveSessions[1]}
+			/>
 		{/each}
 	</div>
 </section>

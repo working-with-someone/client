@@ -1,242 +1,33 @@
-import type { Load } from "@sveltejs/kit";
-import type { CategorizedSessions } from "../../types/session";
+import type { Load } from '@sveltejs/kit';
+import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
+import type { category } from '@prisma/client';
+import type { LiveSession } from '../../types/session';
 
-export const load: Load = async () => {
-  // must be replacing to fetched data
-  const categorizedSessionsList: CategorizedSessions[] = [
-    {
-      category: "study",
-      sessions: [{
-        title: "seo의 study with me",
-        thumbnail: 'https://cdn.prod.website-files.com/60babc2f4a97cece9858d8e7/61fdcbc2eba8184b4ea8b6ff_hq720.jpeg',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      {
-        title: "3-HOUR STUDY WITH ME 🏙 / calm lofi / Tokyo at Sunset / with countdown+alarm",
-        thumbnail: 'https://i.ytimg.com/vi/x0qcqPcEfoc/maxresdefault.jpg',
-        time: 153,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+export const load: Load = async ({ fetch }) => {
+	const getCategoriesEndpointUrl = new URL(`/categories`, PRIVATE_API_SERVER_DOMAIN);
 
-          }
-        },
-      },
-      {
-        title: "Study With Me Live Stream",
-        thumbnail: "https://i.ytimg.com/vi/Lru7Hpe32V4/hq720.jpg?sqp=-oaymwEXCK4FEIIDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLD2ZojtN4ouIi9ReJ0oGtbkarzJoA",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+	getCategoriesEndpointUrl.searchParams.set('sort', 'live_session_count');
+	getCategoriesEndpointUrl.searchParams.set('page', '1');
+	getCategoriesEndpointUrl.searchParams.set('per_page', '10');
 
-          }
-        },
-      },
-      {
-        title: "Study with Korean law student for 2 hours! [Study with me]",
-        thumbnail: "https://i.ytimg.com/vi/ms-Tr0GbVAY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB0p28HQSw32tAq4nv2uKq-VUI43w",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+	const getCategoriesRes = await fetch(getCategoriesEndpointUrl);
 
-          }
-        },
-      },
-      {
-        title: "seo의 study with me",
-        thumbnail: 'https://cdn.prod.website-files.com/60babc2f4a97cece9858d8e7/61fdcbc2eba8184b4ea8b6ff_hq720.jpeg',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      {
-        title: "seo의 study with me",
-        thumbnail: 'https://cdn.prod.website-files.com/60babc2f4a97cece9858d8e7/61fdcbc2eba8184b4ea8b6ff_hq720.jpeg',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      ]
-    },
-    {
-      category: "read",
-      sessions: [{
-        title: "seo의 study with me",
-        thumbnail: 'https://i.ytimg.com/vi/_Fc7_1mPt6c/hq720.jpg?sqp=-oaymwEXCK4FEIIDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLAfGKd7h7x5A-3oGRpnJC_UnkyvZw',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      {
-        title: "개방장의 read me with me",
-        thumbnail: 'https://i.ytimg.com/vi/WVInz6L8aQk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDQyPBcBonCjsZz3mHR2sOia5nAQA',
-        time: 153,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+	const majorCategories = (await getCategoriesRes.json()).data as category[];
 
-          }
-        },
-      },
-      {
-        title: "emily와 함께 코딩할사람 모여라~",
-        thumbnail: "https://i.ytimg.com/vi/4mcYMuBoMns/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA7yNNz_XLSH4pCy1k55UutoXZu3g",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+	const categorizedLiveSessionsList = new Map<string, LiveSession[]>();
 
-          }
-        },
-      },
-      {
-        title: "Play this While You Read (Read With Me 📚 30 Minutes)",
-        thumbnail: "https://i.ytimg.com/vi/3--F5Uo5HX0/maxresdefault.jpg",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+	for (const category of majorCategories) {
+		const getLiveSessionsEndpointUrl = new URL(`/sessions/live`, PRIVATE_API_SERVER_DOMAIN);
+		getLiveSessionsEndpointUrl.searchParams.set('category', category.label);
+		getLiveSessionsEndpointUrl.searchParams.set('page', '1');
+		getLiveSessionsEndpointUrl.searchParams.set('per_page', '10');
 
-          }
-        },
-      }
-      ]
-    },
-    {
-      category: "code",
-      sessions: [{
-        title: "seo의 code with me",
-        thumbnail: 'https://i.ytimg.com/vi/Joq3z0lxbQc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCWr09Rur5TOvcgR5n3spx1Cb30ng',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      {
-        title: "seungho-hub의 code with me",
-        thumbnail: 'https://i.ytimg.com/vi/wJDtkILuk9Q/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCFSwRx05-jHroc8G3CfOqnl4WGRA',
-        time: 153,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+		const getLiveSessionsRes = await fetch(getLiveSessionsEndpointUrl);
 
-          }
-        },
-      },
-      {
-        title: "emily와 함께 코딩할사람 모여라~",
-        thumbnail: "https://i.ytimg.com/vi/F3MBsDvMLc4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB8I4UfRH4bO-CeIoBK-4JSLCTacw",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+		const liveSessions = (await getLiveSessionsRes.json()).data as LiveSession[];
 
-          }
-        },
-      },
-      {
-        title: "Study and Code With Me (55 min) - No Music / College Student / Mechanical Keyboard",
-        thumbnail: "https://i.ytimg.com/vi/eilhBUcNhD0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDFSRMbxPo6-81yvAt7wi3-eZmo7Q",
-        time: 98,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
+		categorizedLiveSessionsList.set(category.label, liveSessions);
+	}
 
-          }
-        },
-      },
-      {
-        title: "2-Hour Code and study with me - Relaxing music 🎧 - 35/5 Pomodoro",
-        thumbnail: 'https://i.ytimg.com/vi/RPxmnIHrJBU/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCEXdHOObszpSJeC2xOX8lIBrwXjg',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      {
-        title: "seo의 code with me",
-        thumbnail: 'https://i.ytimg.com/vi/Joq3z0lxbQc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCWr09Rur5TOvcgR5n3spx1Cb30ng',
-        time: 230,
-        isLive: true,
-        user: {
-          id: 5,
-          username: "minjung",
-          pfp: {
-            curr: "https://d1telmomo28umc.cloudfront.net/media/public/avatars/serranoarevalo-1679363190.jpg",
-          }
-        },
-      },
-      ]
-    }
-  ];
-
-
-  return {
-    categorizedSessionsList
-  };
+	return { categorizedLiveSessionsList };
 };

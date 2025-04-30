@@ -1,16 +1,24 @@
 <script lang="ts">
-	import type { Session } from '../../../@types/session';
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	export let session: Session;
+	import type { LiveSession } from '../../../types/session';
+
+	interface Props {
+		liveSession: LiveSession;
+	}
+
+	const { liveSession }: Props = $props();
 </script>
 
 <div class="card middle-rounded">
 	<div class="body">
 		<div class="thumbnail-wrapper">
-			<img src={session.thumbnail} alt="" class="thumbnail" />
+			<img src={liveSession.thumbnail_uri} alt="" class="thumbnail" />
 		</div>
 	</div>
 	<div class="footer">
+		<div class="title">
+			<p>{liveSession.title}</p>
+		</div>
 		<div class="session-info">
 			<table>
 				<tbody>
@@ -20,30 +28,35 @@
 					</tr>
 					<tr>
 						<th>Breaks</th>
-						<td>x</td>
-					</tr>
-					<tr>
-						<th>Sound</th>
-						<td><span>기다린만큼, 더 - 카더가든</span></td>
+						<td>
+							{#if liveSession.break_time}
+								<span class="break-time">each {liveSession.break_time.interval} minute</span>
+							{:else}
+								<span class="break-time-none"
+									><span class="material-symbols-outlined"> close </span></span
+								>
+							{/if}
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
 				on:click={() => {
-					window.location.href = `/user/${session.user.id}`;
+					window.location.href = `/user/${liveSession.organizer?.id}`;
 				}}
 			>
 				<img
-					src={new URL(`${session?.user?.pfp?.curr}`, PUBLIC_API_SERVER_DOMAIN).toString()}
+					src={new URL(`${liveSession.organizer.id}`, PUBLIC_API_SERVER_DOMAIN).toString()}
 					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
 				/>
 			</button>
 			<div class="info">
-				<p class="title">{session.title}</p>
-				<p class="username">{session.user.username}</p>
+				<p class="title">{liveSession.title}</p>
+				<p class="username">{liveSession.organizer?.username}</p>
 			</div>
 		</div>
 	</div>
@@ -60,8 +73,18 @@
 		border: 1px solid var(--sig);
 		.body {
 			.thumbnail-wrapper {
+				width: 100%;
+				position: relative;
+				padding-top: calc(100% / $card-ratio); /* 16:9 비율 유지 */
+				overflow: hidden;
+
 				.thumbnail {
+					position: absolute;
+					top: 0;
+					left: 0;
 					width: 100%;
+					height: 100%;
+					object-fit: cover; /* 이미지를 영역에 맞게 조절 */
 				}
 			}
 		}
@@ -69,8 +92,14 @@
 		.footer {
 			display: flex;
 			flex-direction: column;
-			padding: 0px 0px 10px 10px;
+			padding: 10px;
 			gap: 10px;
+			.title {
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+				font-size: 0.9em;
+			}
 			.session-info {
 				font-size: 12px;
 				display: flex;
@@ -84,10 +113,17 @@
 								font-size: 20px;
 								color: var(--sig);
 							}
+
+							.break-time-none {
+								span {
+									font-size: 20px;
+								}
+							}
 						}
 						th {
 							padding: 5px;
 							text-align: start;
+							width: 50%;
 						}
 					}
 				}
