@@ -9,7 +9,12 @@
 	const { liveSession }: Props = $props();
 </script>
 
-<div class="card middle-rounded">
+<div
+	class="card middle-rounded"
+	onclick={() => {
+		window.location.href = `/session/live/${liveSession.id}`;
+	}}
+>
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img src={liveSession.thumbnail_uri} alt="" class="thumbnail" />
@@ -45,7 +50,7 @@
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
-				on:click={() => {
+				onClick={() => {
 					window.location.href = `/user/${liveSession.organizer?.id}`;
 				}}
 			>
@@ -71,6 +76,9 @@
 		flex: 0 0 $card-width;
 		width: $card-width;
 		border: 1px solid var(--sig);
+		&:hover {
+			cursor: pointer;
+		}
 		.body {
 			.thumbnail-wrapper {
 				width: 100%;
