@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import type { LiveSession } from '../../../types/session';
+	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
 		liveSession: LiveSession;
@@ -42,6 +43,9 @@
 								>
 							{/if}
 						</td>
+					</tr>
+					<tr>
+						<th>status</th><td><StateTag state={liveSession.status} /></td>
 					</tr>
 				</tbody>
 			</table>

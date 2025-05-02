@@ -20,6 +20,7 @@
 
 <style lang="scss">
 	.state-tag {
+		display: inline-block;
 		padding: 5px 10px;
 		&.state-tag-open {
 			background-color: var(--dark-green);
