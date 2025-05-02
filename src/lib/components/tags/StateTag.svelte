@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { LiveSession } from '../../../routes/session/live/[sessionId]/LiveSession.svelte';
+	import { live_session_status } from '@prisma/client';
 
 	interface Props {
-		liveSession: LiveSession;
+		state: live_session_status;
 	}
 
-	const { liveSession }: Props = $props();
+	const { state }: Props = $props();
 </script>
 
-{#if liveSession.isOpened}
+{#if state == live_session_status.OPENED}
 	<div class="state-tag state-tag-open little-rounded">
 		<span>opened</span>
 	</div>
-{:else if liveSession.isBreaked}
+{:else if state == live_session_status.BREAKED}
 	<div class="state-tag state-tag-break little-rounded">
 		<span>breaked</span>
 	</div>

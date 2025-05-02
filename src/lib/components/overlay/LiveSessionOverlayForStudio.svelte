@@ -35,7 +35,7 @@
 	</div>
 
 	<div class="state">
-		<StateTag liveSession={studio.liveSession} />
+		<StateTag state={studio.liveSession.status} />
 		{#if studio.breakTimeSchedular}
 			<div class="timer">
 				{#if studio.liveSession.isOpened}
