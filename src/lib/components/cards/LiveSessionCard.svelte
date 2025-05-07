@@ -54,7 +54,8 @@
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
-				onClick={() => {
+				onclick = {(e) => {
+					e.stopPropagation();
 					window.location.href = `/user/${liveSession.organizer?.id}`;
 				}}
 			>
