@@ -33,10 +33,17 @@
 						<td><span class="material-symbols-outlined live-icon"> bigtop_updates </span></td>
 					</tr>
 					<tr>
-						<th>Breaks</th>
+						<th><Img:srcset></Img:srcset>Interval</th>
 						<td>
 							{#if liveSession.break_time}
-								<span class="break-time">each {liveSession.break_time.interval} minute</span>
+								<span class="break-time">
+									<span class="interval">
+										{liveSession.break_time.interval}	
+									</span>
+									<span>/</span>
+									<span class="duration">
+										{liveSession.break_time.duration}</span>
+									</span>
 							{:else}
 								<span class="break-time-none"
 									><span class="material-symbols-outlined"> close </span></span
@@ -129,7 +136,7 @@
 
 							.break-time-none {
 								span {
-									font-size: 20px;
+									font-size: 18px;
 								}
 							}
 						}
