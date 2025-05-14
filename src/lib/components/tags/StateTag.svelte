@@ -12,6 +12,10 @@
 	<div class="state-tag state-tag-open little-rounded">
 		<span>opened</span>
 	</div>
+	{:else if state  == live_session_status.READY}
+	<div class="state-tag state-tag-ready little-rounded">
+		<span>ready</span>
+	</div>
 {:else if state == live_session_status.BREAKED}
 	<div class="state-tag state-tag-break little-rounded">
 		<span>breaked</span>
@@ -22,6 +26,13 @@
 	.state-tag {
 		display: inline-block;
 		padding: 5px 10px;
+				&.state-tag-ready {
+			background-color: var(--dark-orange);
+			span {
+				color: var(--light-orange);
+			}
+		}
+
 		&.state-tag-open {
 			background-color: var(--dark-green);
 			span {
