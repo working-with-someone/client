@@ -10,40 +10,29 @@
 	const { liveSession }: Props = $props();
 </script>
 
-<div
-	class="card middle-rounded"
-	onclick={() => {
-		window.location.href = `/session/live/${liveSession.id}`;
-	}}
->
+<a class="card middle-rounded" href={`/session/live/${liveSession.id}`}>
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img src={liveSession.thumbnail_uri} alt="" class="thumbnail" />
+			<span class="material-symbols-outlined live-icon much-rounded"> bigtop_updates </span>
+			<div class="status-tag-wrapper">
+				<StateTag state={liveSession.status} />
+			</div>
 		</div>
 	</div>
 	<div class="footer">
-		<div class="title">
-			<p>{liveSession.title}</p>
-		</div>
 		<div class="session-info">
 			<table>
 				<tbody>
 					<tr>
-						<th>Duration</th>
-						<td><span class="material-symbols-outlined live-icon"> bigtop_updates </span></td>
-					</tr>
-					<tr>
-						<th><Img:srcset></Img:srcset>Interval</th>
+						<th>Interval</th>
 						<td>
 							{#if liveSession.break_time}
 								<span class="break-time">
 									<span class="interval">
-										{liveSession.break_time.interval}	
+										{liveSession.break_time.interval} minutes
 									</span>
-									<span>/</span>
-									<span class="duration">
-										{liveSession.break_time.duration}</span>
-									</span>
+								</span>
 							{:else}
 								<span class="break-time-none"
 									><span class="material-symbols-outlined"> close </span></span
@@ -52,7 +41,16 @@
 						</td>
 					</tr>
 					<tr>
-						<th>status</th><td><StateTag state={liveSession.status} /></td>
+						<th>Break time</th>
+						<td>
+							{#if liveSession.break_time}
+								<span class="duration"> {liveSession.break_time.duration} minutes</span>
+							{:else}
+								<span class="break-time-none"
+									><span class="material-symbols-outlined"> close </span></span
+								>
+							{/if}
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -61,7 +59,7 @@
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
-				onclick = {(e) => {
+				onclick={(e) => {
 					e.stopPropagation();
 					window.location.href = `/user/${liveSession.organizer?.id}`;
 				}}
@@ -77,10 +75,10 @@
 			</div>
 		</div>
 	</div>
-</div>
+</a>
 
 <style lang="scss">
-	$card-width: 320px;
+	$card-width: 400px;
 	$card-ratio: 16 / 9;
 	.card {
 		background-color: var(--bg);
@@ -95,89 +93,89 @@
 			.thumbnail-wrapper {
 				width: 100%;
 				position: relative;
-				padding-top: calc(100% / $card-ratio); /* 16:9 비율 유지 */
+				padding-top: calc(100% / $card-ratio);
 				overflow: hidden;
-
 				.thumbnail {
 					position: absolute;
 					top: 0;
 					left: 0;
 					width: 100%;
 					height: 100%;
-					object-fit: cover; /* 이미지를 영역에 맞게 조절 */
+					object-fit: cover;
+				}
+				.live-icon {
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					font-size: 24px;
+					color: var(--sig);
+					background-color: rgba(0, 0, 0, 0.5);
+					padding: 4px 8px;
+					z-index: 1;
+				}
+				.status-tag-wrapper {
+					position: absolute;
+					bottom: 10px;
+					right: 10px;
+					z-index: 1;
 				}
 			}
 		}
-
 		.footer {
 			display: flex;
 			flex-direction: column;
 			padding: 10px;
 			gap: 10px;
-			.title {
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
-				font-size: 0.9em;
-			}
 			.session-info {
 				font-size: 12px;
-				display: flex;
-				flex-direction: column;
 				table {
 					border-collapse: collapse;
+					width: 100%;
 					tr {
 						border-bottom: 2px solid var(--bg-sideBar);
-						td {
-							.live-icon {
-								font-size: 20px;
-								color: var(--sig);
-							}
-
-							.break-time-none {
-								span {
-									font-size: 18px;
-								}
-							}
-						}
-						th {
+						th, td {
 							padding: 5px;
 							text-align: start;
+						}
+						th {
 							width: 50%;
+						}
+						.break-time-none span {
+							font-size: 18px;
 						}
 					}
 				}
 			}
 			.user-info {
 				display: flex;
-				flex-direction: row;
 				gap: 10px;
-			}
-			.pfp-wrapper {
-				width: 30px;
-				height: 30px;
-				border-radius: 15px;
-				overflow: hidden;
-				&:hover {
-					cursor: pointer;
-				}
-				img {
-					width: 100%;
-					object-fit: cover;
-				}
-			}
-			.info {
-				width: 241px;
-				.title {
-					width: 100%;
-					font-size: 12px;
-					text-overflow: ellipsis;
+				align-items: center;
+				.pfp-wrapper {
+					width: 30px;
+					height: 30px;
+					border-radius: 15px;
 					overflow: hidden;
-					white-space: nowrap;
+					flex-shrink: 0;
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
 				}
-				.username {
-					font-size: 10px;
-					color: rgba(255, 255, 255, 0.5);
+				.info {
+					flex: 1;
+					min-width: 0;
+					.title {
+						font-size: 14px;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+						width: 100%;
+					}
+					.username {
+						font-size: 12px;
+						color: rgba(255, 255, 255, 0.5);
+					}
 				}
 			}
 		}
