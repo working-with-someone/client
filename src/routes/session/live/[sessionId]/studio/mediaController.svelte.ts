@@ -22,7 +22,9 @@ export class MediaController {
 			video: {
 				deviceId: this.currVideoInputDeviceId,
 				// 16:9
-				aspectRatio: 1.7777777778
+				aspectRatio: 1.7777777778,
+				// constraint
+				frameRate : 30
 			},
 			audio: {
 				deviceId: this.currAudioInputDeviceId
