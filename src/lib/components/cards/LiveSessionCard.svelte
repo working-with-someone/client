@@ -25,7 +25,7 @@
 			<table>
 				<tbody>
 					<tr>
-						<th>Interval</th>
+						<th>interval</th>
 						<td>
 							{#if liveSession.break_time}
 								<span class="break-time">
@@ -41,7 +41,7 @@
 						</td>
 					</tr>
 					<tr>
-						<th>Break time</th>
+						<th>break time</th>
 						<td>
 							{#if liveSession.break_time}
 								<span class="duration"> {liveSession.break_time.duration} minutes</span>
@@ -51,6 +51,10 @@
 								>
 							{/if}
 						</td>
+					</tr>
+					<tr>
+						<th><span>started at</span></th>
+						<td><span>{liveSession.created_at}</span></td>
 					</tr>
 				</tbody>
 			</table>
