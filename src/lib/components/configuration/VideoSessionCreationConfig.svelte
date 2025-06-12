@@ -30,7 +30,7 @@
 </script>
 
 <section id="session-upload-config">
-	<div class="header">Upload Session</div>
+	<div class="header">Create Video Session</div>
 
 	<div class="body">
 		<div class="detail config">

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Modal from '../../modals/Modal.svelte';
 	import LiveSessionCreationConfig from '../../configuration/LiveSessionCreantionConfig.svelte';
-	import SessionUploadConfig from '../../configuration/SessionUploadConfig.svelte';
+	import VideoSessionUploadConfig from '../../configuration/VideoSessionCreationConfig.svelte';
 
 	function closeSessionUploadModal() {
 		showSessionUploadModal = false;
@@ -36,7 +36,7 @@
 
 {#if showSessionUploadModal}
 	<Modal closeModal={closeSessionUploadModal}>
-		<SessionUploadConfig slot="modal-body"></SessionUploadConfig>
+		<VideoSessionUploadConfig slot="modal-body"></VideoSessionUploadConfig>
 	</Modal>
 {/if}
 
