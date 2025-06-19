@@ -204,6 +204,18 @@ h5 {
   border-radius: 15px;
 }
 
+.text-08 {
+  font-size : 0.8em;
+}
+
+.text-1 {
+ font-size : 1em;
+}
+
+.text-12 {
+  font-size : 1.2em;
+}
+
 .text-warn {
   color: var(--font-red);
 }
