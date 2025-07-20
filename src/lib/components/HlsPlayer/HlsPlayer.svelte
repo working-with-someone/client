@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Hls from 'hls.js';
 	import { onMount } from 'svelte';
-	import { PUBLIC_RTMP_SERVER_DOMAIN } from '$env/static/public';
+	import { PUBLIC_MEDIA_SERVER_DOMAIN } from '$env/static/public'
 	import LiveSessionOverlayForParticipant from '../overlay/LiveSessionOverlayForParticipant.svelte';
 	import type { Participant } from '../../../routes/session/live/[sessionId]/Participant.svelte';
 
@@ -14,7 +14,7 @@
 	let video: HTMLVideoElement;
 
 	onMount(() => {
-		const videoSrc = `${PUBLIC_RTMP_SERVER_DOMAIN}/hls/${participant.liveSession.id}/index.m3u8`;
+		const videoSrc = `${PUBLIC_MEDIA_SERVER_DOMAIN}/live/${participant.liveSession.id}.flv`;
 
 		if (video.canPlayType('application/vnd.apple.mpegurl')) {
 			video.src = videoSrc;
