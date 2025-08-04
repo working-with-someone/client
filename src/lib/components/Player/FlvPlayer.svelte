@@ -1,9 +1,11 @@
 <script lang="ts">
-	import Hls from 'hls.js';
 	import { onMount } from 'svelte';
-	import { PUBLIC_MEDIA_SERVER_DOMAIN } from '$env/static/public'
+	import { PUBLIC_MEDIA_SERVER_DOMAIN } from '$env/static/public';
 	import LiveSessionOverlayForParticipant from '../overlay/LiveSessionOverlayForParticipant.svelte';
 	import type { Participant } from '../../../routes/session/live/[sessionId]/Participant.svelte';
+
+	export const ssr = false;
+	export const csr = true;
 
 	interface Props {
 		participant: Participant;
@@ -11,30 +13,36 @@
 
 	const { participant }: Props = $props();
 
-	let video: HTMLVideoElement;
+	onMount(async () => {
+		const flvJs = (await import('flv.js')).default;
 
-	onMount(() => {
-		const videoSrc = `${PUBLIC_MEDIA_SERVER_DOMAIN}/live/${participant.liveSession.id}.flv`;
+		if (flvJs.isSupported()) {
+			const videoEl = document.querySelector('#video');
 
-		if (video.canPlayType('application/vnd.apple.mpegurl')) {
-			video.src = videoSrc;
-		} else if (Hls.isSupported()) {
-			const hls = new Hls();
+			const videoSrc = `${PUBLIC_MEDIA_SERVER_DOMAIN}/live/${participant.liveSession.id}.flv`;
 
-			hls.loadSource(videoSrc);
-			hls.attachMedia(video);
+			const flvPlayer = flvJs.createPlayer({
+				type: 'flv',
+				url: videoSrc
+			});
+
+			flvPlayer.attachMediaElement(videoEl);
+			flvPlayer.muted = true;
+			flvPlayer.load();
+			flvPlayer.play();
 		}
 	});
 </script>
 
-<div id="hls-player">
+<div id="flv-player">
 	<video id="video" autoplay controls bind:this={video}></video>
 
 	<LiveSessionOverlayForParticipant {participant}></LiveSessionOverlayForParticipant>
 </div>
+m
 
 <style lang="scss">
-	#hls-player {
+	#flv-player {
 		flex: 1;
 		background-color: black;
 		position: relative;

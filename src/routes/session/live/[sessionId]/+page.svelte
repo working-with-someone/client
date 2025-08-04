@@ -1,5 +1,5 @@
 <script lang="ts">
-	import HlsPlayer from '$lib/components/HlsPlayer/HlsPlayer.svelte';
+	import FlvPlayer from '$lib/components/Player/FlvPlayer.svelte';
 	import type { PageData } from './$types';
 	import ChatRoom from './ChatRoom.svelte';
 	import { UpdatableLiveSession } from './LiveSession.svelte';
@@ -13,7 +13,7 @@
 
 <section id="live-session">
 	<div class="left">
-		<HlsPlayer {participant}></HlsPlayer>
+		<FlvPlayer {participant}></FlvPlayer>
 	</div>
 	<div class="right">
 		<div class="body">
