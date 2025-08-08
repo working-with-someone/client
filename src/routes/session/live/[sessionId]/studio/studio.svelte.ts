@@ -6,6 +6,7 @@ import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from './organizerChatManager.svelte';
 import WS_CHANNELS from '$lib/constants/channels';
 import { BreakTimeSchedular } from './BreakTimeSchedular.svelte';
+import { Role } from '../../../../../enums/session';
 
 export class Studio {
 	liveSession: UpdatableLiveSession;
@@ -20,6 +21,9 @@ export class Studio {
 		this.socket = io(
 			PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.liveSession.id,
 			{
+				query: {
+					role: Role.organizer
+				},
 				withCredentials: true
 			}
 		);
