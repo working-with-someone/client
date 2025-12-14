@@ -9,9 +9,11 @@ const WS_CHANNELS = {
 	transition: {
 		open: 'transition:open',
 		break: 'transition:break',
+		close: 'transition:close',
 		broadCast: {
 			open: 'transition:broadcast:open',
-			break: 'transition:broadcast:break'
+			break: 'transition:broadcast:break',
+			close: 'transition:broadcast:close'
 		}
 	}
 };
