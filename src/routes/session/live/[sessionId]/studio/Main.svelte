@@ -1,27 +1,24 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import type { MediaController } from './mediaController.svelte';
 	import Preview from './Preview.svelte';
 	import ControlPanel from './ControlPanel.svelte';
-	import { Studio } from './studio.svelte';
+	import { Studio } from '../../../../../lib/live/studio';
 
 	import ChatRoom from './ChatRoom.svelte';
 
 	interface Props {
 		studio: Studio;
-		mediaController: MediaController;
 	}
 
-	let { studio, mediaController }: Props = $props();
+	let { studio }: Props = $props();
 
-	let liveStream = mediaController.mediaStream;
-
-	onMount(async () => {
-		if (!studio.liveSession.isOpened) {
-			await studio.open();
+	$effect(() => {
+		if (studio.mediaController.mediaStream) {
+			// open 상태일 때만 바로 송출한다.
+			if (studio.isOpened) {
+				studio.publish();
+			}
 		}
-
-		studio.publish(mediaController.mediaStream);
 	});
 
 	onDestroy(() => {
@@ -31,8 +28,8 @@
 
 <section id="live-session-organizer">
 	<div class="left">
-		<Preview {studio} mediaStream={liveStream} />
-		<ControlPanel {mediaController} {studio} />
+		<Preview {studio} />
+		<ControlPanel {studio} />
 	</div>
 	<div class="right">
 		<div class="body">

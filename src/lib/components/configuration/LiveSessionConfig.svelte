@@ -1,31 +1,29 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
 	import { access_level } from '@prisma/client';
-	import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
-	import { onMount } from 'svelte';
-	import { Studio } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
+	import { Studio } from '../../live/studio';
 
 	interface Props {
 		studio: Studio;
-		mediaController: MediaController;
+		closeLiveSessionConfigModal: () => void;
 	}
 
-	let { studio, mediaController }: Props = $props();
+	let { studio, closeLiveSessionConfigModal }: Props = $props();
 
 	let previewVideo: HTMLVideoElement;
 
-	onMount(() => {
-		previewVideo.srcObject = mediaController.mediaStream;
+	$effect(() => {
+		previewVideo.srcObject = studio.mediaController.mediaStream;
 	});
 </script>
 
-<section id="live-session-open-config">
-	<div class="header">Open Live Session</div>
+<section id="live-session-open-config" class="much-rounded">
+	<div class="header">live session configuration</div>
 
 	<div class="body">
 		<div class="preview">
 			<div class="preview-media">
-				<video id="preview-video" autoplay bind:this={previewVideo} controls={true}></video>
+				<video id="preview-video" autoplay bind:this={previewVideo} controls={false}></video>
 			</div>
 		</div>
 		<div class="info-confirm">
@@ -51,17 +49,34 @@
 			</div>
 		</div>
 		<div class="media-config">
-			<LiveSessionMediaConfig {mediaController} />
+			<LiveSessionMediaConfig mediaController={studio.mediaController} />
 		</div>
 	</div>
 	<!-- this에 click event가 binding되지 않도록 -->
 	<div class="footer">
-		<button
-			class="btn-sig"
-			onclick={() => {
-				studio.open();
-			}}>start</button
-		>
+		{#if studio.isReady}
+			<button
+				class="btn-sig"
+				onclick={() => {
+					studio
+						.open()
+						.then(() => {
+							closeLiveSessionConfigModal();
+						})
+						.catch((err) => {
+							console.error(err);
+						});
+				}}>start</button
+			>
+		{:else if studio.isOpened}
+			<button
+				class="btn-sig"
+				onclick={() => {
+					studio.mediaController.reloadMediaStream();
+					closeLiveSessionConfigModal();
+				}}>save</button
+			>
+		{/if}
 	</div>
 </section>
 
@@ -74,7 +89,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
-		border-radius: 10px;
+
+		padding: 20px;
 
 		.body {
 			.preview {

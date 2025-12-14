@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type { MediaController } from './mediaController.svelte';
-	import { Studio } from './studio.svelte';
+	import { Studio } from '../../../../../lib/live/studio';
 
 	interface Props {
-		mediaController: MediaController;
 		studio: Studio;
 	}
 
-	let { mediaController, studio }: Props = $props();
+	let { studio }: Props = $props();
 </script>
 
 <div class="control-panel">

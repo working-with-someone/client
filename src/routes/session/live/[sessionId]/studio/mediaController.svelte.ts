@@ -10,6 +10,7 @@ export class MediaController {
 
 	constructor() {}
 
+	// 현재 사용가능한 media device를 load하고,
 	async init() {
 		await this.loadDevices();
 
@@ -24,7 +25,7 @@ export class MediaController {
 				// 16:9
 				aspectRatio: 1.7777777778,
 				// constraint
-				frameRate : 30
+				frameRate: 30
 			},
 			audio: {
 				deviceId: this.currAudioInputDeviceId
@@ -32,8 +33,6 @@ export class MediaController {
 		};
 
 		this.mediaStream = await navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints);
-
-		this.initialized = true;
 	}
 
 	async setVideoTrackConstraints(videoTrackConstraints: MediaTrackConstraints) {
@@ -42,7 +41,7 @@ export class MediaController {
 			...videoTrackConstraints
 		};
 
-		this.updateMediaStream();
+		this.reloadMediaStream();
 	}
 
 	async setAudioTrackConstraints(audioTrackConstraints: MediaTrackConstraints) {
@@ -51,7 +50,7 @@ export class MediaController {
 			...audioTrackConstraints
 		};
 
-		this.updateMediaStream();
+		this.reloadMediaStream();
 	}
 
 	async getConnectedAudioInputDevices() {
@@ -72,15 +71,7 @@ export class MediaController {
 		this.audioInputDevices = await this.getConnectedAudioInputDevices();
 	}
 
-	private async updateMediaStream() {
+	async reloadMediaStream() {
 		this.mediaStream = await navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints);
-	}
-
-	async getMediaStream() {
-		if (this.mediaStream) {
-			return this.mediaStream;
-		}
-
-		return await navigator.mediaDevices.getUserMedia(this.mediaStreamConstraints);
 	}
 }

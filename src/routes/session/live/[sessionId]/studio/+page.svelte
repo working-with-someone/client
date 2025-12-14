@@ -1,40 +1,20 @@
 <script lang="ts">
-	import LiveSessionOpenConfig from '$lib/components/configuration/LiveSessionOpenConfig.svelte';
-	import { onDestroy, onMount } from 'svelte';
-	import { MediaController } from './mediaController.svelte';
-	import Main from './Main.svelte';
-	import { Studio } from './studio.svelte';
-	import { UpdatableLiveSession } from '../LiveSession.svelte';
-
 	import type { PageData } from './$types';
+	import { LiveSession } from '../LiveSession.svelte';
+	import { live_session_status } from '@prisma/client';
+	import Studio from './Studio.svelte';
 
 	let { data }: { data: PageData } = $props();
 
-	const liveSession = new UpdatableLiveSession(data.liveSession, data.breakTime);
-	const studio = new Studio(liveSession);
-
-	let mediaController = $state(new MediaController());
-
-	onMount(() => {
-		// navigator가 mount된 이후에
-		mediaController.init();
-	});
-
-	onDestroy(() => {});
+	const liveSession = new LiveSession(data.liveSession);
 </script>
 
 <section id="live-session">
-	<!-- ready -->
-	{#if mediaController.initialized}
-		{#if studio.liveSession.isReady}
-			<LiveSessionOpenConfig {studio} {mediaController} />
-		{:else if studio.liveSession.isClosed}
-			<!-- end -->
-			live session is closed
-		{:else}
-			<!-- opened, breaked -->
-			<Main {studio} {mediaController} />
-		{/if}
+	{#if liveSession.status === live_session_status.CLOSED}
+		<p>live session is closed</p>
+	{:else}
+		<!-- ready, opened, breaked -->
+		<Studio liveSessionData={liveSession} />
 	{/if}
 </section>
 

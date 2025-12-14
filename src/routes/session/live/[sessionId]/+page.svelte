@@ -1,25 +1,32 @@
 <script lang="ts">
 	import FlvPlayer from '$lib/components/Player/FlvPlayer.svelte';
+	import { live_session_status } from '@prisma/client';
 	import type { PageData } from './$types';
 	import ChatRoom from './ChatRoom.svelte';
-	import { UpdatableLiveSession } from './LiveSession.svelte';
+	import { LiveSession } from './LiveSession.svelte';
 	import { Participant } from './Participant.svelte';
 
 	const { data }: { data: PageData } = $props();
 
-	const liveSession = new UpdatableLiveSession(data.liveSession, data.breakTime);
+	const liveSession = new LiveSession(data.liveSession);
 	const participant = new Participant(liveSession);
+
+	console.log(liveSession);
 </script>
 
 <section id="live-session">
-	<div class="left">
-		<FlvPlayer {participant}></FlvPlayer>
-	</div>
-	<div class="right">
-		<div class="body">
-			<ChatRoom {participant} />
+	{#if liveSession.status == live_session_status.CLOSED || liveSession.status == live_session_status.READY}
+		<p>can not find live session</p>
+	{:else}
+		<div class="left">
+			<FlvPlayer {participant}></FlvPlayer>
 		</div>
-	</div>
+		<div class="right">
+			<div class="body">
+				<ChatRoom {participant} />
+			</div>
+		</div>
+	{/if}
 </section>
 
 <style lang="scss">

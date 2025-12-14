@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CategorizedSessions } from '../@types/session';
+	import type { CategorizedSessions } from '../types/session';
 	import SessionDeck from '$lib/components/cards/SessionDeck.svelte';
 	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 

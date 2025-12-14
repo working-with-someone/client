@@ -1,20 +1,17 @@
 <script lang="ts">
 	import LiveSessionOverlayForStudio from '$lib/components/overlay/LiveSessionOverlayForStudio.svelte';
-	import type { Studio } from './studio.svelte';
+	import type { Studio } from '../../../../../lib/live/studio';
 
 	interface Props {
 		studio: Studio;
-		mediaStream?: MediaStream;
 	}
 
-	let { mediaStream, studio }: Props = $props();
+	let { studio }: Props = $props();
 
 	let video: HTMLVideoElement;
 
 	$effect(() => {
-		if (mediaStream) {
-			video.srcObject = mediaStream;
-		}
+		video.srcObject = studio.mediaController.mediaStream;
 	});
 </script>
 

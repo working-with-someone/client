@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	import { Studio } from './studio.svelte';
+	import { Studio } from '../../../../../lib/live/studio';
 	import { slide } from 'svelte/transition';
 	let chatInput: HTMLTextAreaElement;
 
@@ -20,7 +20,7 @@
 </script>
 
 <div class="chatroom">
-	{#if studio.liveSession.isOpened}
+	{#if studio.isOpened}
 		<div class="chat-lock">
 			<p class="material-symbols-outlined">lock</p>
 			<p>Focus on your task</p>

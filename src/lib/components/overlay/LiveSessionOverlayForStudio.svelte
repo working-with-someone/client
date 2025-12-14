@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Studio } from '../../../routes/session/live/[sessionId]/studio/studio.svelte';
+	import type { Studio } from '../../live/studio';
 	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
@@ -17,14 +17,12 @@
 
 		duration = `${elapsedTime.hours}:${elapsedTime.minutes}:${elapsedTime.seconds}`;
 
-		if (studio.breakTimeSchedular) {
-			let untilBreakTIme = studio.breakTimeSchedular.remainTimeUntilBreak;
+		// let untilBreakTIme = studio.breakTimeSchedular.remainTimeUntilBreak;
 
-			untilBreak = `${untilBreakTIme.hours}:${untilBreakTIme.minutes}:${untilBreakTIme.seconds}`;
+		// untilBreak = `${untilBreakTIme.hours}:${untilBreakTIme.minutes}:${untilBreakTIme.seconds}`;
 
-			let untilOpenTime = studio.breakTimeSchedular.remainTimeUntilOpen;
-			untilOpen = `${untilOpenTime.hours}:${untilOpenTime.minutes}:${untilOpenTime.seconds}`;
-		}
+		// let untilOpenTime = studio.breakTimeSchedular.remainTimeUntilOpen;
+		// untilOpen = `${untilOpenTime.hours}:${untilOpenTime.minutes}:${untilOpenTime.seconds}`;
 	}, 1000);
 </script>
 
@@ -36,15 +34,13 @@
 
 	<div class="state">
 		<StateTag state={studio.liveSession.status} />
-		{#if studio.breakTimeSchedular}
-			<div class="timer">
-				{#if studio.liveSession.isOpened}
-					<span class="until-open">{untilBreak}</span>
-				{:else if studio.liveSession.isBreaked}
-					<span class="until-break">{untilOpen}</span>
-				{/if}
-			</div>
-		{/if}
+		<div class="timer">
+			{#if studio.isOpened}
+				<span class="until-open">{untilBreak}</span>
+			{:else if studio.isBreaked}
+				<span class="until-break">{untilOpen}</span>
+			{/if}
+		</div>
 	</div>
 </div>
 

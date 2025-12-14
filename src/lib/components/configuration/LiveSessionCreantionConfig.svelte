@@ -108,7 +108,7 @@
 	}
 </script>
 
-<section id="live-session-creation-config">
+<section id="live-session-creation-config" class="much-rounded">
 	<div class="header">Create Live Session</div>
 
 	<div class="body">
@@ -279,7 +279,8 @@
 <style lang="scss">
 	section#live-session-creation-config {
 		width: 700px;
-
+		background-color: var(--bg);
+		padding: 15px 10px;
 		.header {
 			padding: 10px;
 			border-bottom: 1px solid gray;
