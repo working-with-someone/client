@@ -87,7 +87,6 @@ export class Studio {
 	}
 
 	publish() {
-		console.log(this.mediaController.mediaStream);
 		if (!this.mediaController.mediaStream) {
 			throw new Error('Media stream is not available');
 		}
