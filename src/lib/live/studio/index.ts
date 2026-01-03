@@ -43,6 +43,10 @@ export class Studio {
 			this.liveSession.status = live_session_status.OPENED;
 		});
 
+		this.socket.on(WS_CHANNELS.livesession.update, async (field) => {
+			await this.liveSession.fetch();
+		});
+
 		this.chatManager = new OrganizerChatManager(this.socket);
 	}
 

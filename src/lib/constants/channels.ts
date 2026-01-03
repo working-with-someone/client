@@ -15,6 +15,9 @@ const WS_CHANNELS = {
 			break: 'transition:broadcast:break',
 			close: 'transition:broadcast:close'
 		}
+	},
+	livesession: {
+		update: 'livesession:update'
 	}
 };
 
