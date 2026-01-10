@@ -134,8 +134,24 @@ export class Studio {
 	}
 
 	get elapsedTime() {
+		if (!this.liveSession.started_at) {
+			return undefined;
+		}
+
 		const { hours, minutes, seconds } = timeDifference(Date.now(), this.liveSession.started_at!);
 
 		return { hours, minutes, seconds };
+	}
+
+	get currentStatusDuration() {
+		const lastTransition = this.liveSession.live_session_transition_log.at(-1);
+
+		let duration = { hours: '00', minutes: '00', seconds: '00' };
+
+		if (lastTransition) {
+			duration = timeDifference(Date.now(), lastTransition.transitioned_at);
+		}
+
+		return duration;
 	}
 }

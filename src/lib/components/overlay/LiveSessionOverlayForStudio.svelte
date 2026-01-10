@@ -9,20 +9,16 @@
 	const { studio }: Props = $props();
 
 	let duration = $state('00:00:00');
-	let untilBreak = $state('00:00:00');
-	let untilOpen = $state('00:00:00');
+	let currentStateDuration = $state('00:00:00');
 
 	setInterval(() => {
 		let elapsedTime = studio.elapsedTime;
 
-		duration = `${elapsedTime.hours}:${elapsedTime.minutes}:${elapsedTime.seconds}`;
+		if (elapsedTime) {
+			duration = `${elapsedTime.hours}:${elapsedTime.minutes}:${elapsedTime.seconds}`;
+		}
 
-		// let untilBreakTIme = studio.breakTimeSchedular.remainTimeUntilBreak;
-
-		// untilBreak = `${untilBreakTIme.hours}:${untilBreakTIme.minutes}:${untilBreakTIme.seconds}`;
-
-		// let untilOpenTime = studio.breakTimeSchedular.remainTimeUntilOpen;
-		// untilOpen = `${untilOpenTime.hours}:${untilOpenTime.minutes}:${untilOpenTime.seconds}`;
+		currentStateDuration = `${studio.currentStatusDuration.hours}:${studio.currentStatusDuration.minutes}:${studio.currentStatusDuration.seconds}`;
 	}, 1000);
 </script>
 
@@ -36,9 +32,9 @@
 		<StateTag state={studio.liveSession.status} />
 		<div class="timer">
 			{#if studio.isOpened}
-				<span class="until-open">{untilBreak}</span>
+				<span class="until-open">{currentStateDuration}</span>
 			{:else if studio.isBreaked}
-				<span class="until-break">{untilOpen}</span>
+				<span class="until-break">{currentStateDuration}</span>
 			{/if}
 		</div>
 	</div>
