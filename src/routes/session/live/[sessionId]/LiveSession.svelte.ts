@@ -2,16 +2,9 @@ import { error } from '@sveltejs/kit';
 import wwsfetch from '$lib/utils/wwsfetch';
 import { access_level, live_session_status } from '@prisma/client';
 
-import { Prisma } from '@prisma/client';
+import type { LiveSessionWithAll } from '../../../../types/session';
 
-export class LiveSession
-	implements
-		Prisma.live_sessionGetPayload<{
-			include: {
-				break_time: true;
-			};
-		}>
-{
+export class LiveSession implements LiveSessionWithAll {
 	id: string;
 	title: string;
 	description: string | null;
@@ -25,8 +18,17 @@ export class LiveSession
 	started_at: Date | null;
 	organizer_id: number;
 	break_time: { session_id: string; interval: number; duration: number } | null;
+	allow: { user_id: number; live_session_id: string }[];
+	live_session_transition_log: {
+		id: number;
+		live_session_id: string;
+		from_state: live_session_status;
+		to_state: live_session_status;
+		transitioned_at: Date;
+	}[];
+	category: { label: string };
 
-	constructor(liveSession: Prisma.live_sessionGetPayload<true>) {
+	constructor(liveSession: LiveSession) {
 		this.id = liveSession.id;
 		this.title = liveSession.title;
 		this.description = liveSession.description;
@@ -41,6 +43,12 @@ export class LiveSession
 		this.started_at = liveSession.started_at ? new Date(liveSession.started_at) : null;
 
 		this.organizer_id = liveSession.organizer_id;
+		this.break_time = liveSession.break_time;
+		this.allow = liveSession.allow;
+		this.live_session_transition_log = liveSession.live_session_transition_log;
+		this.category = liveSession.category;
+
+		console.log(liveSession);
 	}
 
 	async fetch() {

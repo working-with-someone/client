@@ -15,7 +15,7 @@ export interface CategorizedSessions {
 	sessions: Session[];
 }
 
-export type LiveSession = Prisma.live_sessionGetPayload<{
+export type LiveSessionWithAll = Prisma.live_sessionGetPayload<{
 	include: {
 		break_time: true;
 		category: true;
