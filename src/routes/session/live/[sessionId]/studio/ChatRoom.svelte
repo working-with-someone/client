@@ -20,7 +20,7 @@
 </script>
 
 <div class="chatroom">
-	{#if studio.isOpened}
+	{#if studio.liveSession.isOpened}
 		<div class="chat-lock">
 			<p class="material-symbols-outlined">lock</p>
 			<p>Focus on your task</p>

@@ -22,7 +22,7 @@
 	}
 
 	onMount(async () => {
-		if (studio.isReady) {
+		if (studio.liveSession.isReady) {
 			openLiveSessionConfigModal();
 		}
 		await studio.mediaController.init();
@@ -42,7 +42,7 @@
 		</Modal>
 	{/if}
 
-	{#if studio.isClosed}
+	{#if studio.liveSession.isClosed}
 		<p>live session is closed</p>
 	{:else}
 		<!-- ready, opened, breaked -->

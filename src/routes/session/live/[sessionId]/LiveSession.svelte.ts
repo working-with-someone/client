@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import wwsfetch from '$lib/utils/wwsfetch';
 import { access_level, live_session_status } from '@prisma/client';
-
+import { timeDifference } from '$lib/utils/time';
 import type { LiveSessionWithAll } from '../../../../types/session';
 
 export class LiveSession implements LiveSessionWithAll {
@@ -62,5 +62,43 @@ export class LiveSession implements LiveSessionWithAll {
 		const liveSession = body.data;
 
 		Object.assign(this, liveSession);
+	}
+
+	get isReady() {
+		return this.status === live_session_status.READY;
+	}
+
+	get isOpened() {
+		return this.status === live_session_status.OPENED;
+	}
+
+	get isBreaked() {
+		return this.status === live_session_status.BREAKED;
+	}
+
+	get isClosed() {
+		return this.status === live_session_status.CLOSED;
+	}
+
+	get elapsedTime() {
+		if (!this.started_at) {
+			return undefined;
+		}
+
+		const { hours, minutes, seconds } = timeDifference(Date.now(), this.started_at!);
+
+		return { hours, minutes, seconds };
+	}
+
+	get currentStatusDuration() {
+		const lastTransition = this.live_session_transition_log.at(-1);
+
+		let duration = { hours: '00', minutes: '00', seconds: '00' };
+
+		if (lastTransition) {
+			duration = timeDifference(Date.now(), lastTransition.transitioned_at);
+		}
+
+		return duration;
 	}
 }

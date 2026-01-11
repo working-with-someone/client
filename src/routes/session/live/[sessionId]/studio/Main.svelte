@@ -15,7 +15,7 @@
 	$effect(() => {
 		if (studio.mediaController.mediaStream) {
 			// open 상태일 때만 바로 송출한다.
-			if (studio.isOpened) {
+			if (studio.liveSession.isOpened) {
 				studio.publish();
 			}
 		}

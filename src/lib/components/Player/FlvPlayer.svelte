@@ -2,16 +2,16 @@
 	import { onMount } from 'svelte';
 	import { PUBLIC_MEDIA_SERVER_DOMAIN } from '$env/static/public';
 	import LiveSessionOverlayForParticipant from '../overlay/LiveSessionOverlayForParticipant.svelte';
-	import type { Participant } from '../../../routes/session/live/[sessionId]/Participant.svelte';
+	import type { Viewer } from '../../live/viewer';
 
 	export const ssr = false;
 	export const csr = true;
 
 	interface Props {
-		participant: Participant;
+		viewer: Viewer;
 	}
 
-	const { participant }: Props = $props();
+	const { viewer }: Props = $props();
 
 	onMount(async () => {
 		const flvJs = (await import('flv.js')).default;
@@ -19,14 +19,14 @@
 		if (flvJs.isSupported()) {
 			const videoEl = document.querySelector('#video');
 
-			const videoSrc = `${PUBLIC_MEDIA_SERVER_DOMAIN}/live/${participant.liveSession.id}.flv`;
+			const videoSrc = `${PUBLIC_MEDIA_SERVER_DOMAIN}/live/${viewer.liveSession.id}.flv`;
 
 			const flvPlayer = flvJs.createPlayer({
 				type: 'flv',
 				url: videoSrc
 			});
 
-			flvPlayer.attachMediaElement(videoEl);
+			flvPlayer.attachMediaElement(videoEl as HTMLMediaElement);
 			flvPlayer.muted = true;
 			flvPlayer.load();
 			flvPlayer.play();
@@ -35,9 +35,9 @@
 </script>
 
 <div id="flv-player">
-	<video id="video" autoplay controls bind:this={video}></video>
+	<video id="video" autoplay controls></video>
 
-	<LiveSessionOverlayForParticipant {participant}></LiveSessionOverlayForParticipant>
+	<LiveSessionOverlayForParticipant {viewer}></LiveSessionOverlayForParticipant>
 </div>
 m
 

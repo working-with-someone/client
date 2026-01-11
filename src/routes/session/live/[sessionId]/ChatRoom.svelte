@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import { slide } from 'svelte/transition';
-	import type { Participant } from './Participant.svelte';
+	import type { Viewer } from '../../../../lib/live/viewer';
 	let chatInput: HTMLTextAreaElement;
 
 	interface Props {
-		participant: Participant;
+		viewer: Viewer;
 	}
 
-	const { participant }: Props = $props();
+	const { viewer }: Props = $props();
 
 	function sendChat() {
 		const msg = chatInput.value;
-		participant.chatManager.chat(msg);
+		viewer.chatManager.chat(msg);
 
 		chatInput.value = '';
 		chatInput.focus();
@@ -20,7 +20,7 @@
 </script>
 
 <div class="chatroom">
-	{#if participant.liveSession.isOpened}
+	{#if viewer.liveSession.isOpened}
 		<div class="chat-lock">
 			<p class="material-symbols-outlined">lock</p>
 			<p>Focus on your task</p>
@@ -28,7 +28,7 @@
 	{/if}
 
 	<ul class="chat-log-list">
-		{#each participant.chatManager.chatLogs as chatLog}
+		{#each viewer.chatManager.chatLogs as chatLog}
 			<li class="chat-log" transition:slide>
 				<div class="pfp">
 					<img src={`${PUBLIC_API_SERVER_DOMAIN}${chatLog.user.pfp}`} alt="" />

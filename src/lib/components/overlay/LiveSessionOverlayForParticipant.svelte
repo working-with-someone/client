@@ -1,17 +1,22 @@
 <script lang="ts">
-	import type { Participant } from '../../../routes/session/live/[sessionId]/Participant.svelte';
+	import { Viewer } from '../../live/viewer';
 	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
-		participant: Participant;
+		viewer: Viewer;
 	}
 
-	const { participant }: Props = $props();
+	const { viewer }: Props = $props();
+
+	let duration = $state('00:00:00');
+	let currentStateDuration = $state('00:00:00');
+
+	setInterval;
 </script>
 
 <div class="overlay">
 	<div class="state">
-		<StateTag liveSession={participant.liveSession} />
+		<StateTag state={viewer.liveSession.status} />
 	</div>
 </div>
 

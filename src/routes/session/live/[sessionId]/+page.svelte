@@ -4,14 +4,12 @@
 	import type { PageData } from './$types';
 	import ChatRoom from './ChatRoom.svelte';
 	import { LiveSession } from './LiveSession.svelte';
-	import { Participant } from './Participant.svelte';
+	import { Viewer } from '../../../../lib/live/viewer';
 
 	const { data }: { data: PageData } = $props();
 
 	const liveSession = new LiveSession(data.liveSession);
-	const participant = new Participant(liveSession);
-
-	console.log(liveSession);
+	const viewer = new Viewer(liveSession);
 </script>
 
 <section id="live-session">
@@ -19,11 +17,11 @@
 		<p>can not find live session</p>
 	{:else}
 		<div class="left">
-			<FlvPlayer {participant}></FlvPlayer>
+			<FlvPlayer {viewer}></FlvPlayer>
 		</div>
 		<div class="right">
 			<div class="body">
-				<ChatRoom {participant} />
+				<ChatRoom {viewer} />
 			</div>
 		</div>
 	{/if}

@@ -74,22 +74,6 @@ export class Studio {
 		});
 	}
 
-	get isReady() {
-		return this.liveSession.status === live_session_status.READY;
-	}
-
-	get isOpened() {
-		return this.liveSession.status === live_session_status.OPENED;
-	}
-
-	get isBreaked() {
-		return this.liveSession.status === live_session_status.BREAKED;
-	}
-
-	get isClosed() {
-		return this.liveSession.status === live_session_status.CLOSED;
-	}
-
 	publish() {
 		if (!this.mediaController.mediaStream) {
 			throw new Error('Media stream is not available');
@@ -131,27 +115,5 @@ export class Studio {
 		if (this.mediaRecorder?.state === 'recording') {
 			this.mediaRecorder.stop();
 		}
-	}
-
-	get elapsedTime() {
-		if (!this.liveSession.started_at) {
-			return undefined;
-		}
-
-		const { hours, minutes, seconds } = timeDifference(Date.now(), this.liveSession.started_at!);
-
-		return { hours, minutes, seconds };
-	}
-
-	get currentStatusDuration() {
-		const lastTransition = this.liveSession.live_session_transition_log.at(-1);
-
-		let duration = { hours: '00', minutes: '00', seconds: '00' };
-
-		if (lastTransition) {
-			duration = timeDifference(Date.now(), lastTransition.transitioned_at);
-		}
-
-		return duration;
 	}
 }

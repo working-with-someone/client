@@ -54,7 +54,7 @@
 	</div>
 	<!-- this에 click event가 binding되지 않도록 -->
 	<div class="footer">
-		{#if studio.isReady}
+		{#if studio.liveSession.isReady}
 			<button
 				class="btn-sig"
 				onclick={() => {
@@ -68,7 +68,7 @@
 						});
 				}}>start</button
 			>
-		{:else if studio.isOpened}
+		{:else if studio.liveSession.isOpened}
 			<button
 				class="btn-sig"
 				onclick={() => {

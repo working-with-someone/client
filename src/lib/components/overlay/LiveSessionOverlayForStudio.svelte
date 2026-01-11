@@ -12,13 +12,13 @@
 	let currentStateDuration = $state('00:00:00');
 
 	setInterval(() => {
-		let elapsedTime = studio.elapsedTime;
+		let elapsedTime = studio.liveSession.elapsedTime;
 
 		if (elapsedTime) {
 			duration = `${elapsedTime.hours}:${elapsedTime.minutes}:${elapsedTime.seconds}`;
 		}
 
-		currentStateDuration = `${studio.currentStatusDuration.hours}:${studio.currentStatusDuration.minutes}:${studio.currentStatusDuration.seconds}`;
+		currentStateDuration = `${studio.liveSession.currentStatusDuration.hours}:${studio.liveSession.currentStatusDuration.minutes}:${studio.liveSession.currentStatusDuration.seconds}`;
 	}, 1000);
 </script>
 
@@ -31,9 +31,9 @@
 	<div class="state">
 		<StateTag state={studio.liveSession.status} />
 		<div class="timer">
-			{#if studio.isOpened}
+			{#if studio.liveSession.isOpened}
 				<span class="until-open">{currentStateDuration}</span>
-			{:else if studio.isBreaked}
+			{:else if studio.liveSession.isBreaked}
 				<span class="until-break">{currentStateDuration}</span>
 			{/if}
 		</div>
