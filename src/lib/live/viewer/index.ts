@@ -4,8 +4,6 @@ import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import WS_CHANNELS from '$lib/constants/channels';
 import { LiveSession } from '../../../routes/session/live/[sessionId]/LiveSession.svelte';
 import { Role } from '../../../enums/session';
-import { live_session_status } from '@prisma/client';
-import { timeDifference } from '$lib/utils/time';
 
 export class Viewer {
 	liveSession: LiveSession;
@@ -27,12 +25,8 @@ export class Viewer {
 
 		this.chatManager = new ClientChatManager(this.socket);
 
-		this.socket.on(WS_CHANNELS.transition.broadCast.break, () => {
-			this.liveSession.fetch();
-		});
-
-		this.socket.on(WS_CHANNELS.transition.broadCast.open, () => {
-			this.liveSession.fetch();
+		this.socket.on(WS_CHANNELS.livesession.update, async (field) => {
+			await this.liveSession.fetch();
 		});
 	}
 }
