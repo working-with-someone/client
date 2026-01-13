@@ -1,11 +1,25 @@
-export function convertMillisecondsToTime(ms: number) {
-	const hours = Math.floor(ms / (1000 * 60 * 60));
-	ms -= hours * (1000 * 60 * 60);
+export function convertToTime(
+	value: number,
+	unit: 'h' | 'm' | 's' | 'ms'
+): { hours: string; minutes: string; seconds: string } {
+	// 단위를 밀리초로 먼저 변환
+	const toMilliseconds = (val: number, u: 'h' | 'm' | 's' | 'ms'): number => {
+		const conversions = {
+			h: 3600000,
+			m: 60000,
+			s: 1000,
+			ms: 1
+		};
+		return val * (conversions[u] || 1);
+	};
 
-	const minutes = Math.floor(ms / (1000 * 60));
-	ms -= minutes * (1000 * 60);
+	const totalMs = toMilliseconds(value, unit);
 
-	const seconds = Math.floor(ms / 1000);
+	const hours = Math.floor(totalMs / (1000 * 60 * 60));
+	const remainingMs = totalMs % (1000 * 60 * 60);
+
+	const minutes = Math.floor(remainingMs / (1000 * 60));
+	const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
 
 	return {
 		hours: String(hours).padStart(2, '0'),
@@ -19,8 +33,10 @@ export function timeDifference(from: number | string | Date, to: number | string
 	const _to = new Date(to).getTime();
 
 	const diff = Math.abs(_to - _from);
-	return convertMillisecondsToTime(diff);
+
+	return convertToTime(diff, 'ms');
 }
+
 export function toMilliseconds(value: number, unit: 'h' | 'm' | 's' | 'ms'): number {
 	const conversions = {
 		h: 3600000,
