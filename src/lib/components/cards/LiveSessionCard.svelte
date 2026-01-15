@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	import type { LiveSession } from '../../../types/session';
+	import type { LiveSessionWithAll } from '../../../types/session';
 	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
-		liveSession: LiveSession;
+		liveSession: LiveSessionWithAll;
 	}
 
 	const { liveSession }: Props = $props();
@@ -13,7 +13,11 @@
 <a class="card middle-rounded" href={`/session/live/${liveSession.id}`}>
 	<div class="body">
 		<div class="thumbnail-wrapper">
-			<img src={liveSession.thumbnail_uri} alt="" class="thumbnail" />
+			<img
+				src={new URL(liveSession.thumbnail_uri, PUBLIC_API_SERVER_DOMAIN).href}
+				alt=""
+				class="thumbnail"
+			/>
 			<span class="material-symbols-outlined live-icon much-rounded"> bigtop_updates </span>
 			<div class="status-tag-wrapper">
 				<StateTag state={liveSession.status} />
@@ -69,7 +73,7 @@
 				}}
 			>
 				<img
-					src={new URL(`${liveSession.organizer.id}`, PUBLIC_API_SERVER_DOMAIN).toString()}
+					src={new URL(liveSession.organizer.pfp.curr, PUBLIC_API_SERVER_DOMAIN).href}
 					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
 				/>
 			</button>
@@ -137,7 +141,8 @@
 					width: 100%;
 					tr {
 						border-bottom: 2px solid var(--bg-sideBar);
-						th, td {
+						th,
+						td {
 							padding: 5px;
 							text-align: start;
 						}
