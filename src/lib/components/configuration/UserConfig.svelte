@@ -101,7 +101,9 @@
 	section#user-config {
 		display: grid;
 		gap: 20px;
-		padding: 10px;
+		padding: 20px;
+		background-color: var(--bg-sideBar);
+		border-radius: 10px;
 		p {
 			font-size: 0.7em;
 		}
