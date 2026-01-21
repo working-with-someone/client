@@ -21,15 +21,12 @@ export class Studio {
 	constructor(liveSession: LiveSession) {
 		this.liveSession = liveSession;
 		this.mediaController = new MediaController();
-		this.socket = io(
-			PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/livesession/` + this.liveSession.id,
-			{
-				query: {
-					role: Role.organizer
-				},
-				withCredentials: true
-			}
-		);
+		this.socket = io(PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN + `/` + this.liveSession.id, {
+			query: {
+				role: Role.organizer
+			},
+			withCredentials: true
+		});
 
 		this.socket.on(WS_CHANNELS.transition.broadCast.break, () => {
 			this.liveSession.status = live_session_status.BREAKED;
