@@ -47,14 +47,6 @@ export class Studio {
 		this.chatManager = new OrganizerChatManager(this.socket);
 	}
 
-	async open() {
-		this.socket.emit(WS_CHANNELS.transition.open, (res: SocketResponse) => {
-			if (res.status != httpStatusCodes.OK) {
-				throw new wwsError(res.status, res.message!);
-			}
-		});
-	}
-
 	async break() {
 		this.socket.emit(WS_CHANNELS.transition.break, (res: SocketResponse) => {
 			if (res.status != httpStatusCodes.OK) {

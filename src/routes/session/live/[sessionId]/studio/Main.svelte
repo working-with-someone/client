@@ -12,15 +12,6 @@
 
 	let { studio }: Props = $props();
 
-	$effect(() => {
-		if (studio.mediaController.mediaStream) {
-			// open 상태일 때만 바로 송출한다.
-			if (studio.liveSession.isOpened) {
-				studio.publish();
-			}
-		}
-	});
-
 	onDestroy(() => {
 		studio.unpublish();
 	});

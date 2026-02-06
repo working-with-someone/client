@@ -58,14 +58,8 @@
 			<button
 				class="btn-sig"
 				onclick={() => {
-					studio
-						.open()
-						.then(() => {
-							closeLiveSessionConfigModal();
-						})
-						.catch((err) => {
-							console.error(err);
-						});
+					studio.publish();
+					closeLiveSessionConfigModal();
 				}}>start</button
 			>
 		{:else if studio.liveSession.isOpened}
