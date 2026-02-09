@@ -1,19 +1,22 @@
 <script lang="ts">
-	import type { Session } from '../../../@types/session';
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	export let session: Session;
+	import type { VideoSessionWithAll } from '../../../types/session';
 
-	function formatMinutesToHoursAndMinutes(minutes: number) {
-		const hours = Math.floor(minutes / 60);
-		const remainingMinutes = minutes % 60;
-		return `${hours}h ${remainingMinutes}m`;
+	interface Props {
+		videoSession: VideoSessionWithAll;
 	}
+
+	const { videoSession }: Props = $props();
 </script>
 
 <div class="card middle-rounded">
 	<div class="body">
 		<div class="thumbnail-wrapper">
-			<img src={session.thumbnail} alt="" class="thumbnail" />
+			<img
+				src={new URL(videoSession.thumbnail_uri, PUBLIC_API_SERVER_DOMAIN).href}
+				alt=""
+				class="thumbnail"
+			/>
 		</div>
 	</div>
 	<div class="footer">
@@ -21,16 +24,33 @@
 			<table>
 				<tbody>
 					<tr>
-						<th>Duration</th>
-						<td>{formatMinutesToHoursAndMinutes(session.time)}</td>
+						<th>interval</th>
+						<td>
+							{#if videoSession.break_time}
+								<span class="break-time">
+									<span class="interval">
+										{videoSession.break_time.interval} minutes
+									</span>
+								</span>
+							{:else}
+								<span class="break-time-none">x</span>
+							{/if}
+						</td>
 					</tr>
 					<tr>
-						<th>Breaks</th>
-						<td>x</td>
+						<th>break time</th>
+						<td>
+							{#if videoSession.break_time}
+								<span class="duration"> {videoSession.break_time.duration} minutes</span>
+							{:else}
+								<span class="break-time-none">x</span>
+							{/if}
+						</td>
 					</tr>
+
 					<tr>
-						<th>Sound</th>
-						<td><span>기다린만큼, 더 - 카더가든</span></td>
+						<th><span>created at</span></th>
+						<td><span>{videoSession.created_at}</span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -39,17 +59,20 @@
 			<button
 				class="btn-div pfp-wrapper"
 				on:click={() => {
-					window.location.href = `/user/${session.user.id}`;
+					window.location.href = `/user/${videoSession.organizer_id}`;
 				}}
 			>
 				<img
-					src={new URL(`${session?.user?.pfp?.curr}`, PUBLIC_API_SERVER_DOMAIN).toString()}
+					src={new URL(
+						`${videoSession?.organizer?.pfp?.curr}`,
+						PUBLIC_API_SERVER_DOMAIN
+					).toString()}
 					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
 				/>
 			</button>
 			<div class="info">
-				<p class="title">{session.title}</p>
-				<p class="username">{session.user.username}</p>
+				<p class="title">{videoSession.title}</p>
+				<p class="username">{videoSession.organizer.username}</p>
 			</div>
 		</div>
 	</div>
@@ -65,8 +88,17 @@
 		width: $card-width;
 		.body {
 			.thumbnail-wrapper {
+				width: 100%;
+				position: relative;
+				padding-top: calc(100% / $card-ratio);
+				overflow: hidden;
 				.thumbnail {
+					position: absolute;
+					top: 0;
+					left: 0;
 					width: 100%;
+					height: 100%;
+					object-fit: cover;
 				}
 			}
 		}
@@ -74,7 +106,7 @@
 		.footer {
 			display: flex;
 			flex-direction: column;
-			padding: 0px 0px 10px 10px;
+			padding: 5px 10px;
 			gap: 10px;
 			.session-info {
 				font-size: 12px;
@@ -112,14 +144,14 @@
 			.info {
 				width: 241px;
 				.title {
-					width: 100%;
-					font-size: 12px;
+					font-size: 13px;
 					text-overflow: ellipsis;
-					overflow: hidden;
 					white-space: nowrap;
+					overflow: hidden;
+					width: 100%;
 				}
 				.username {
-					font-size: 10px;
+					font-size: 12px;
 					color: rgba(255, 255, 255, 0.5);
 				}
 			}

@@ -1,14 +1,13 @@
 <script lang="ts">
-	import type { CategorizedSessions } from '../../../@types/session';
-	import SessionCard from './SessionCard.svelte';
-	import LiveSessionCard from './LiveSessionCard.svelte';
+	import type { VideoSessionWithAll } from '../../../types/session';
+	import VideoSessionCard from './VideoSessionCard.svelte';
 
 	interface Props {
-		categorizedSessions: CategorizedSessions;
+		category: string;
+		videoSessions: VideoSessionWithAll[];
 	}
-	let { categorizedSessions }: Props = $props();
 
-	const { category, sessions } = categorizedSessions;
+	let { category, videoSessions }: Props = $props();
 </script>
 
 <div class="deck middle-rounded">
@@ -16,12 +15,8 @@
 		<span>{category}</span>
 	</div>
 	<div class="sessions">
-		{#each sessions as session}
-			{#if session.isLive}
-				<LiveSessionCard {session} />
-			{:else}
-				<SessionCard {session} />
-			{/if}
+		{#each videoSessions as videoSession}
+			<VideoSessionCard {videoSession} />
 		{/each}
 	</div>
 </div>

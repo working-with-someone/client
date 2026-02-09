@@ -1,10 +1,10 @@
 <script lang="ts">
+	import type { LiveSessionWithAll } from '../../../types/session';
 	import LiveSessionCard from './LiveSessionCard.svelte';
-	import type { live_session } from '@prisma/client';
 
 	interface Props {
 		category: string;
-		liveSessions: live_session[];
+		liveSessions: LiveSessionWithAll[];
 	}
 
 	let { category, liveSessions }: Props = $props();

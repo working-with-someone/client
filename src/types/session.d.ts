@@ -1,5 +1,4 @@
 import type { PublicUserInfo } from './user';
-
 export type SessionMode = 'live' | 'video';
 
 export interface Session {
@@ -20,6 +19,19 @@ export type LiveSessionWithAll = Prisma.live_sessionGetPayload<{
 		break_time: true;
 		category: true;
 		live_session_transition_log: true;
+		organizer: {
+			include: {
+				pfp: true;
+			};
+		};
+	};
+}>;
+
+export type VideoSessionWithAll = Prisma.video_sessionGetPayload<{
+	include: {
+		allow: true;
+		break_time: true;
+		category: true;
 		organizer: {
 			include: {
 				pfp: true;

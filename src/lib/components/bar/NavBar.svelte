@@ -16,7 +16,7 @@
 		},
 		{
 			name: 'session',
-			url: '/session',
+			url: '/video',
 			icon: `<span class="material-symbols-outlined" style="font-size : 30px;">play_circle</span>`,
 			selected: false
 		},
@@ -100,8 +100,8 @@
 						background-color: $selected-color;
 					}
 
-					.material-symbols-outlined{
-						font-size : 40px;
+					.material-symbols-outlined {
+						font-size: 40px;
 					}
 				}
 				p {

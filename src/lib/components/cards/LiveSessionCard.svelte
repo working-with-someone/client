@@ -38,9 +38,7 @@
 									</span>
 								</span>
 							{:else}
-								<span class="break-time-none"
-									><span class="material-symbols-outlined"> close </span></span
-								>
+								<span class="break-time-none">x</span>
 							{/if}
 						</td>
 					</tr>
@@ -50,9 +48,7 @@
 							{#if liveSession.break_time}
 								<span class="duration"> {liveSession.break_time.duration} minutes</span>
 							{:else}
-								<span class="break-time-none"
-									><span class="material-symbols-outlined"> close </span></span
-								>
+								<span class="break-time-none">x</span>
 							{/if}
 						</td>
 					</tr>
@@ -86,14 +82,13 @@
 </a>
 
 <style lang="scss">
-	$card-width: 400px;
+	$card-width: 320px;
 	$card-ratio: 16 / 9;
 	.card {
 		background-color: var(--bg);
 		overflow: hidden;
 		flex: 0 0 $card-width;
 		width: $card-width;
-		border: 1px solid var(--sig);
 		&:hover {
 			cursor: pointer;
 		}
@@ -132,25 +127,19 @@
 		.footer {
 			display: flex;
 			flex-direction: column;
-			padding: 10px;
+			padding: 5px 10px;
 			gap: 10px;
 			.session-info {
 				font-size: 12px;
+				display: flex;
+				flex-direction: column;
 				table {
 					border-collapse: collapse;
-					width: 100%;
 					tr {
 						border-bottom: 2px solid var(--bg-sideBar);
-						th,
-						td {
+						th {
 							padding: 5px;
 							text-align: start;
-						}
-						th {
-							width: 50%;
-						}
-						.break-time-none span {
-							font-size: 18px;
 						}
 					}
 				}
@@ -175,7 +164,7 @@
 					flex: 1;
 					min-width: 0;
 					.title {
-						font-size: 14px;
+						font-size: 13px;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						overflow: hidden;
