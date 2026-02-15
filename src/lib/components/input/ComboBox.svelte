@@ -7,10 +7,11 @@
 		className?: string;
 		id?: string;
 		name?: string;
-		changeInput: (value) => void;
+		changeInput?: (value: any) => void;
+		selectOption?: (option: string) => void;
 	};
 
-	// $props를 사용한 props 선언 (TypeScript 타입 추가)
+	import { tick } from 'svelte';
 	let {
 		options = [],
 		value = '',
@@ -18,41 +19,77 @@
 		className = '',
 		id = '',
 		name = '',
-		changeInput
+		changeInput,
+		selectOption
 	}: ComboboxProps = $props();
 
-	// 내부 상태
 	let isDropdownVisible = $state(false);
 	let inputElement: HTMLDivElement | null = $state(null);
 
-	// 필터링된 옵션 계산
+	let activeIndex = $state(-1);
+	const listboxId = id ? `${id}-listbox` : 'combobox-listbox';
 	let filteredOptions = $derived(
 		options.filter((option) => option.toLowerCase().includes((value || '').toLowerCase()))
 	);
 
-	// 이벤트 디스패치를 위한 설정
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher<{
-		input: { value: string };
-		change: { value: string };
-	}>();
-
-	// 입력값 변경 처리
 	function handleInput(event: Event): void {
 		const target = event.target as HTMLInputElement;
 		value = target.value;
 		isDropdownVisible = true;
 
-		changeInput(value);
+		changeInput?.(value);
 	}
 
-	// 옵션 선택 처리
-	function selectOption(selectedOption: string): void {
+	async function handleKeydown(event: KeyboardEvent) {
+		if (!isDropdownVisible && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+			isDropdownVisible = true;
+			activeIndex = 0;
+			await tick();
+			return;
+		}
+
+		switch (event.key) {
+			case 'ArrowDown':
+				event.preventDefault();
+				activeIndex = Math.min(activeIndex + 1, filteredOptions.length - 1);
+				await tick();
+				scrollActiveIntoView();
+				break;
+			case 'ArrowUp':
+				event.preventDefault();
+				activeIndex = Math.max(activeIndex - 1, 0);
+				await tick();
+				scrollActiveIntoView();
+				break;
+			case 'Enter':
+				if (isDropdownVisible && activeIndex >= 0 && filteredOptions[activeIndex]) {
+					event.preventDefault();
+					handleSelectOption(filteredOptions[activeIndex]);
+				}
+				break;
+			case 'Escape':
+				isDropdownVisible = false;
+				activeIndex = -1;
+				break;
+		}
+	}
+
+	function scrollActiveIntoView() {
+		const el = inputElement?.querySelectorAll('.dropdown-item')[activeIndex] as
+			| HTMLElement
+			| undefined;
+		if (el) el.scrollIntoView({ block: 'nearest' });
+	}
+
+	function handleSelectOption(selectedOption: string): void {
 		value = selectedOption;
 		isDropdownVisible = false;
 		(inputElement?.querySelector('input') as HTMLInputElement)?.blur();
 
-		changeInput(value);
+		activeIndex = -1;
+
+		changeInput?.(value);
+		selectOption?.(value);
 	}
 
 	function handleClickOutside(event: MouseEvent): void {
@@ -61,12 +98,9 @@
 		}
 	}
 
-	// 라이프사이클 훅
 	$effect(() => {
-		// 컴포넌트 마운트 시 이벤트 리스너 추가
 		document.addEventListener('click', handleClickOutside);
 
-		// 클린업 함수 반환 (컴포넌트 언마운트 시 실행)
 		return () => {
 			document.removeEventListener('click', handleClickOutside);
 		};
@@ -82,16 +116,28 @@
 		{placeholder}
 		bind:value
 		on:input={handleInput}
-		on:focus={() => (isDropdownVisible = true)}
+		on:focus={() => {
+			isDropdownVisible = true;
+		}}
+		on:keydown={handleKeydown}
+		role="combobox"
+		aria-expanded={isDropdownVisible}
+		aria-controls={listboxId}
+		aria-autocomplete="list"
+		aria-haspopup="listbox"
 	/>
 	<span class="material-symbols-outlined"> search </span>
 	{#if isDropdownVisible && filteredOptions.length > 0}
-		<div class="dropdown middle-rounded">
-			{#each filteredOptions as option}
+		<div class="dropdown middle-rounded" id={listboxId} role="listbox">
+			{#each filteredOptions as option, index}
 				<div
 					class="dropdown-item"
-					class:active={value === option}
-					on:click={() => selectOption(option)}
+					class:active={activeIndex === index}
+					role="option"
+					tabindex="-1"
+					aria-selected={activeIndex === index}
+					on:mouseenter={() => (activeIndex = index)}
+					on:click={() => handleSelectOption(option)}
 				>
 					<p>
 						<span class="category-label">{option}</span><span class="suffix">with me</span>
@@ -132,6 +178,10 @@
 				cursor: pointer;
 				transition: background-color 0.2s;
 				border-bottom: 1px solid var(--font-light-gray);
+
+				&.active {
+					background-color: #0096f3;
+				}
 
 				&:hover,
 				&:active {

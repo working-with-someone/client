@@ -1,7 +1,7 @@
 <script>
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import Modal from '../modals/Modal.svelte';
-	import UserConfig from '../configuration/UserConfig.svelte';
+	import UserConfig from '../configuration/ProfileConfig.svelte';
 	import { getContext } from 'svelte';
 
 	const user = getContext('user');

@@ -1,21 +1,17 @@
 <script lang="ts">
 	import wwsfetch from '$lib/utils/wwsfetch';
-	import { onMount } from 'svelte';
+	import CategorySearchBox from '../input/CategorySearchBox.svelte';
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 	import Switch from '../input/ToggleSwitch.svelte';
 	import TextError from '../error/TextError.svelte';
 	import { access_level } from '@prisma/client';
-	import ComboBox from '../input/ComboBox.svelte';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
 	let thumbnailImgInput: HTMLInputElement;
 
-	// must be fetch categories
 	let thumbnailImg: HTMLImageElement;
 	let enableBreakTime = $state(true);
-	// must be fetch categories
-	let categories: string[] = $state([]);
 
 	let showThumbnailPrompt = $state(true);
 
@@ -28,28 +24,6 @@
 	let breakTimeDuration: string = '10';
 
 	let validationError = $state<App.Error>();
-	onMount(() => {
-		loadCategories();
-	});
-
-	function loadCategories() {
-		wwsfetch('/categories', {
-			queryParams: {
-				page: '1',
-				per_page: '10'
-			}
-		})
-			.then((res) => res.json())
-			.then((body) => {
-				const _categories = body.data;
-
-				if (_categories.length) {
-					_categories.forEach((category: any) => {
-						categories = [...categories, category.label];
-					});
-				}
-			});
-	}
 
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
@@ -165,14 +139,7 @@
 				<p>Category</p>
 				<span>select category</span>
 			</div>
-			<ComboBox
-				changeInput={(value) => {
-					category = value;
-				}}
-				options={categories}
-				placeholder={'input or select category'}
-				value={category}
-			></ComboBox>
+			<CategorySearchBox bind:value={category} />
 		</div>
 
 		<div class="privacy config">

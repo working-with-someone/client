@@ -2,6 +2,7 @@
 	import Modal from '../../modals/Modal.svelte';
 	import LiveSessionCreationConfig from '../../configuration/LiveSessionCreantionConfig.svelte';
 	import VideoSessionUploadConfig from '../../configuration/VideoSessionCreationConfig.svelte';
+	import PreferredCategoryConfig from '$lib/components/configuration/PreferredCategoryConfig.svelte';
 
 	function closeSessionUploadModal() {
 		showSessionUploadModal = false;
@@ -22,9 +23,23 @@
 	}
 
 	let showLiveConfigModal = $state(false);
+
+	function openCategoryConfigModal() {
+		showCategoryConfigModal = true;
+	}
+
+	function closeCategoryConfigModal() {
+		showCategoryConfigModal = false;
+	}
+
+	let showCategoryConfigModal = $state(false);
 </script>
 
 <div class="activation-menus">
+	<button class="menu-item open-category-config" onclick={openCategoryConfigModal}>
+		<span class="material-symbols-outlined"> loyalty </span>
+	</button>
+
 	<button class="menu-item open-session" onclick={openLiveSessionConfigModal}>
 		<span class="material-symbols-outlined"> radio_button_checked </span>
 	</button>
@@ -34,6 +49,11 @@
 	</button>
 </div>
 
+{#if showCategoryConfigModal}
+	<Modal closeModal={closeCategoryConfigModal}>
+		<PreferredCategoryConfig slot="modal-body"></PreferredCategoryConfig>
+	</Modal>
+{/if}
 {#if showSessionUploadModal}
 	<Modal closeModal={closeSessionUploadModal}>
 		<VideoSessionUploadConfig slot="modal-body"></VideoSessionUploadConfig>
