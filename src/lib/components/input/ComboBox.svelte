@@ -38,6 +38,7 @@
 		isDropdownVisible = true;
 
 		changeInput?.(value);
+		value = '';
 	}
 
 	async function handleKeydown(event: KeyboardEvent) {
@@ -90,6 +91,8 @@
 
 		changeInput?.(value);
 		selectOption?.(value);
+
+		value = '';
 	}
 
 	function handleClickOutside(event: MouseEvent): void {
