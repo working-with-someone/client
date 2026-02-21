@@ -2,18 +2,29 @@
 	import CategoryTag from '../tags/CategoryTag.svelte';
 	import CategorySearchBox from '../input/CategorySearchBox.svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
-	import { getContext } from 'svelte';
-	import { reloadUser } from '$lib/store/user';
+	import { getContext, onMount } from 'svelte';
 	import httpStatusCodes from 'http-status-codes';
 	import TextError from '../error/TextError.svelte';
+	import Sortable from 'sortablejs';
+	import { reloadUser } from '$lib/store/user';
 
 	const user: any = getContext('user');
 
 	let category = $state('');
 	let error = $state<App.Error>();
+	let preferredCategories: HTMLUListElement | null = null;
+
+	// reload user와 sortable의 element 정렬이 충돌하는 현상 때문에 reloadUser는 수행하지 않으며, sortable의 onEnd에서 이 update request에서 200을 응답받지 못하면 order를 원상복구할것이다.
+	async function updatePriority(categoryLabel: string, priority: number) {
+		return wwsfetch(
+			`/users/${$user.id}/preferred-categories/${categoryLabel}/priority/${priority}`,
+			{
+				method: 'PUT'
+			}
+		);
+	}
 
 	let addPreferredCategory = (categoryLabel: string) => {
-		console.log('add!');
 		wwsfetch(`/users/${$user.id}/preferred-categories/${categoryLabel}`, {
 			method: 'POST'
 		})
@@ -38,12 +49,54 @@
 	let removePreferredCategory = (categoryLabel: string) => {
 		wwsfetch(`/users/${$user.id}/preferred-categories/${categoryLabel}`, {
 			method: 'DELETE'
-		}).then((res) => {
-			if (res.status === httpStatusCodes.NO_CONTENT) {
-				reloadUser();
+		})
+			.then((res) => {
+				if (res.status === httpStatusCodes.NO_CONTENT) {
+					reloadUser();
+					error = undefined;
+				}
+			})
+			.catch((errRes) => {
+				error = {
+					status: errRes.status,
+					message: errRes.message,
+					statusText: errRes.statusText
+				};
+			});
+	};
+
+	function initializeSortable() {
+		if (!preferredCategories) return;
+
+		Sortable.create(preferredCategories, {
+			animation: 200,
+			onEnd: async (ev: any) => {
+				const oldIndex = ev.oldIndex;
+				const newIndex = ev.newIndex;
+				if (oldIndex === newIndex) return;
+				const itemEl: HTMLElement = ev.item as HTMLElement;
+				const label = itemEl?.dataset?.label;
+				if (!label) return;
+
+				updatePriority(label, newIndex)
+					.then(() => {
+						error = undefined;
+					})
+					.catch((err) => {
+						error = {
+							status: err.status,
+							message: err.message,
+							statusText: err.statusText
+						};
+					});
 			}
 		});
-	};
+	}
+
+	onMount(async () => {
+		reloadUser();
+		initializeSortable();
+	});
 </script>
 
 <section id="preferred-category-config" class="much-rounded">
@@ -59,14 +112,16 @@
 		</div>
 		<div class="preferred-categories-boundary middle-rounded">
 			<span class="preferred-label">Preferred Categories</span>
-			<ul class="preferred-categories-list">
-				{#each $user.preferred_categories as pCategory}
-					<li class="preferred-category-item">
+			<ul class="preferred-categories-list" bind:this={preferredCategories}>
+				{#each $user.preferred_categories as pCategory (pCategory.category_label)}
+					<li class="preferred-category-item drag-handle" data-label={pCategory.category_label}>
 						<CategoryTag category_label={pCategory.category_label}>
 							<button
 								slot="extension"
 								class="preferred-categories-remove-btn"
-								onclick={() => removePreferredCategory(pCategory.category_label)}
+								onclick={() => {
+									removePreferredCategory(pCategory.category_label);
+								}}
 								aria-label="Remove preferred category"
 							>
 								&times;
@@ -134,6 +189,10 @@
 					flex-wrap: wrap;
 
 					.preferred-category-item {
+						display: inline-flex;
+						align-items: center;
+						will-change: transform;
+
 						.preferred-categories-remove-btn {
 							padding: 0;
 							margin: 0;
