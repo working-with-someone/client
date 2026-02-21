@@ -71,6 +71,15 @@
 		display: flex;
 		flex-direction: row;
 		gap: 5px;
+
+		.menu-item.open-category-config {
+			&:hover {
+				span {
+					color: var(--font-hot-pink);
+				}
+			}
+		}
+
 		.menu-item.open-session {
 			&:hover {
 				span {
