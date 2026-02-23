@@ -1,24 +1,24 @@
-import type { Load } from '@sveltejs/kit';
+import type { PageServerLoad } from '../$types';
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
-import { live_session_status, type category } from '@prisma/client';
+import { live_session_status } from '@prisma/client';
+import type { preferred_category } from '@prisma/client';
 import type { LiveSessionWithAll } from '../../types/session';
 
-export const load: Load = async ({ fetch }) => {
-	const getCategoriesEndpointUrl = new URL(`/categories`, PRIVATE_API_SERVER_DOMAIN);
+export const load: PageServerLoad = async ({ locals, fetch }) => {
+	const getPCategoriesEndpointUrl = new URL(
+		`/users/${locals.userId}/preferred-categories`,
+		PRIVATE_API_SERVER_DOMAIN
+	);
 
-	getCategoriesEndpointUrl.searchParams.set('sort', 'live_session_count');
-	getCategoriesEndpointUrl.searchParams.set('page', '1');
-	getCategoriesEndpointUrl.searchParams.set('per_page', '10');
+	const getPCategoriesRes = await fetch(getPCategoriesEndpointUrl);
 
-	const getCategoriesRes = await fetch(getCategoriesEndpointUrl);
+	const pCategories = (await getPCategoriesRes.json()).data as preferred_category[];
 
-	const majorCategories = (await getCategoriesRes.json()).data as category[];
+	const pCategorizedLiveSessionsList = new Map<string, LiveSessionWithAll[]>();
 
-	const categorizedLiveSessionsList = new Map<string, LiveSessionWithAll[]>();
-
-	for (const category of majorCategories) {
+	for (const pCategory of pCategories) {
 		const getLiveSessionsEndpointUrl = new URL(`/sessions/live`, PRIVATE_API_SERVER_DOMAIN);
-		getLiveSessionsEndpointUrl.searchParams.set('category', category.label);
+		getLiveSessionsEndpointUrl.searchParams.set('category', pCategory.category_label);
 		getLiveSessionsEndpointUrl.searchParams.append('status', live_session_status.OPENED);
 		getLiveSessionsEndpointUrl.searchParams.append('status', live_session_status.BREAKED);
 		getLiveSessionsEndpointUrl.searchParams.set('page', '1');
@@ -28,8 +28,8 @@ export const load: Load = async ({ fetch }) => {
 
 		const liveSessions = (await getLiveSessionsRes.json()).data as LiveSessionWithAll[];
 
-		categorizedLiveSessionsList.set(category.label, liveSessions);
+		pCategorizedLiveSessionsList.set(pCategory.category_label, liveSessions);
 	}
 
-	return { categorizedLiveSessionsList };
+	return { pCategorizedLiveSessionsList };
 };

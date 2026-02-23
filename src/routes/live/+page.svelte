@@ -4,16 +4,16 @@
 
 	let { data } = $props();
 
-	const categorizedLiveSessionList = data.categorizedLiveSessionsList;
+	const pCategorizedLiveSessionList = data.pCategorizedLiveSessionsList;
 </script>
 
 <section id="live-sessions">
 	<TopBar />
 	<div class="decks">
-		{#each categorizedLiveSessionList as categorizedLiveSessions}
+		{#each pCategorizedLiveSessionList as pCategorizedLiveSessions}
 			<LiveSessionDeck
-				category={categorizedLiveSessions[0]}
-				liveSessions={categorizedLiveSessions[1]}
+				category={pCategorizedLiveSessions[0]}
+				liveSessions={pCategorizedLiveSessions[1]}
 			/>
 		{/each}
 	</div>

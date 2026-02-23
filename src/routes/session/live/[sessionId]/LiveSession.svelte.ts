@@ -47,8 +47,6 @@ export class LiveSession implements LiveSessionWithAll {
 		this.allow = liveSession.allow;
 		this.live_session_transition_log = liveSession.live_session_transition_log;
 		this.category = liveSession.category;
-
-		console.log(liveSession);
 	}
 
 	async fetch() {
