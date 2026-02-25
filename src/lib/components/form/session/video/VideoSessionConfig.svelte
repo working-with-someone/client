@@ -1,8 +1,9 @@
 <script lang="ts">
 	import InnerLabelInput from '$lib/components/input/InnerLabelInput.svelte';
+	import CategorySearchBox from '$lib/components/input/CategorySearchBox.svelte';
 
 	let thumbnailImgInput: HTMLInputElement;
-
+	let category = $state('');
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
 	// must be fetch categories
@@ -70,18 +71,7 @@
 		<p>Category</p>
 		<span>select category</span>
 	</div>
-	<div class="select-box middle-rounded">
-		<select
-			name="category"
-			id=""
-			class="category-input middle-rounded"
-			placeholder="select category of video"
-		>
-			{#each categories as category}
-				<option value={category}>{category}</option>
-			{/each}
-		</select>
-	</div>
+	<CategorySearchBox bind:value={category} />
 </div>
 
 <div class="privacy config">
