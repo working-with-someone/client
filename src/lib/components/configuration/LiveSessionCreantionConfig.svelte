@@ -73,7 +73,6 @@
 				return liveSession;
 			})
 			.then((liveSession) => {
-				console.log(liveSession);
 				window.location.href = `/session/live/${liveSession.id}/studio`;
 			})
 			.catch((err: App.Error) => {
@@ -139,7 +138,13 @@
 				<p>Category</p>
 				<span>select category</span>
 			</div>
-			<CategorySearchBox bind:value={category} />
+			<CategorySearchBox
+				selectOption={(option) => {
+					category = option;
+					// input의 value를 비우지 않는다.
+					return false;
+				}}
+			/>
 		</div>
 
 		<div class="privacy config">

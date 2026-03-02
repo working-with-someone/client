@@ -10,7 +10,6 @@
 
 	const user: any = getContext('user');
 
-	let category = $state('');
 	let error = $state<App.Error>();
 	let preferredCategories: HTMLUListElement | null = null;
 
@@ -40,10 +39,10 @@
 					message: errRes.message,
 					statusText: errRes.statusText
 				};
-			})
-			.finally(() => {
-				category = '';
 			});
+
+		// input의 value를 비운다.
+		return true;
 	};
 
 	let removePreferredCategory = (categoryLabel: string) => {
@@ -105,8 +104,7 @@
 		<span class="text-blur">Select your preferred categories to customize your experience.</span>
 	</div>
 	<div class="body">
-		<CategorySearchBox bind:value={category} selectOption={addPreferredCategory}
-		></CategorySearchBox>
+		<CategorySearchBox selectOption={addPreferredCategory}></CategorySearchBox>
 		<div class="error">
 			<TextError {error}></TextError>
 		</div>

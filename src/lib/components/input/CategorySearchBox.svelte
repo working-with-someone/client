@@ -6,18 +6,12 @@
 	let categories: string[] = $state([]);
 
 	interface Props {
-		value: string;
 		placeholder?: string;
 		changeInput?: (value: string) => void;
 		selectOption?: (option: string) => void;
 	}
 
-	const {
-		changeInput,
-		value = $bindable(''),
-		placeholder = 'input or select category',
-		selectOption
-	}: Props = $props();
+	const { changeInput, placeholder = 'input or select category', selectOption }: Props = $props();
 
 	onMount(() => {
 		loadCategories();

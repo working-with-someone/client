@@ -90,9 +90,11 @@
 		activeIndex = -1;
 
 		changeInput?.(value);
-		selectOption?.(value);
+		const emptyValueAfter = selectOption?.(value);
 
-		value = '';
+		if (emptyValueAfter) {
+			value = '';
+		}
 	}
 
 	function handleClickOutside(event: MouseEvent): void {
