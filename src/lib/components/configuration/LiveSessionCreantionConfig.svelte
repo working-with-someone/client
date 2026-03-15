@@ -252,7 +252,7 @@
 	section#live-session-creation-config {
 		width: 700px;
 		background-color: var(--bg);
-		padding: 15px 10px;
+		padding: 5px 10px;
 		.header {
 			padding: 10px;
 			border-bottom: 1px solid gray;
@@ -382,7 +382,7 @@
 				.next-button {
 					background-color: var(--sig);
 					color: var(--bg);
-					font-size: 12px;
+					font-size: 0.8em;
 				}
 			}
 		}
