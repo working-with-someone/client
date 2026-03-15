@@ -32,7 +32,6 @@ export const load: Load = async ({ fetch, params }) => {
 	const body = await getLiveSessionRes.json();
 	const liveSession = body.data;
 
-	console.log(liveSession, breakTime);
 	return {
 		liveSession,
 		breakTime
