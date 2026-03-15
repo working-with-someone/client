@@ -18,30 +18,30 @@
 	}
 
 	.uploader {
-		width: 6px;
-		height: 6px;
+		width: 12px;
+		height: 12px;
 		position: relative;
 		border-radius: 50%;
-		background: rgba(110, 231, 183, 1);
+		background: rgba(110, 231, 183, 0);
 		animation: wave 1s ease-in infinite;
 	}
 
 	@keyframes wave {
 		0% {
 			box-shadow:
-				0 0 0 0px rgba(110, 231, 183, 0.6),
-				0 0 0 3px rgba(110, 231, 183, 0.5),
-				0 0 0 6px rgba(110, 231, 183, 0.4),
-				0 0 0 9px rgba(110, 231, 183, 0.2),
+				0 0 0 0px rgba(110, 231, 183, 0.4),
+				0 0 0 3px rgba(110, 231, 183, 0.3),
+				0 0 0 6px rgba(110, 231, 183, 0.2),
+				0 0 0 9px rgba(110, 231, 183, 0.1),
 				0 0 0 12px rgba(110, 231, 183, 0.05);
 		}
 		100% {
 			box-shadow:
 				0 0 0 12px rgba(110, 231, 183, 0.05),
-				0 0 0 9px rgba(110, 231, 183, 0.2),
-				0 0 0 6px rgba(110, 231, 183, 0.4),
-				0 0 0 3px rgba(110, 231, 183, 0.5),
-				0 0 0 0px rgba(110, 231, 183, 0.6);
+				0 0 0 9px rgba(110, 231, 183, 0.1),
+				0 0 0 6px rgba(110, 231, 183, 0.2),
+				0 0 0 3px rgba(110, 231, 183, 0.3),
+				0 0 0 0px rgba(110, 231, 183, 0.4);
 		}
 	}
 </style>
