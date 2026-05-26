@@ -123,6 +123,7 @@ button:hover {
 }
 
 .btn-circle {
+	padding: 1em;
 	width: 20px;
 	height: 20px;
 	background: none;
