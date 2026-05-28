@@ -23,7 +23,7 @@
 	let breakTimeInterval: string = '50';
 	let breakTimeDuration: string = '10';
 
-	let validationError = $state<App.Error>();
+	let validationError = $state<Error>();
 
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
@@ -75,7 +75,7 @@
 			.then((liveSession) => {
 				window.location.href = `/session/live/${liveSession.id}/studio`;
 			})
-			.catch((err: App.Error) => {
+			.catch((err) => {
 				validationError = err;
 			});
 	}

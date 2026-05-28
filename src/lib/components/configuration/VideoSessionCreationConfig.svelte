@@ -4,15 +4,17 @@
 	import VideoUploadForm from '../form/session/video/VideoUploadForm.svelte';
 	import UploadLoader from '../loader/UploadLoader.svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
-
+	import type { UploadStage } from '../../../types/stage';
 	const videoSessionForm = new VideoSessionForm();
+	import TextError from '../error/TextError.svelte';
 
 	let step = $state<number>(1);
 
-	type UploadStage = 'select' | 'uploading' | 'completed';
 	let uploadStage: UploadStage = $state('select');
 	let uploadProgressPercentage = $state<string>('0');
-	let errorMessage = $state<string>('');
+	let uploadError = $state<Error>();
+
+	let updateError = $state<Error>();
 
 	const onUploadComplete = (videoId: string, name: string) => {
 		videoSessionForm.title = name;
@@ -24,7 +26,7 @@
 				uploadStage = 'completed';
 			})
 			.catch((err) => {
-				errorMessage = 'Failed to create video session. Please try again.';
+				uploadError = new Error('Failed to create video session. Please try again.');
 
 				uploadStage = 'select';
 			});
@@ -37,7 +39,7 @@
 	};
 
 	const onUploadError = (error: Error) => {
-		errorMessage = 'Failed to upload video. Please try again.';
+		uploadError = new Error('Failed to upload video. Please try again.');
 		step = 1;
 		uploadStage = 'select';
 	};
@@ -73,19 +75,16 @@
 			formData.append('thumbnail', videoSessionForm.thumbnailFile);
 		}
 
-		const res = await wwsfetch(`/sessions/video/${videoSessionForm.id}`, {
+		wwsfetch(`/sessions/video/${videoSessionForm.id}`, {
 			method: 'PUT',
 			body: formData
-		});
-
-		const data = await res.json();
-
-		videoSessionForm.title = data.title;
-		videoSessionForm.description = data.description;
-		videoSessionForm.access_level = data.access_level;
-		videoSessionForm.video_id = data.video_id;
-
-		window.location.href = `/session/video/${videoSessionForm.id}`;
+		})
+			.then((res) => {
+				window.location.href = `/session/video/${videoSessionForm.id}`;
+			})
+			.catch((err) => {
+				updateError = new Error(err.message || 'Failed to update video session. Please try again.');
+			});
 	};
 </script>
 
@@ -96,12 +95,12 @@
 			<VideoUploadForm {onUploadComplete} {onUploadProgress} {onUploadError} />
 		</div>
 		<div class="footer">
-			{errorMessage}
+			<TextError error={uploadError} fontsize={12} fade={true}></TextError>
 		</div>
 	{:else if step === 2}
 		<div class="header">Video Session Config</div>
 		<div class="body">
-			<VideoSessionConfig {videoSessionForm} />
+			<VideoSessionConfig {videoSessionForm} {uploadStage} />
 		</div>
 		<div class="footer">
 			{#if uploadStage === 'uploading'}
@@ -115,6 +114,9 @@
 				<div class="upload-complete-wrapper">
 					<span class="material-symbols-outlined"> check_circle </span>
 					<span>upload complete</span>
+				</div>
+				<div class="error-wrapper">
+					<TextError error={updateError} fontsize={12}></TextError>
 				</div>
 				<div class="create-button">
 					<button on:click={updateVideoSession}>create session</button>
@@ -146,6 +148,7 @@
 			align-items: stretch;
 			justify-content: space-between;
 			padding: 10px 5px;
+			gap: 10px;
 			border-top: 1px solid var(--font-light-gray);
 			font-size: 0.9em;
 			.upload-progress-wrapper {
@@ -164,7 +167,9 @@
 
 			.upload-complete-wrapper {
 				display: flex;
+
 				flex-direction: row;
+				flex-shrink: 0;
 				align-items: center;
 				gap: 10px;
 				span {
@@ -176,7 +181,10 @@
 					}
 				}
 			}
-
+			.error-wrapper {
+				display: flex;
+				align-items: center;
+			}
 			.create-button {
 				button:disabled {
 					opacity: 0.5;

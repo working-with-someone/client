@@ -23,7 +23,6 @@ export async function generateThumbnails(
 		}
 
 		const frames: File[] = [];
-		let duration = 0;
 		let videoUrl: string | null = null;
 
 		// cleanup utility
@@ -32,23 +31,56 @@ export async function generateThumbnails(
 				video.pause();
 				video.src = '';
 				video.load();
-			} catch (e) {
-				// ignore
-			}
+			} catch (e) {}
 
 			if (videoUrl) {
 				try {
 					URL.revokeObjectURL(videoUrl);
-				} catch (e) {
-					// ignore
-				}
+				} catch (e) {}
 				videoUrl = null;
 			}
 		}
 
+		// 비동기로 특정 시점의 프레임을 추출하는 헬퍼 함수
+		function captureFrameAtTime(time: number, index: number): Promise<File> {
+			return new Promise((resCapture) => {
+				const seekHandler = () => {
+					canvas.width = video.videoWidth || 640;
+					canvas.height = video.videoHeight || 360;
+
+					try {
+						ctx!.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+						canvas.toBlob(
+							(blob) => {
+								if (blob) {
+									resCapture(
+										new File([blob], `thumbnail-${index}.jpg`, {
+											type: 'image/jpeg',
+											lastModified: Date.now()
+										})
+									);
+								} else {
+									resCapture(new File([], `thumbnail-${index}.jpg`, { type: 'image/jpeg' }));
+								}
+							},
+							'image/jpeg',
+							0.92
+						);
+					} catch (e) {
+						resCapture(new File([], `thumbnail-${index}.jpg`, { type: 'image/jpeg' }));
+					}
+				};
+
+				// 한 번만 실행되도록 listen
+				video.addEventListener('seeked', seekHandler, { once: true });
+				video.currentTime = time;
+			});
+		}
+
 		// when video metadata is loaded
-		video.addEventListener('loadedmetadata', () => {
-			duration = video.duration;
+		video.addEventListener('loadedmetadata', async () => {
+			const duration = video.duration;
 
 			// clamp duration
 			if (!isFinite(duration) || duration <= 0) {
@@ -56,62 +88,24 @@ export async function generateThumbnails(
 				return reject(new Error('Invalid video duration'));
 			}
 
-			// random time points (avoid exactly 0 or duration)
+			// 랜덤 시간 포인트 생성
 			const timePoints = Array.from({ length: count }, () =>
 				Math.min(Math.max(Math.random() * duration, 0.1), duration - 0.1)
 			);
 
-			let extractedCount = 0;
+			try {
+				// 순차적으로(하나씩 순서대로) 비디오 탐색 및 캡처 진행
+				for (let i = 0; i < timePoints.length; i++) {
+					const file = await captureFrameAtTime(timePoints[i], i);
+					frames.push(file);
+				}
 
-			// seek to each time point and extract frames
-			timePoints.forEach((time, index) => {
-				video.currentTime = time;
-
-				const seekHandler = () => {
-					// fit to video dimensions
-					canvas.width = video.videoWidth || 640;
-					canvas.height = video.videoHeight || 360;
-
-					try {
-						ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-						// convert canvas to Blob then to File
-						canvas.toBlob(
-							(blob) => {
-								if (blob) {
-									const file = new File([blob], `thumbnail-${index}.jpg`, {
-										type: 'image/jpeg',
-										lastModified: Date.now()
-									});
-									frames[index] = file;
-								} else {
-									frames[index] = new File([], `thumbnail-${index}.jpg`, { type: 'image/jpeg' });
-								}
-
-								extractedCount++;
-
-								if (extractedCount === timePoints.length) {
-									cleanup();
-									resolve(frames);
-								}
-							},
-							'image/jpeg',
-							0.92
-						);
-					} catch (e) {
-						// on drawing error, create an empty file placeholder
-						frames[index] = new File([], `thumbnail-${index}.jpg`, { type: 'image/jpeg' });
-						extractedCount++;
-
-						if (extractedCount === timePoints.length) {
-							cleanup();
-							resolve(frames);
-						}
-					}
-				};
-
-				video.addEventListener('seeked', seekHandler, { once: true });
-			});
+				cleanup();
+				resolve(frames);
+			} catch (err) {
+				cleanup();
+				reject(err);
+			}
 		});
 
 		video.addEventListener('error', (error) => {
@@ -119,7 +113,6 @@ export async function generateThumbnails(
 			reject(new Error(`video load failed: ${error?.message ?? error}`));
 		});
 
-		// create object URL from blob and start loading
 		videoUrl = URL.createObjectURL(inputBlob);
 		video.src = videoUrl;
 		video.preload = 'metadata';

@@ -10,7 +10,7 @@
 
 	const user: any = getContext('user');
 
-	let error = $state<App.Error>();
+	let error = $state<Error>();
 	let preferredCategories: HTMLUListElement | null = null;
 
 	// reload user와 sortable의 element 정렬이 충돌하는 현상 때문에 reloadUser는 수행하지 않으며, sortable의 onEnd에서 이 update request에서 200을 응답받지 못하면 order를 원상복구할것이다.
@@ -33,12 +33,8 @@
 					error = undefined;
 				}
 			})
-			.catch((errRes) => {
-				error = {
-					status: errRes.status,
-					message: errRes.message,
-					statusText: errRes.statusText
-				};
+			.catch((err) => {
+				error = err;
 			});
 
 		// input의 value를 비운다.
@@ -55,12 +51,8 @@
 					error = undefined;
 				}
 			})
-			.catch((errRes) => {
-				error = {
-					status: errRes.status,
-					message: errRes.message,
-					statusText: errRes.statusText
-				};
+			.catch((err) => {
+				error = err;
 			});
 	};
 
@@ -82,11 +74,7 @@
 						error = undefined;
 					})
 					.catch((err) => {
-						error = {
-							status: err.status,
-							message: err.message,
-							statusText: err.statusText
-						};
+						error = err;
 					});
 			}
 		});

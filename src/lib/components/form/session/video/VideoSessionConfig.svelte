@@ -4,26 +4,37 @@
 	import { access_level } from '@prisma/client';
 	import { VideoSessionForm } from '$lib/video/VideoSession.svelte';
 	import { to } from '../../../../../config/path.config.svelte';
+	import { generateThumbnails } from '$lib/utils/thumbnail-generator';
+	import LoadSpinner from '$lib/components/loader/LoadSpinner1.svelte';
+	import type { UploadStage } from '../../../../../types/stage';
+	import TextError from '$lib/components/error/TextError.svelte';
 
 	let thumbnailImgInput: HTMLInputElement;
 
 	interface Props {
 		videoSessionForm: VideoSessionForm;
+		uploadStage: UploadStage;
 	}
 
-	let { videoSessionForm }: Props = $props();
+	let { videoSessionForm, uploadStage }: Props = $props();
 
 	let thumbnailImg: HTMLImageElement;
+	let generatedThumbnails: File[] = [];
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
 	let showThumbnailPrompt = $state(true);
+	let showThumbnailGeneratedSelection = $state(false);
+	let showThumbnailPreview = $state(false);
+	let thumbNailGenerationInProgress = $state(false);
+
+	let thumbnailError = $state<Error>();
 
 	const changeThumbnailPreview = () => {
 		if (thumbnailImgInput.files) {
 			const reader = new FileReader();
 			showThumbnailPrompt = false;
-
+			showThumbnailPreview = true;
 			reader.onload = function (e) {
 				if (e?.target?.result) {
 					thumbnailImg.src = e.target.result.toString();
@@ -36,6 +47,58 @@
 		if (thumbnailImgInput.files) {
 			videoSessionForm.thumbnailFile = thumbnailImgInput.files[0];
 		}
+	};
+
+	const cancelThumbnail = () => {
+		if (!thumbnailImgInput.files) return;
+
+		videoSessionForm.thumbnailFile = null;
+		showThumbnailPrompt = true;
+		showThumbnailPreview = false;
+		showThumbnailGeneratedSelection = false;
+		thumbnailImg.src = '';
+	};
+
+	const generateThumbnail = async () => {
+		if (uploadStage != 'completed') {
+			thumbnailError = new Error('video upload not completed');
+			return;
+		}
+
+		generatedThumbnails = [];
+		if (!videoSessionForm?.video_id) return;
+
+		thumbNailGenerationInProgress = true;
+		showThumbnailPrompt = false;
+		showThumbnailGeneratedSelection = true;
+
+		const url = to.mediaServer.staticServer.video + '/' + videoSessionForm.video_id;
+
+		const thumbNails = await generateThumbnails(url, 3);
+
+		if (thumbNails && thumbNails.length > 0) {
+			for (let i = 0; i < thumbNails.length; i++) {
+				generatedThumbnails.push(thumbNails[i]);
+			}
+		}
+
+		thumbNailGenerationInProgress = false;
+	};
+
+	const selectGeneratedThumbnail = (thumbnail: File) => {
+		videoSessionForm.thumbnailFile = thumbnail;
+		showThumbnailGeneratedSelection = false;
+		showThumbnailPreview = true;
+
+		const reader = new FileReader();
+
+		reader.onload = function (e) {
+			if (e?.target?.result) {
+				thumbnailImg.src = e.target.result.toString();
+			}
+		};
+
+		reader.readAsDataURL(thumbnail);
 	};
 </script>
 
@@ -72,7 +135,7 @@
 		{#if videoSessionForm.video_uploaded}
 			<video
 				controls
-				src={new URL(videoSessionForm.video_id!, to.mediaServer.staticServer.video).href}
+				src={to.mediaServer.staticServer.video + '/' + videoSessionForm.video_id}
 				class="middle-rounded"
 			></video>
 		{:else}
@@ -84,17 +147,59 @@
 			<p>Thumbnail</p>
 			<span>select thumbnail for video</span>
 		</div>
-		<div class="thumbnail-wrapper middle-rounded">
+		<div class="thumbnail-wrapper">
 			{#if showThumbnailPrompt}
-				<div class="thumbnail-prompt" onclick={toggleThumbnailInput}>
+				<div class="thumbnail-prompt middle-rounded" onclick={toggleThumbnailInput}>
 					<span class="material-symbols-outlined"> upload_file </span>
 					<p>upload file</p>
 				</div>
-			{:else}
-				<div class="thumbnail-preview">
-					<img bind:this={thumbnailImg} alt="" />
+				<div class="thumbnail-generate-prompt middle-rounded" onclick={generateThumbnail}>
+					<span class="material-symbols-outlined"> auto_fix_high </span>
+					<p>auto generate</p>
 				</div>
 			{/if}
+
+			{#if showThumbnailPreview}
+				<div class="thumbnail-preview">
+					<button class="btn-circle" onclick={cancelThumbnail}>
+						<span class="material-symbols-outlined"> close </span>
+					</button>
+					<img
+						bind:this={thumbnailImg}
+						alt=""
+						src="https://cloudfour.com/examples/img-currentsrc/images/kitten-small.png"
+					/>
+				</div>
+			{/if}
+
+			{#if showThumbnailGeneratedSelection}
+				<div class="thumbnail-generated-selection">
+					{#if thumbNailGenerationInProgress}
+						<LoadSpinner size={20} />
+						<span class="text-blur">generating thumbnails...</span>
+					{:else}
+						{#each generatedThumbnails as thumbnail, index}
+							<div
+								class="thumbnail-generated middle-rounded"
+								onclick={() => selectGeneratedThumbnail(thumbnail)}
+							>
+								<img
+									src={URL.createObjectURL(thumbnail)}
+									alt={`generated thumbnail ${index + 1}`}
+								/>
+							</div>
+						{/each}
+						<div class="close-btn-wrapper">
+							<button class="close btn-circle" onclick={cancelThumbnail}>
+								<span class="material-symbols-outlined"> close </span>
+							</button>
+						</div>
+					{/if}
+				</div>
+			{/if}
+		</div>
+		<div class="error">
+			<TextError error={thumbnailError} fontsize={12} fade={true}></TextError>
 		</div>
 	</div>
 
@@ -242,38 +347,89 @@
 			gap: 10px;
 
 			.thumbnail-wrapper {
-				width: 150px;
-				aspect-ratio: 16/9;
-				border: 1px solid var(--font-light-gray);
-				overflow: hidden;
-
-				&:hover {
-					cursor: pointer;
-					border: 1px solid var(--font-white);
-				}
+				display: flex;
+				flex-direction: row;
+				gap: 10px;
 
 				.thumbnail-prompt {
-					width: 100%;
-					height: 100%;
 					display: flex;
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
 					gap: 5px;
+					width: 150px;
+					aspect-ratio: 16/9;
+					border: 1px solid var(--font-light-gray);
+					&:hover {
+						cursor: pointer;
+						border: 1px solid var(--font-white);
+					}
+					p {
+						color: var(--font-light-gray);
+						font-size: 15px;
+					}
+				}
+
+				.thumbnail-generate-prompt {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					gap: 5px;
+					width: 150px;
+					aspect-ratio: 16/9;
+					border: 1px solid var(--font-light-gray);
+					&:hover {
+						cursor: pointer;
+						border: 1px solid var(--font-white);
+					}
 					p {
 						color: var(--font-light-gray);
 						font-size: 15px;
 					}
 				}
 				.thumbnail-preview {
-					height: 100%;
-					display: flex;
-					align-items: center;
-					justify-content: center;
+					width: 300px;
+					position: relative;
 					background-color: black;
+					button {
+						position: absolute;
+						top: 5px;
+						right: 5px;
+						span {
+							font-size: 20px;
+						}
+					}
 					img {
 						width: 100%;
 						object-fit: cover;
+					}
+				}
+
+				.thumbnail-generated-selection {
+					display: flex;
+					flex-direction: row;
+					gap: 10px;
+
+					.thumbnail-generated {
+						width: 150px;
+						aspect-ratio: 16/9;
+						border: 1px solid var(--font-light-gray);
+						&:hover {
+							cursor: pointer;
+							border: 1px solid var(--font-white);
+						}
+						img {
+							width: 100%;
+							height: 100%;
+							object-fit: cover;
+						}
+					}
+
+					.close-btn-wrapper {
+						display: flex;
+						align-items: center;
+						justify-content: center;
 					}
 				}
 			}
