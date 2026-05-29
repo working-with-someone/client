@@ -7,9 +7,13 @@
 	}
 
 	const { videoSession }: Props = $props();
+
+	const moveToVideoSession = () => {
+		window.location.href = `/session/video/${videoSession.id}`;
+	};
 </script>
 
-<div class="card middle-rounded">
+<div class="card middle-rounded" onclick={moveToVideoSession}>
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img
@@ -58,7 +62,7 @@
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
-				on:click={() => {
+				onclick={() => {
 					window.location.href = `/user/${videoSession.organizer_id}`;
 				}}
 			>
