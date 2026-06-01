@@ -1,13 +1,13 @@
 <script>
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
-	import wwsfetch from '$lib/utils/wwsfetch';
+	import FollowBtn from '$lib/components/user/followBtn.svelte';
 	import { getContext } from 'svelte';
+	import wwsfetch from '$lib/utils/wwsfetch';
 
 	let { data } = $props();
 
-	let { targetUser, isFollowing } = $state(data);
+	let { targetUser } = $state(data);
 	const user = getContext('user');
-	const isSelf = $user.id == targetUser.id;
 
 	function reloadTarget() {
 		wwsfetch(`/users/${targetUser.id}`, {})
@@ -18,36 +18,6 @@
 			})
 			.catch((err) => {
 				console.log('Failed to fetch user data');
-			});
-	}
-
-	function follow() {
-		wwsfetch(`/users/${$user.id}/followings/${targetUser.id}`, {
-			method: 'POST'
-		})
-			.then((res) => {
-				if (res.status === 201) {
-					isFollowing = true;
-					reloadTarget();
-				}
-			})
-			.catch((err) => {
-				console.log('failed following user');
-			});
-	}
-
-	function unfollow() {
-		wwsfetch(`/users/${$user.id}/followings/${targetUser.id}`, {
-			method: 'DELETE'
-		})
-			.then((res) => {
-				if (res.status === 204) {
-					isFollowing = false;
-					reloadTarget();
-				}
-			})
-			.catch((err) => {
-				console.log('failed unfollowing user');
 			});
 	}
 </script>
@@ -61,17 +31,30 @@
 			<div class="username">
 				<span>{targetUser.username}</span>
 			</div>
-			{#if !isSelf}
-				<div class="follow">
-					{#if isFollowing}
-						<button class="btn-gray" onclick={unfollow}>
-							<span>following</span>
-						</button>
-					{:else}
-						<button class="btn-sig" onclick={follow}> <span> follow </span></button>
-					{/if}
-				</div>
-			{/if}
+
+			<div class="follow">
+				<FollowBtn targetUserId={targetUser.id}>
+					{#snippet children({ isFollowing, follow, unfollow })}
+						{#if isFollowing}
+							<button
+								onclick={async () => {
+									await unfollow();
+									reloadTarget();
+								}}>unfollow</button
+							>
+						{:else}
+							<button
+								class="btn-sig"
+								onclick={async () => {
+									await follow();
+									reloadTarget();
+								}}>follow</button
+							>
+						{/if}
+					{/snippet}
+				</FollowBtn>
+			</div>
+
 			<div class="join-info">
 				<div class="icon">
 					<span class="material-symbols-outlined"> groups </span>
