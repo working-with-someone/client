@@ -17,6 +17,8 @@
 	--border: #21262d;
 	--focus: #4552b4;
 
+	--black: #000000;
+
 	--dark-green: #064e3b;
 	--mid-green: #22a07b;
 	--light-green: #6ee7b7;
@@ -32,6 +34,10 @@
 	--dark-orange: #7c2d12;
 	--mid-orange: #ea580c;
 	--light-orange: #fdba74;
+
+	--dark-gray: #4c515a;
+	--mid-gray: #6b7280;
+	--light-gray: #c5c5c5;
 }
 
 * {
