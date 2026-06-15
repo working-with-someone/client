@@ -4,9 +4,47 @@
 	import VideoPlayer from '$lib/components/Player/VideoPlayer.svelte';
 	import Pfp from '$lib/components/user/pfp.svelte';
 	import FollowBtn from '$lib/components/user/followBtn.svelte';
+	import wwsfetch from '$lib/utils/wwsfetch';
+	import { onMount } from 'svelte';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = data.videoSession;
+
+	let isLiked = $state(false);
+
+	function toggleLike() {
+		if (!isLiked) {
+			wwsfetch(`/sessions/video/${videoSession.id}/like`, {
+				method: 'POST'
+			}).then(() => {
+				isLiked = !isLiked;
+			});
+		} else {
+			wwsfetch(`/sessions/video/${videoSession.id}/like`, {
+				method: 'DELETE'
+			}).then(() => {
+				isLiked = !isLiked;
+			});
+		}
+	}
+
+	onMount(() => {
+		wwsfetch(`/sessions/video/${videoSession.id}/like`, {
+			method: 'GET'
+		})
+			.then((res) => {
+				if (res.status === 200) {
+					isLiked = true;
+				}
+			})
+			.catch((err) => {
+				console.log('ERROR :::::::', err);
+				if (err.status === 404) {
+					console.log('Not found!!!');
+				}
+				console.log(err);
+			});
+	});
 </script>
 
 <section id="video-session">
@@ -38,6 +76,18 @@
 									{/if}
 								{/snippet}
 							</FollowBtn>
+						</div>
+					</div>
+					<div class="video-activation-btns">
+						<div class="like">
+							<button class="like-btn btn-circle" class:active={isLiked} onclick={toggleLike}>
+								{#if isLiked}
+									<span class="material-symbols-outlined liked"> thumb_up </span>
+								{:else}
+									<span class="material-symbols-outlined"> thumb_up </span>
+								{/if}
+							</button>
+							<span class="like-count">{videoSession._count.likes} </span>
 						</div>
 					</div>
 				</div>
@@ -96,11 +146,10 @@
 			-ms-overflow-style: none;
 			scrollbar-width: none;
 
-			/* 🌟 부모가 제공하는 완벽한 16:9 유튜브형 비디오 존 */
 			.video-zone {
 				width: 100%;
-				aspect-ratio: 16 / 9; /* 가로/세로 비디오 상관없이 플레이어 틀은 16:9 유지 */
-				max-height: calc(70vh - 40px); /* 세로 화면이 줄어들 때 화면 밖 탈출 방지 */
+				aspect-ratio: 16 / 9;
+				max-height: calc(70vh - 40px);
 				margin-bottom: 15px;
 				border-radius: 12px;
 				overflow: hidden;
@@ -115,7 +164,7 @@
 			.top {
 				margin-bottom: 10px;
 				display: flex;
-				flex-direction: column;
+				justify-content: space-between;
 				gap: 10px;
 				.organizer-info {
 					display: flex;
@@ -128,6 +177,28 @@
 						button {
 							width: 80px;
 							padding: 5px 10px;
+						}
+					}
+				}
+				.video-activation-btns {
+					display: flex;
+					align-items: center;
+					.like {
+						display: flex;
+						flex-direction: row;
+						background-color: var(--mid-gray);
+						border-radius: 50vh;
+						padding: 0px 5px;
+						.like-btn {
+							background-color: transparent;
+							.liked {
+								font-variation-settings: 'FILL' 1;
+							}
+						}
+
+						.like-count {
+							padding: 10px 10px 10px 0px;
+							line-height: 20px;
 						}
 					}
 				}
