@@ -6,6 +6,7 @@
 	import FollowBtn from '$lib/components/user/followBtn.svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
 	import { onMount } from 'svelte';
+	import CopyButton from '$lib/components/button/CopyButton.svelte';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = data.videoSession;
@@ -31,19 +32,11 @@
 	onMount(() => {
 		wwsfetch(`/sessions/video/${videoSession.id}/like`, {
 			method: 'GET'
-		})
-			.then((res) => {
-				if (res.status === 200) {
-					isLiked = true;
-				}
-			})
-			.catch((err) => {
-				console.log('ERROR :::::::', err);
-				if (err.status === 404) {
-					console.log('Not found!!!');
-				}
-				console.log(err);
-			});
+		}).then((res) => {
+			if (res.status === 200) {
+				isLiked = true;
+			}
+		});
 	});
 </script>
 
@@ -79,15 +72,19 @@
 						</div>
 					</div>
 					<div class="video-activation-btns">
-						<div class="like">
-							<button class="like-btn btn-circle" class:active={isLiked} onclick={toggleLike}>
+						<div class="like activation-btn">
+							<button class="like-btn" class:active={isLiked} onclick={toggleLike}>
 								{#if isLiked}
 									<span class="material-symbols-outlined liked"> thumb_up </span>
 								{:else}
-									<span class="material-symbols-outlined"> thumb_up </span>
+									<span class="material-symbols-outlined like"> thumb_up </span>
 								{/if}
+
+								<span class="like-count">{videoSession._count.likes} </span>
 							</button>
-							<span class="like-count">{videoSession._count.likes} </span>
+						</div>
+						<div class="copy-link activation-btn">
+							<CopyButton></CopyButton>
 						</div>
 					</div>
 				</div>
@@ -183,6 +180,13 @@
 				.video-activation-btns {
 					display: flex;
 					align-items: center;
+					gap: 10px;
+					.activation-btn {
+						display: inline-flex;
+						align-items: center;
+						justify-content: center;
+						height: 40px;
+					}
 					.like {
 						display: flex;
 						flex-direction: row;
@@ -191,15 +195,29 @@
 						padding: 0px 5px;
 						.like-btn {
 							background-color: transparent;
+							padding: 0px 10px;
+							.like {
+								padding: 0;
+								&:hover {
+									color: var(--sig);
+								}
+							}
 							.liked {
 								font-variation-settings: 'FILL' 1;
+								padding: 0;
+								color: var(--sig);
+							}
+
+							.like-count {
+								padding: 0px 10px;
 							}
 						}
-
-						.like-count {
-							padding: 10px 10px 10px 0px;
-							line-height: 20px;
-						}
+					}
+					.copy-link {
+						display: flex;
+						flex-direction: row;
+						background-color: var(--mid-gray);
+						border-radius: 50vh;
 					}
 				}
 			}
