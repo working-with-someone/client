@@ -5,12 +5,14 @@
 	import Pfp from '$lib/components/user/pfp.svelte';
 	import FollowBtn from '$lib/components/user/followBtn.svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import CopyButton from '$lib/components/button/CopyButton.svelte';
+	import AutoResizeTextarea from '$lib/components/input/AutoResizeTextarea.svelte';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = data.videoSession;
 
+	const user = getContext('user');
 	let isLiked = $state(false);
 
 	function toggleLike() {
@@ -19,14 +21,38 @@
 				method: 'POST'
 			}).then(() => {
 				isLiked = !isLiked;
+				videoSession._count.likes += 1;
 			});
 		} else {
 			wwsfetch(`/sessions/video/${videoSession.id}/like`, {
 				method: 'DELETE'
 			}).then(() => {
 				isLiked = !isLiked;
+				videoSession._count.likes -= 1;
 			});
 		}
+	}
+
+	let commentInput: string = $state('');
+
+	function createComment() {
+		const formData = new FormData();
+
+		formData.append('content', commentInput);
+
+		wwsfetch(`/sessions/video/${videoSession.id}/comment`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				content: commentInput
+			})
+		})
+			.then((res) => res.json())
+			.then((body) => {
+				const comment = body.data;
+			});
 	}
 
 	onMount(() => {
@@ -86,11 +112,32 @@
 						<div class="copy-link activation-btn">
 							<CopyButton></CopyButton>
 						</div>
+						<!-- <div class="save activation-btn">
+							<button class="save-btn">
+								<span class="material-symbols-outlined"> collections_bookmark </span>
+								<span>save</span>
+							</button>
+						</div> -->
 					</div>
 				</div>
 				<div class="mid">
 					<div class="description middle-rounded">
 						<p>{videoSession.description}</p>
+					</div>
+				</div>
+				<div class="bottom">
+					<div class="comment-header">
+						<h4>Comment ({videoSession.comment_count})</h4>
+					</div>
+					<div class="comment-form">
+						<div class="comment-input">
+							<Pfp pfpUri={$user.pfp.curr} size={25}></Pfp>
+							<AutoResizeTextarea placeholder="write comment" bind:content={commentInput}
+							></AutoResizeTextarea>
+						</div>
+						<div class="comment-submit">
+							<button class="btn-sig" onclick={createComment}>comment</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -107,8 +154,8 @@
 
 	section#video-session {
 		width: 100%;
-		height: 100vh;
-		max-height: 100vh;
+		height: auto;
+
 		display: flex;
 		justify-content: center;
 		background-color: var(--bg-sideBar);
@@ -134,7 +181,7 @@
 			display: flex;
 			flex-direction: column;
 			min-width: 0;
-			height: 100%;
+			height: auto;
 			overflow-y: auto;
 
 			&::-webkit-scrollbar {
@@ -153,88 +200,128 @@
 				background-color: #000;
 			}
 
-			.title h5 {
-				font-size: 1.2rem;
-				margin: 0 0 10px 0;
-			}
-
-			.top {
-				margin-bottom: 10px;
+			.video-info {
 				display: flex;
-				justify-content: space-between;
-				gap: 10px;
-				.organizer-info {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					gap: 10px;
-					font-size: 0.9em;
-
-					.follow {
-						button {
-							width: 80px;
-							padding: 5px 10px;
-						}
-					}
+				flex-direction: column;
+				.title h5 {
+					font-size: 1.2rem;
+					margin: 0 0 10px 0;
 				}
-				.video-activation-btns {
+
+				.top {
+					margin-bottom: 10px;
 					display: flex;
-					align-items: center;
+					justify-content: space-between;
 					gap: 10px;
-					.activation-btn {
-						display: inline-flex;
-						align-items: center;
-						justify-content: center;
-						height: 40px;
-					}
-					.like {
+					.organizer-info {
 						display: flex;
 						flex-direction: row;
-						background-color: var(--mid-gray);
-						border-radius: 50vh;
-						padding: 0px 5px;
-						.like-btn {
-							background-color: transparent;
-							padding: 0px 10px;
-							.like {
-								padding: 0;
-								&:hover {
+						align-items: center;
+						gap: 10px;
+						font-size: 0.9em;
+
+						.follow {
+							button {
+								width: 80px;
+								padding: 5px 10px;
+							}
+						}
+					}
+					.video-activation-btns {
+						display: flex;
+						align-items: center;
+						gap: 10px;
+						.activation-btn {
+							display: inline-flex;
+							align-items: center;
+							justify-content: center;
+							height: 40px;
+						}
+						.like {
+							display: flex;
+							flex-direction: row;
+							background-color: var(--mid-gray);
+							border-radius: 50vh;
+							padding: 0px 5px;
+							.like-btn {
+								background-color: transparent;
+								padding: 0px 10px;
+								.like {
+									padding: 0;
+									&:hover {
+										color: var(--sig);
+									}
+								}
+								.liked {
+									font-variation-settings: 'FILL' 1;
+									padding: 0;
 									color: var(--sig);
 								}
-							}
-							.liked {
-								font-variation-settings: 'FILL' 1;
-								padding: 0;
-								color: var(--sig);
-							}
 
-							.like-count {
+								.like-count {
+									padding: 0px 10px;
+								}
+							}
+						}
+						.copy-link {
+							display: flex;
+							flex-direction: row;
+							background-color: var(--mid-gray);
+							border-radius: 50vh;
+						}
+						.save {
+							display: flex;
+							flex-direction: row;
+							background-color: var(--mid-gray);
+							border-radius: 50vh;
+							padding: 0px 5px;
+
+							.save-btn {
+								background-color: transparent;
 								padding: 0px 10px;
 							}
 						}
 					}
-					.copy-link {
-						display: flex;
-						flex-direction: row;
+				}
+
+				.mid {
+					margin-bottom: 40px;
+					.description {
+						padding: 12px;
 						background-color: var(--mid-gray);
-						border-radius: 50vh;
+						border-radius: 8px;
 					}
 				}
-			}
 
-			.mid {
-				.description {
-					padding: 12px;
-					background-color: var(--mid-gray);
-					border-radius: 8px;
+				.bottom {
+					.comment-form {
+						display: flex;
+						flex-direction: column;
+						margin: 20px 0px;
+
+						.comment-input {
+							margin: 0;
+							width: 100%;
+							display: flex;
+							flex-direction: row;
+							gap: 10px;
+						}
+					}
+					.comment-submit {
+						display: flex;
+						justify-content: flex-end;
+						margin-top: 10px;
+						button {
+							padding: 5px 10px;
+						}
+					}
 				}
 			}
 		}
 
 		.right {
 			width: $recommended-width;
-			min-width: $recommended-width;
-			height: 100%;
+			height: auto;
 			background-color: var(--black);
 			border-radius: 12px;
 
