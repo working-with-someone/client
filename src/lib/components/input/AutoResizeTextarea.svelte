@@ -3,9 +3,10 @@
 		content: string;
 		placeholder: string;
 		maxRows?: number;
+		onEnter: () => void;
 	}
 
-	let { content = $bindable(), placeholder, maxRows }: Props = $props();
+	let { content = $bindable(), placeholder, maxRows, onEnter }: Props = $props();
 
 	let textareaElement: HTMLTextAreaElement;
 
@@ -16,9 +17,11 @@
 		}
 	}
 
-	function handleKeyDown(event) {
-		if (event.key === 'Enter' && !event.shiftKey) {
-			event.preventDefault();
+	function onKeyDown(e: KeyboardEvent) {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault();
+			onEnter();
+			content = '';
 		}
 	}
 </script>
@@ -32,7 +35,7 @@
 		style={maxRows
 			? `max-height: ${maxRows * 1.5 + 1}em; overflow-y: ${textareaElement?.scrollHeight > textareaElement?.clientHeight ? 'auto' : 'hidden'}`
 			: ''}
-		onkeydown={handleKeyDown}
+		onkeydown={onKeyDown}
 		oninput={handleInput}
 	></textarea>
 </div>
