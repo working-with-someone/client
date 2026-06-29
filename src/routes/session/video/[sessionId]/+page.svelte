@@ -8,6 +8,9 @@
 	import { getContext, onMount } from 'svelte';
 	import CopyButton from '$lib/components/button/CopyButton.svelte';
 	import AutoResizeTextarea from '$lib/components/input/AutoResizeTextarea.svelte';
+	import CommentList from '$lib/components/videoSession/CommentList.svelte';
+	import type { CommentWithAll } from '../../../../types/comment';
+	import Like from '$lib/components/shared/Like.svelte';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = data.videoSession;
@@ -34,12 +37,9 @@
 	}
 
 	let commentInput: string = $state('');
+	let comments: CommentWithAll[] = $state([]);
 
 	function createComment() {
-		const formData = new FormData();
-
-		formData.append('content', commentInput);
-
 		wwsfetch(`/sessions/video/${videoSession.id}/comment`, {
 			method: 'POST',
 			headers: {
@@ -51,7 +51,9 @@
 		})
 			.then((res) => res.json())
 			.then((body) => {
-				const comment = body.data;
+				const createdComment = body.data;
+
+				comments.unshift(createdComment);
 			});
 	}
 
@@ -100,12 +102,7 @@
 					<div class="video-activation-btns">
 						<div class="like activation-btn">
 							<button class="like-btn" class:active={isLiked} onclick={toggleLike}>
-								{#if isLiked}
-									<span class="material-symbols-outlined liked"> thumb_up </span>
-								{:else}
-									<span class="material-symbols-outlined like"> thumb_up </span>
-								{/if}
-
+								<Like {isLiked} animationEnabled={true}></Like>
 								<span class="like-count">{videoSession._count.likes} </span>
 							</button>
 						</div>
@@ -131,13 +128,19 @@
 					</div>
 					<div class="comment-form">
 						<div class="comment-input">
-							<Pfp pfpUri={$user.pfp.curr} size={25}></Pfp>
-							<AutoResizeTextarea placeholder="write comment" bind:content={commentInput}
+							<Pfp pfpUri={$user.pfp.curr} size={30}></Pfp>
+							<AutoResizeTextarea
+								placeholder="write comment"
+								bind:content={commentInput}
+								onEnter={() => createComment()}
 							></AutoResizeTextarea>
 						</div>
 						<div class="comment-submit">
 							<button class="btn-sig" onclick={createComment}>comment</button>
 						</div>
+					</div>
+					<div class="comments">
+						<CommentList videoSessionId={videoSession.id} {comments}></CommentList>
 					</div>
 				</div>
 			</div>
@@ -246,17 +249,6 @@
 							.like-btn {
 								background-color: transparent;
 								padding: 0px 10px;
-								.like {
-									padding: 0;
-									&:hover {
-										color: var(--sig);
-									}
-								}
-								.liked {
-									font-variation-settings: 'FILL' 1;
-									padding: 0;
-									color: var(--sig);
-								}
 
 								.like-count {
 									padding: 0px 10px;
