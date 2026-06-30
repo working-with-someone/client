@@ -5,6 +5,7 @@
 	import Switch from '../input/ToggleSwitch.svelte';
 	import TextError from '../error/TextError.svelte';
 	import { access_level } from '@prisma/client';
+	import moveTo from '$lib/utils/navigation';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();
 
@@ -73,7 +74,7 @@
 				return liveSession;
 			})
 			.then((liveSession) => {
-				window.location.href = `/session/live/${liveSession.id}/studio`;
+				moveTo.liveSessionStudio(liveSession.id);
 			})
 			.catch((err) => {
 				validationError = err;

@@ -7,6 +7,7 @@
 	import type { UploadStage } from '../../../types/stage';
 	const videoSessionForm = new VideoSessionForm();
 	import TextError from '../error/TextError.svelte';
+	import moveTo from '$lib/utils/navigation';
 
 	let step = $state<number>(1);
 
@@ -80,7 +81,7 @@
 			body: formData
 		})
 			.then((res) => {
-				window.location.href = `/session/video/${videoSessionForm.id}`;
+				moveTo.videoSession(videoSessionForm.id);
 			})
 			.catch((err) => {
 				updateError = new Error(err.message || 'Failed to update video session. Please try again.');

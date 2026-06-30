@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import moveTo from '$lib/utils/navigation';
 	import type { LiveSessionWithAll } from '../../../types/session';
 	import StateTag from '../tags/StateTag.svelte';
 
@@ -65,7 +66,7 @@
 				class="btn-div pfp-wrapper"
 				onclick={(e) => {
 					e.stopPropagation();
-					window.location.href = `/user/${liveSession.organizer?.id}`;
+					moveTo.user(liveSession.organizer.id);
 				}}
 			>
 				<img

@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import moveTo from '$lib/utils/navigation';
 
 	const menus = [
 		{
@@ -50,7 +51,7 @@
 			<li class="menu-item {menu.name} {menu.selected ? 'selected' : ''}">
 				<button
 					onclick={() => {
-						window.location.href = menu.url;
+						moveTo.url(menu.url);
 					}}
 				>
 					{@html menu.icon}

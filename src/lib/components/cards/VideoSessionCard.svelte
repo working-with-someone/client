@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
+	import moveTo from '$lib/utils/navigation';
 	import type { VideoSessionWithAll } from '../../../types/session';
 
 	interface Props {
@@ -7,13 +8,9 @@
 	}
 
 	const { videoSession }: Props = $props();
-
-	const moveToVideoSession = () => {
-		window.location.href = `/session/video/${videoSession.id}`;
-	};
 </script>
 
-<div class="card middle-rounded" onclick={moveToVideoSession}>
+<div class="card middle-rounded" onclick={() => moveTo.videoSession(videoSession.id)}>
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img
@@ -62,8 +59,9 @@
 		<div class="user-info">
 			<button
 				class="btn-div pfp-wrapper"
-				onclick={() => {
-					window.location.href = `/user/${videoSession.organizer_id}`;
+				onclick={(e) => {
+					e.stopPropagation();
+					moveTo.user(videoSession.organizer_id);
 				}}
 			>
 				<img
