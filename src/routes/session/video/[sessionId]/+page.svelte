@@ -11,6 +11,7 @@
 	import CommentList from '$lib/components/videoSession/CommentList.svelte';
 	import type { CommentWithAll } from '../../../../types/comment';
 	import Like from '$lib/components/shared/Like.svelte';
+	import moveTo from '$lib/utils/navigation';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = data.videoSession;
@@ -81,10 +82,10 @@
 				</div>
 				<div class="top">
 					<div class="organizer-info">
-						<div class="pfp">
+						<div class="pfp clickable" onclick={() => moveTo.user(videoSession.organizer.id)}>
 							<Pfp pfpUri={videoSession.organizer.pfp.curr} size={30} />
 						</div>
-						<div class="username">
+						<div class="username clickable" onclick={() => moveTo.user(videoSession.organizer.id)}>
 							<p>{videoSession.organizer.username}</p>
 						</div>
 						<div class="follow">

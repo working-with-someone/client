@@ -116,6 +116,10 @@ button {
 	justify-content: center;
 }
 
+.clickable:hover {
+	cursor: pointer;
+}
+
 .btn {
 	background: none;
 	border: none;
@@ -129,11 +133,10 @@ button:hover {
 }
 
 .btn-circle {
-	padding: 1em;
-	width: 20px;
-	height: 20px;
-	background: none;
-	border: none;
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	padding: 10px;
+
 	background-color: var(--bg-button);
 }
 

@@ -2,6 +2,7 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import moveTo from '$lib/utils/navigation';
 	import type { VideoSessionWithAll } from '../../../types/session';
+	import UserLink from '../link/UserLink.svelte';
 
 	interface Props {
 		videoSession: VideoSessionWithAll;
@@ -74,7 +75,11 @@
 			</button>
 			<div class="info">
 				<p class="title">{videoSession.title}</p>
-				<p class="username">{videoSession.organizer.username}</p>
+				<UserLink
+					userId={videoSession.organizer_id}
+					username={videoSession.organizer.username}
+					size={12}
+				></UserLink>
 			</div>
 		</div>
 	</div>
@@ -88,6 +93,15 @@
 		overflow: hidden;
 		flex: 0 0 $card-width;
 		width: $card-width;
+		transition:
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
+
+		&:hover {
+			cursor: pointer;
+			transform: translateY(-4px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+		}
 		.body {
 			.thumbnail-wrapper {
 				width: 100%;

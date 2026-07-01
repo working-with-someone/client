@@ -7,6 +7,7 @@
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import Like from '../shared/Like.svelte';
+	import UserLink from '../link/UserLink.svelte';
 	dayjs.extend(relativeTime);
 
 	const user = getContext('user');
@@ -68,9 +69,7 @@
 			</div>
 			<div class="right">
 				<div class="top">
-					<div class="username">
-						<p>{comment.user.username}</p>
-					</div>
+					<UserLink userId={comment.user.id} username={comment.user.username} size={14}></UserLink>
 					<div class="ago">
 						<p>{dayjs(comment.created_at).fromNow()}</p>
 					</div>
@@ -114,10 +113,6 @@
 					display: flex;
 					flex-direction: row;
 					gap: 5px;
-					.username {
-						font-weight: bold;
-						font-size: 0.9em;
-					}
 					.ago {
 						p {
 							color: var(--font-gray);
