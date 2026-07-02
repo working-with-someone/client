@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import moveTo from '$lib/utils/navigation';
 
@@ -6,49 +6,45 @@
 		{
 			name: 'home',
 			url: '/',
-			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">home</span>`,
-			selected: false
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">home</span>`
 		},
 		{
 			name: 'live',
 			url: '/live',
-			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">bigtop_updates</span>`,
-			selected: false
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">bigtop_updates</span>`
 		},
 		{
 			name: 'session',
 			url: '/video',
-			icon: `<span class="material-symbols-outlined" style="font-size : 30px;">play_circle</span>`,
-			selected: false
+			icon: `<span class="material-symbols-outlined" style="font-size : 30px;">play_circle</span>`
 		},
 		{
 			name: 'calendar',
 			url: '/calendar',
-			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">calendar_month</span>`,
-			selected: false
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">calendar_month</span>`
 		},
 		{
 			name: 'sound',
 			url: '/sound',
-			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">hearing</span>`,
-			selected: false
+			icon: `<span class="menu-icon material-symbols-outlined" style="font-size : 30px;">hearing</span>`
 		}
 	];
 
-	// root path일 때조차 ["/", ""] 가 return된다.
-	const paths = $page.url.pathname.split('/');
+	const getPathKey = (path: string) => path.split('/')[1] ?? '';
 
-	const selectedMenu = paths[1];
+	let selectedMenu: string = $state('');
 
-	menus.forEach((menu) => {
-		if (menu.url.split('/')[1] == selectedMenu) menu.selected = true;
+	$effect(() => {
+		selectedMenu = getPathKey($page.url.pathname);
 	});
+
+	const isSelectedMenu = (menuUrl: string) => getPathKey(menuUrl) === selectedMenu;
 </script>
 
 <nav>
 	<ul class="menus">
 		{#each menus as menu}
-			<li class="menu-item {menu.name} {menu.selected ? 'selected' : ''}">
+			<li class="menu-item {menu.name} {isSelectedMenu(menu.url) ? 'selected' : ''}">
 				<button
 					onclick={() => {
 						moveTo.url(menu.url);
