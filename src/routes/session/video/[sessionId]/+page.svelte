@@ -14,7 +14,7 @@
 	import moveTo from '$lib/utils/navigation';
 
 	const { data }: { data: PageData } = $props();
-	const videoSession = data.videoSession;
+	const videoSession = $state(data.videoSession);
 
 	const user = getContext('user');
 	let isLiked = $state(false);
@@ -54,6 +54,7 @@
 			.then((body) => {
 				const createdComment = body.data;
 
+				videoSession.comment_count += 1;
 				comments.unshift(createdComment);
 			});
 	}
