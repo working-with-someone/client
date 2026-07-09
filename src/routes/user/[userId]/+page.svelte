@@ -1,12 +1,14 @@
 <script>
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import FollowBtn from '$lib/components/user/followBtn.svelte';
+	import UserContentTab from './UserContentTab.svelte';
 	import { getContext } from 'svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
 
 	let { data } = $props();
 
-	let { targetUser } = $state(data);
+	let { targetUser } = data;
+
 	const user = getContext('user');
 
 	function reloadTarget() {
@@ -124,9 +126,8 @@
 				</picture>
 			</div>
 		</div>
-
-		<div class="videos"></div>
 	</div>
+	<UserContentTab userId={targetUser.id} />
 </section>
 
 <style lang="scss">

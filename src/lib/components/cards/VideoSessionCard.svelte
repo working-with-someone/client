@@ -6,9 +6,10 @@
 
 	interface Props {
 		videoSession: VideoSessionWithAll;
+		skipUserInfo?: boolean;
 	}
 
-	const { videoSession }: Props = $props();
+	const { videoSession, skipUserInfo }: Props = $props();
 </script>
 
 <div class="card middle-rounded" onclick={() => moveTo.videoSession(videoSession.id)}>
@@ -57,31 +58,34 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="user-info">
-			<button
-				class="btn-div pfp-wrapper"
-				onclick={(e) => {
-					e.stopPropagation();
-					moveTo.user(videoSession.organizer_id);
-				}}
-			>
-				<img
-					src={new URL(
-						`${videoSession?.organizer?.pfp?.curr}`,
-						PUBLIC_API_SERVER_DOMAIN
-					).toString()}
-					alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
-				/>
-			</button>
-			<div class="info">
-				<p class="title">{videoSession.title}</p>
-				<UserLink
-					userId={videoSession.organizer_id}
-					username={videoSession.organizer.username}
-					size={12}
-				></UserLink>
+		{#if !skipUserInfo}
+			<div class="user-info">
+				<button
+					class="btn-div pfp-wrapper"
+					onclick={(e) => {
+						e.stopPropagation();
+						moveTo.user(videoSession.organizer_id);
+					}}
+				>
+					<img
+						src={new URL(
+							`${videoSession?.organizer?.pfp?.curr}`,
+							PUBLIC_API_SERVER_DOMAIN
+						).toString()}
+						alt={`${PUBLIC_API_SERVER_DOMAIN}/media/images/default/pfp`}
+					/>
+				</button>
+
+				<div class="info">
+					<p class="title">{videoSession.title}</p>
+					<UserLink
+						userId={videoSession.organizer_id}
+						username={videoSession.organizer.username}
+						size={12}
+					></UserLink>
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 </div>
 

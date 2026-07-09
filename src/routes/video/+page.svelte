@@ -1,5 +1,5 @@
 <script lang="ts">
-	import VideoSessionDeck from '$lib/components/cards/VideoSessionDeck.svelte';
+	import CategorizedVideoSessionDeck from '$lib/components/cards/CategorizedVideoSessionDeck.svelte';
 	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 
 	let { data } = $props();
@@ -11,7 +11,7 @@
 	<TopBar />
 	<div class="decks">
 		{#each pCategorizedVideoSessionList as pCategorizedVideoSession}
-			<VideoSessionDeck
+			<CategorizedVideoSessionDeck
 				category={pCategorizedVideoSession[0]}
 				videoSessions={pCategorizedVideoSession[1]}
 			/>
