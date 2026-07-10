@@ -9,7 +9,7 @@
 	import CopyButton from '$lib/components/button/CopyButton.svelte';
 	import AutoResizeTextarea from '$lib/components/input/AutoResizeTextarea.svelte';
 	import CommentList from '$lib/components/videoSession/CommentList.svelte';
-	import type { CommentWithAll } from '../../../../types/comment';
+	import type { PublicVideoSessionCommentWithIsLiked } from '../../../../types/contracts/comment';
 	import Like from '$lib/components/shared/Like.svelte';
 	import moveTo from '$lib/utils/navigation';
 
@@ -38,7 +38,7 @@
 	}
 
 	let commentInput: string = $state('');
-	let comments: CommentWithAll[] = $state([]);
+	let comments: PublicVideoSessionCommentWithIsLiked[] = $state([]);
 
 	function createComment() {
 		wwsfetch(`/sessions/video/${videoSession.id}/comment`, {

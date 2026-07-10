@@ -26,16 +26,3 @@ export type LiveSessionWithAll = Prisma.live_sessionGetPayload<{
 		};
 	};
 }>;
-
-export type VideoSessionWithAll = Prisma.video_sessionGetPayload<{
-	include: {
-		allow: true;
-		break_time: true;
-		category: true;
-		organizer: {
-			include: {
-				pfp: true;
-			};
-		};
-	};
-}>;

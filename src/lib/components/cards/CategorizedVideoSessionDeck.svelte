@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { VideoSessionWithAll } from '../../../types/session';
+	import type { PublicVideoSession } from '../../../types/contracts/video-session';
 	import VideoSessionCard from './VideoSessionCard.svelte';
 
 	interface Props {
 		category: string;
-		videoSessions: VideoSessionWithAll[];
+		videoSessions: PublicVideoSession[];
 	}
 
 	let { category, videoSessions }: Props = $props();

@@ -2,7 +2,7 @@ import type { PageServerLoad } from '../$types';
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
 import { live_session_status } from '@prisma/client';
 import type { preferred_category } from '@prisma/client';
-import type { LiveSessionWithAll } from '../../types/session';
+import type { PublicLiveSession } from '../../types/contracts/live-session';
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
 	const getPCategoriesEndpointUrl = new URL(
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 	const pCategories = (await getPCategoriesRes.json()).data as preferred_category[];
 
-	const pCategorizedLiveSessionsList = new Map<string, LiveSessionWithAll[]>();
+	const pCategorizedLiveSessionsList = new Map<string, PublicLiveSession[]>();
 
 	for (const pCategory of pCategories) {
 		const getLiveSessionsEndpointUrl = new URL(`/sessions/live`, PRIVATE_API_SERVER_DOMAIN);
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 		const getLiveSessionsRes = await fetch(getLiveSessionsEndpointUrl);
 
-		const liveSessions = (await getLiveSessionsRes.json()).data as LiveSessionWithAll[];
+		const liveSessions = (await getLiveSessionsRes.json()).data as PublicLiveSession[];
 
 		pCategorizedLiveSessionsList.set(pCategory.category_label, liveSessions);
 	}

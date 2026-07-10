@@ -1,8 +1,7 @@
 <script lang="ts">
 	import VideoSessionCard from '$lib/components/cards/VideoSessionCard.svelte';
 	import wwsfetch from '$lib/utils/wwsfetch';
-	import { VideoSession } from '$lib/video/VideoSession.svelte';
-	import type { VideoSessionWithAll } from '../../../types/session';
+	import type { PublicVideoSession } from '../../../types/contracts/video-session';
 
 	let activeTab = $state('home');
 
@@ -12,19 +11,7 @@
 
 	const { userId }: Props = $props();
 
-	const tabs = {
-		home: {
-			name: 'home'
-		},
-		video: {
-			name: 'video'
-		},
-		live: {
-			name: 'live'
-		}
-	};
-
-	let videoSessions = $state<VideoSessionWithAll[]>([]);
+	let videoSessions = $state<PublicVideoSession[]>([]);
 
 	function setActiveTab(tab: string) {
 		activeTab = tab;
@@ -43,7 +30,7 @@
 					}
 				})
 					.then((res) => res.json())
-					.then((body: { data: VideoSessionWithAll[] }) => {
+					.then((body: { data: PublicVideoSession[] }) => {
 						videoSessions.push(...body.data);
 					});
 				break;

@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import wwsfetch from '$lib/utils/wwsfetch';
 	import { getContext, onMount } from 'svelte';
 	import Pfp from '../user/pfp.svelte';
-	import type { CommentWithAll } from '../../../types/comment';
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import Like from '../shared/Like.svelte';
 	import UserLink from '../link/UserLink.svelte';
+	import type { PublicVideoSessionCommentWithIsLiked } from '../../../types/contracts/comment';
 	dayjs.extend(relativeTime);
 
 	const user = getContext('user');
 
 	interface Props {
 		videoSessionId: string;
-		comments: CommentWithAll[];
+		comments: PublicVideoSessionCommentWithIsLiked[];
 	}
 
 	let { comments, videoSessionId }: Props = $props();
@@ -36,14 +35,12 @@
 			});
 	});
 
-	function toggleLike(comment: CommentWithAll) {
-		const isLiked = comment.likes.length ? true : false;
-
-		if (isLiked) {
+	function toggleLike(comment: PublicVideoSessionCommentWithIsLiked) {
+		if (comment.isLiked) {
 			wwsfetch(`/sessions/video/${videoSessionId}/comment/${comment.id}/like`, {
 				method: 'DELETE'
 			}).then(() => {
-				comment.likes.pop();
+				comment.isLiked = false;
 				comment.like_count -= 1;
 			});
 		} else {
@@ -54,7 +51,7 @@
 				.then((body) => {
 					const like = body.data;
 
-					comment.likes.push(like);
+					comment.isLiked = true;
 					comment.like_count += 1;
 				});
 		}
@@ -84,8 +81,7 @@
 							toggleLike(comment);
 						}}
 					>
-						<Like isLiked={comment.likes.length ? true : false} animationEnabled={true} size={20}
-						></Like>
+						<Like isLiked={comment.isLiked} animationEnabled={true} size={20}></Like>
 					</button>
 					<span class="like-count">{comment.like_count}</span>
 				</div>

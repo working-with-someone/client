@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import moveTo from '$lib/utils/navigation';
-	import type { VideoSessionWithAll } from '../../../types/session';
+	import type { PublicVideoSession } from '../../../types/contracts/video-session';
 	import UserLink from '../link/UserLink.svelte';
 
 	interface Props {
-		videoSession: VideoSessionWithAll;
+		videoSession: PublicVideoSession;
 		skipUserInfo?: boolean;
 	}
 

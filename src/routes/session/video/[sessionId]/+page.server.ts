@@ -1,7 +1,7 @@
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
 import { error, type Load } from '@sveltejs/kit';
 import httpStatusCode from 'http-status-codes';
-import type { VideoSessionWithAll } from '../../../../types/session';
+import type { PublicVideoSession } from '../../../../types/contracts/video-session';
 
 export const load: Load = async ({ fetch, params }) => {
 	const { sessionId } = params;
@@ -22,7 +22,7 @@ export const load: Load = async ({ fetch, params }) => {
 	}
 
 	const body = await getVideoSessionRes.json();
-	const videoSession = body.data as VideoSessionWithAll;
+	const videoSession = body.data as PublicVideoSession;
 
 	return {
 		videoSession
