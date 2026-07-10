@@ -12,6 +12,7 @@
 	import type { PublicVideoSessionCommentWithIsLiked } from '../../../../types/contracts/comment';
 	import Like from '$lib/components/shared/Like.svelte';
 	import moveTo from '$lib/utils/navigation';
+	import UserLink from '$lib/components/link/UserLink.svelte';
 
 	const { data }: { data: PageData } = $props();
 	const videoSession = $state(data.videoSession);
@@ -25,14 +26,14 @@
 				method: 'POST'
 			}).then(() => {
 				isLiked = !isLiked;
-				videoSession._count.likes += 1;
+				videoSession.like_count += 1;
 			});
 		} else {
 			wwsfetch(`/sessions/video/${videoSession.id}/like`, {
 				method: 'DELETE'
 			}).then(() => {
 				isLiked = !isLiked;
-				videoSession._count.likes -= 1;
+				videoSession.like_count -= 1;
 			});
 		}
 	}
@@ -84,10 +85,14 @@
 				<div class="top">
 					<div class="organizer-info">
 						<div class="pfp clickable" onclick={() => moveTo.user(videoSession.organizer.id)}>
-							<Pfp pfpUri={videoSession.organizer.pfp.curr} size={30} />
+							<Pfp pfpUri={videoSession.organizer.pfp!.curr} size={30} />
 						</div>
 						<div class="username clickable" onclick={() => moveTo.user(videoSession.organizer.id)}>
-							<p>{videoSession.organizer.username}</p>
+							<UserLink
+								userId={videoSession.organizer.id}
+								username={videoSession.organizer.username}
+								size={14}
+							></UserLink>
 						</div>
 						<div class="follow">
 							<FollowBtn targetUserId={videoSession.organizer.id}>
@@ -105,7 +110,7 @@
 						<div class="like activation-btn">
 							<button class="like-btn" class:active={isLiked} onclick={toggleLike}>
 								<Like {isLiked} animationEnabled={true}></Like>
-								<span class="like-count">{videoSession._count.likes} </span>
+								<span class="like-count">{videoSession.like_count} </span>
 							</button>
 						</div>
 						<div class="copy-link activation-btn">

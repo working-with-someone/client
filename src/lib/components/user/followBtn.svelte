@@ -6,7 +6,7 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		targetUserId: string;
+		targetUserId: number;
 		children: Snippet<[{ isFollowing: boolean; follow: () => void; unfollow: () => void }]>;
 	}
 
