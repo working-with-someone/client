@@ -20,6 +20,7 @@
 <style lang="scss">
 	a {
 		font-weight: bold;
+		display: block;
 		&:hover {
 			cursor: Pointer;
 			color: var(--light-blue);

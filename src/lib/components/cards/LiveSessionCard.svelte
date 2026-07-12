@@ -2,6 +2,7 @@
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import moveTo from '$lib/utils/navigation';
 	import type { LiveSessionWithAll } from '../../../types/session';
+	import UserLink from '../link/UserLink.svelte';
 	import StateTag from '../tags/StateTag.svelte';
 
 	interface Props {
@@ -11,7 +12,7 @@
 	const { liveSession }: Props = $props();
 </script>
 
-<a class="card middle-rounded" href={`/session/live/${liveSession.id}`}>
+<a class="card middle-rounded" onclick={() => moveTo.liveSession(liveSession.id)}>
 	<div class="body">
 		<div class="thumbnail-wrapper">
 			<img
@@ -76,7 +77,11 @@
 			</button>
 			<div class="info">
 				<p class="title">{liveSession.title}</p>
-				<p class="username">{liveSession.organizer?.username}</p>
+				<UserLink
+					userId={liveSession.organizer.id}
+					username={liveSession.organizer.username}
+					size={12}
+				></UserLink>
 			</div>
 		</div>
 	</div>
@@ -92,6 +97,8 @@
 		width: $card-width;
 		&:hover {
 			cursor: pointer;
+			transform: translateY(-4px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 		}
 		.body {
 			.thumbnail-wrapper {

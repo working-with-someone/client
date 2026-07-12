@@ -33,9 +33,9 @@
 		.sessions {
 			display: flex;
 			flex-direction: row;
-			margin-top: 20px;
 			gap: 25px;
 			overflow-x: scroll;
+			padding: 10px 0px;
 		}
 	}
 </style>

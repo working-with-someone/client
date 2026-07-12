@@ -145,34 +145,36 @@
 			}
 			.user-info {
 				display: flex;
-				flex-direction: row;
 				gap: 10px;
-			}
-			.pfp-wrapper {
-				width: 30px;
-				height: 30px;
-				border-radius: 15px;
-				overflow: hidden;
-				&:hover {
-					cursor: pointer;
-				}
-				img {
-					width: 100%;
-					object-fit: cover;
-				}
-			}
-			.info {
-				width: 241px;
-				.title {
-					font-size: 13px;
-					text-overflow: ellipsis;
-					white-space: nowrap;
+				align-items: center;
+				.pfp-wrapper {
+					width: 30px;
+					height: 30px;
+					border-radius: 15px;
 					overflow: hidden;
-					width: 100%;
+					&:hover {
+						cursor: pointer;
+					}
+					img {
+						width: 100%;
+						object-fit: cover;
+					}
 				}
-				.username {
-					font-size: 12px;
-					color: rgba(255, 255, 255, 0.5);
+
+				.info {
+					flex: 1;
+					min-width: 0;
+					.title {
+						font-size: 13px;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+						width: 100%;
+					}
+					.username {
+						font-size: 12px;
+						color: rgba(255, 255, 255, 0.5);
+					}
 				}
 			}
 		}
