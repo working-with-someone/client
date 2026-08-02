@@ -1,23 +1,12 @@
 <script lang="ts">
-	import type { CategorizedSessions } from '../types/session';
-	import SessionDeck from '$lib/components/cards/VideoSessionDeck.svelte';
 	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 
 	let { data } = $props();
-
-	const categorizedVideoSessionsList = data.categorizedSessionsList;
 </script>
 
 <section id="home">
 	<TopBar />
-	<div class="decks">
-		<!-- {#each categorizedVideoSessionsList as categorizedVideoSessions}
-			<SessionDeck
-				category={categorizedVideoSessions[0]}
-				videoSessions={categorizedVideoSessions[1]}
-			/>
-		{/each} -->
-	</div>
+	<div class="decks"></div>
 </section>
 
 <style lang="scss">

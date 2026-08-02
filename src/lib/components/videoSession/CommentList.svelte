@@ -1,12 +1,12 @@
 <script lang="ts">
 	import wwsfetch from '$lib/utils/wwsfetch';
-	import { getContext, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import Pfp from '../user/pfp.svelte';
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import Like from '../shared/Like.svelte';
 	import UserLink from '../link/UserLink.svelte';
-	import type { PublicVideoSessionCommentWithIsLiked } from '../../../types/contracts/comment';
+	import type { PublicVideoSessionCommentWithIsLiked } from '../../../types/api-contracts/comment';
 	import LoadSpinner1 from '../loader/LoadSpinner1.svelte';
 	dayjs.extend(relativeTime);
 

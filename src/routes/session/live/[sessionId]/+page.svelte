@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FlvPlayer from '$lib/components/Player/FlvPlayer.svelte';
-	import { live_session_status } from '@prisma/client';
+	import { live_session_status } from '../../../../types/api-contracts/enums';
 	import type { PageData } from './$types';
 	import ChatRoom from './ChatRoom.svelte';
 	import { LiveSession } from './LiveSession.svelte';

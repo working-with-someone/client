@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { LiveSessionWithAll } from '../../../types/session';
+	import type { PublicLiveSession } from '../../../types/api-contracts/live-session';
 	import LiveSessionCard from './LiveSessionCard.svelte';
 
 	interface Props {
 		category: string;
-		liveSessions: LiveSessionWithAll[];
+		liveSessions: PublicLiveSession[];
 	}
 
 	let { category, liveSessions }: Props = $props();

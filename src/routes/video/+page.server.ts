@@ -1,7 +1,7 @@
 import type { PageServerLoad } from '../$types';
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
-import type { preferred_category } from '@prisma/client';
-import type { PublicVideoSession } from '../../types/contracts/video-session';
+import type { PublicPreferredCategory } from '../../types/api-contracts/category';
+import type { PublicVideoSession } from '../../types/api-contracts/video-session';
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
 	const getPCategoriesEndpointUrl = new URL(
@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 	const getPCategoriesRes = await fetch(getPCategoriesEndpointUrl);
 
-	const pCategories = (await getPCategoriesRes.json()).data as preferred_category[];
+	const pCategories = (await getPCategoriesRes.json()).data as PublicPreferredCategory[];
 
 	const pCategorizedVideoSessionsList = new Map<string, PublicVideoSession[]>();
 

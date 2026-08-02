@@ -1,5 +1,4 @@
 import { LiveSession } from '../../../routes/session/live/[sessionId]/LiveSession.svelte';
-import { timeDifference } from '$lib/utils/time';
 import { io, type Socket } from 'socket.io-client';
 import { PUBLIC_LIVE_SESSION_HUB_SERVER_DOMAIN } from '$env/static/public';
 import { OrganizerChatManager } from '../../../routes/session/live/[sessionId]/studio/organizerChatManager.svelte';
@@ -8,7 +7,7 @@ import { Role } from '../../../enums/session';
 import httpStatusCodes from 'http-status-codes';
 import { wwsError } from '$lib/error/wwsError';
 import type { ResponseCb, SocketResponse } from '../../../types/response';
-import { live_session_status } from '@prisma/client';
+import { live_session_status } from '../../../types/api-contracts/enums';
 import { MediaController } from '../../../routes/session/live/[sessionId]/studio/mediaController.svelte';
 
 export class Studio {

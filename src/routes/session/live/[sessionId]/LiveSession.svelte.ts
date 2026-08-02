@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
 import wwsfetch from '$lib/utils/wwsfetch';
-import { access_level, live_session_status } from '@prisma/client';
+import { access_level, live_session_status } from '../../../../types/api-contracts/enums';
 import { timeDifference } from '$lib/utils/time';
-import type { LiveSessionWithAll } from '../../../../types/session';
+import type { PublicLiveSession } from '../../../../types/api-contracts/live-session';
+import type { PublicBreakTime } from '../../../../types/api-contracts/break-time';
 
-export class LiveSession implements LiveSessionWithAll {
+export class LiveSession implements PublicLiveSession {
 	id: string;
 	title: string;
 	description: string | null;
@@ -17,7 +18,7 @@ export class LiveSession implements LiveSessionWithAll {
 	updated_at: Date;
 	started_at: Date | null;
 	organizer_id: number;
-	break_time: { session_id: string; interval: number; duration: number } | null;
+	break_time: PublicBreakTime | null;
 	allow: { user_id: number; live_session_id: string }[];
 	live_session_transition_log: {
 		id: number;
@@ -28,7 +29,7 @@ export class LiveSession implements LiveSessionWithAll {
 	}[];
 	category: { label: string };
 
-	constructor(liveSession: LiveSession) {
+	constructor(liveSession: PublicLiveSession) {
 		this.id = liveSession.id;
 		this.title = liveSession.title;
 		this.description = liveSession.description;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { live_session_status } from '@prisma/client';
+	import { live_session_status } from '../../../types/api-contracts/enums';
 
 	interface Props {
 		state: live_session_status;
@@ -12,7 +12,7 @@
 	<div class="state-tag state-tag-open little-rounded">
 		<span>opened</span>
 	</div>
-	{:else if state  == live_session_status.READY}
+{:else if state == live_session_status.READY}
 	<div class="state-tag state-tag-ready little-rounded">
 		<span>ready</span>
 	</div>
@@ -26,7 +26,7 @@
 	.state-tag {
 		display: inline-block;
 		padding: 5px 10px;
-				&.state-tag-ready {
+		&.state-tag-ready {
 			background-color: var(--dark-orange);
 			span {
 				color: var(--light-orange);

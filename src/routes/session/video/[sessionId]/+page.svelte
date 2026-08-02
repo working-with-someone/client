@@ -9,7 +9,7 @@
 	import CopyButton from '$lib/components/button/CopyButton.svelte';
 	import AutoResizeTextarea from '$lib/components/input/AutoResizeTextarea.svelte';
 	import CommentList from '$lib/components/videoSession/CommentList.svelte';
-	import type { PublicVideoSessionCommentWithIsLiked } from '../../../../types/contracts/comment';
+	import type { PublicVideoSessionCommentWithIsLiked } from '../../../../types/api-contracts/comment';
 	import Like from '$lib/components/shared/Like.svelte';
 	import moveTo from '$lib/utils/navigation';
 	import UserLink from '$lib/components/link/UserLink.svelte';

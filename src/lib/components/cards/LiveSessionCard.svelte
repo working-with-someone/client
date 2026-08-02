@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { PUBLIC_API_SERVER_DOMAIN } from '$env/static/public';
 	import moveTo from '$lib/utils/navigation';
-	import type { LiveSessionWithAll } from '../../../types/session';
 	import UserLink from '../link/UserLink.svelte';
 	import StateTag from '../tags/StateTag.svelte';
-
+	import type { PublicLiveSession } from '../../../types/api-contracts/live-session';
 	interface Props {
-		liveSession: LiveSessionWithAll;
+		liveSession: PublicLiveSession;
 	}
 
 	const { liveSession }: Props = $props();

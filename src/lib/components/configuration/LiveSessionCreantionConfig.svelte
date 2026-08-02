@@ -4,7 +4,7 @@
 	import InnerLabelInput from '../input/InnerLabelInput.svelte';
 	import Switch from '../input/ToggleSwitch.svelte';
 	import TextError from '../error/TextError.svelte';
-	import { access_level } from '@prisma/client';
+	import { access_level } from '../../../types/api-contracts/enums';
 	import moveTo from '$lib/utils/navigation';
 
 	const toggleThumbnailInput = () => thumbnailImgInput.click();

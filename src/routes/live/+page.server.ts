@@ -1,8 +1,8 @@
 import type { PageServerLoad } from '../$types';
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
-import { live_session_status } from '@prisma/client';
-import type { preferred_category } from '@prisma/client';
-import type { PublicLiveSession } from '../../types/contracts/live-session';
+import { live_session_status } from '../../types/api-contracts/enums';
+import type { PublicLiveSession } from '../../types/api-contracts/live-session';
+import type { PublicPreferredCategory } from '../../types/api-contracts/category';
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
 	const getPCategoriesEndpointUrl = new URL(
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 	const getPCategoriesRes = await fetch(getPCategoriesEndpointUrl);
 
-	const pCategories = (await getPCategoriesRes.json()).data as preferred_category[];
+	const pCategories = (await getPCategoriesRes.json()).data as PublicPreferredCategory[];
 
 	const pCategorizedLiveSessionsList = new Map<string, PublicLiveSession[]>();
 

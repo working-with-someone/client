@@ -1,0 +1,3 @@
+[submodule "src/types/api-contracts"]
+	path = src/types/api-contracts
+	url = https://github.com/working-with-someone/api-contracts.git

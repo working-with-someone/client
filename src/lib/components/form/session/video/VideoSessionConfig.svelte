@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CategorySearchBox from '$lib/components/input/CategorySearchBox.svelte';
 	import InnerLabelInput from '$lib/components/input/InnerLabelInput.svelte';
-	import { access_level } from '@prisma/client';
+	import { access_level } from '../../../../../types/api-contracts/enums';
 	import { VideoSessionForm } from '$lib/video/VideoSession.svelte';
 	import { to } from '../../../../../config/path.config.svelte';
 	import { generateThumbnails } from '$lib/utils/thumbnail-generator';

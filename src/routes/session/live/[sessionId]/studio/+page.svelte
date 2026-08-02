@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { LiveSession } from '../LiveSession.svelte';
-	import { live_session_status } from '@prisma/client';
+	import { live_session_status } from '../../../../../types/api-contracts/enums';
 	import Studio from './Studio.svelte';
 
 	let { data }: { data: PageData } = $props();

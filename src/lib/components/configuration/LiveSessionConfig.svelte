@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LiveSessionMediaConfig from './LiveSessionMediaConfig.svelte';
-	import { access_level } from '@prisma/client';
+	import { access_level } from '../../../types/api-contracts/enums';
 	import { Studio } from '../../live/studio';
 
 	interface Props {
