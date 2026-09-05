@@ -4,7 +4,7 @@
 
 	let { data } = $props();
 
-	const pCategorizedVideoSessionList = data.pCategorizedVideoSessionsList;
+	const pCategorizedVideoSessionList = $derived(data.pCategorizedVideoSessionsList);
 </script>
 
 <section id="sessions">
