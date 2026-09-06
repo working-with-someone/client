@@ -16,22 +16,50 @@ export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 	const pCategories = (await getPCategoriesRes.json()).data as PublicPreferredCategory[];
 
 	const pCategorizedVideoSessionsList = new Map<string, PublicVideoSession[]>();
+	const randomizedVideoSessions: PublicVideoSession[] = [];
 
 	for (const pCategory of pCategories) {
-		const getVideoSessionsEndpointUrl = new URL(`/sessions/video`, PRIVATE_API_SERVER_DOMAIN);
-		getVideoSessionsEndpointUrl.searchParams.set('category', pCategory.category_label);
+		const getCategorizedVideoSessionsEndpointUrl = new URL(
+			`/sessions/video`,
+			PRIVATE_API_SERVER_DOMAIN
+		);
+
+		getCategorizedVideoSessionsEndpointUrl.searchParams.set('category', pCategory.category_label);
 
 		if (search) {
-			getVideoSessionsEndpointUrl.searchParams.set('search', search);
+			getCategorizedVideoSessionsEndpointUrl.searchParams.set('search', search);
 		}
 
-		getVideoSessionsEndpointUrl.searchParams.set('page', '1');
-		getVideoSessionsEndpointUrl.searchParams.set('per_page', '10');
+		getCategorizedVideoSessionsEndpointUrl.searchParams.set('page', '1');
+		getCategorizedVideoSessionsEndpointUrl.searchParams.set('per_page', '10');
 
-		const getVideoSessionsRes = await fetch(getVideoSessionsEndpointUrl);
-		const videoSessions = (await getVideoSessionsRes.json()).data as PublicVideoSession[];
+		const getVideoSessionsRes = await fetch(getCategorizedVideoSessionsEndpointUrl);
+		const categorizedVideoSessionsData = (await getVideoSessionsRes.json())
+			.data as PublicVideoSession[];
 
-		pCategorizedVideoSessionsList.set(pCategory.category_label, videoSessions);
+		if (!categorizedVideoSessionsData.length) {
+			continue;
+		}
+
+		pCategorizedVideoSessionsList.set(pCategory.category_label, categorizedVideoSessionsData);
 	}
-	return { pCategorizedVideoSessionsList };
+
+	const getRandomizedVideoSessionsEndpointUrl = new URL(
+		`/sessions/video`,
+		PRIVATE_API_SERVER_DOMAIN
+	);
+
+	if (search) {
+		getRandomizedVideoSessionsEndpointUrl.searchParams.set('search', search);
+	}
+
+	getRandomizedVideoSessionsEndpointUrl.searchParams.set('page', '1');
+	getRandomizedVideoSessionsEndpointUrl.searchParams.set('per_page', '10');
+	const randomizedVideoSessionsRes = await fetch(getRandomizedVideoSessionsEndpointUrl);
+	const randomizedVideoSessionsData = (await randomizedVideoSessionsRes.json())
+		.data as PublicVideoSession[];
+
+	randomizedVideoSessions.push(...randomizedVideoSessionsData);
+
+	return { pCategorizedVideoSessionsList, randomizedVideoSessions };
 };
