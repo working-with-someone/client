@@ -5,21 +5,24 @@
 
 	let { data } = $props();
 
-	const pCategorizedVideoSessionList = $derived(data.pCategorizedVideoSessionsList);
-	const randomizedVideoSessions = $derived(data.randomizedVideoSessions);
+	const pCategorizedVideoSessionsBodyList = $derived(data.pCategorizedVideoSessionsBodyList);
+	const randomizedVideoSessionsBody = $derived(data.randomizedVideoSessionsBody);
 </script>
 
 <section id="sessions">
 	<TopBar />
 	<div class="decks">
-		{#each pCategorizedVideoSessionList as pCategorizedVideoSession}
+		{#each pCategorizedVideoSessionsBodyList as pCategorizedVideoSessionBody}
 			<CategorizedVideoSessionDeck
-				category={pCategorizedVideoSession[0]}
-				videoSessions={pCategorizedVideoSession[1]}
+				category={pCategorizedVideoSessionBody[0]}
+				videoSessions={pCategorizedVideoSessionBody[1].data}
+				pagination={pCategorizedVideoSessionBody[1].pagination}
 			/>
 		{/each}
 
-		<RandomizedVideoSessionDeck videoSessions={randomizedVideoSessions}
+		<RandomizedVideoSessionDeck
+			videoSessions={randomizedVideoSessionsBody.data}
+			pagination={randomizedVideoSessionsBody.pagination}
 		></RandomizedVideoSessionDeck>
 	</div>
 </section>

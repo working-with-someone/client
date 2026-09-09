@@ -1,13 +1,15 @@
 <script lang="ts">
-	import type { PublicVideoSession } from '../../../types/contracts/video-session';
+	import type { PublicVideoSession } from '../../../types/api-contracts/video-session';
+	import type { PaginationMeta } from '../../../types/pagination';
 	import VideoSessionCard from './VideoSessionCard.svelte';
 
 	interface Props {
 		category: string;
 		videoSessions: PublicVideoSession[];
+		pagination: PaginationMeta;
 	}
 
-	let { category, videoSessions }: Props = $props();
+	let { category, videoSessions, pagination }: Props = $props();
 </script>
 
 <div class="deck middle-rounded">

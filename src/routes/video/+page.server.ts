@@ -2,6 +2,7 @@ import type { PageServerLoad } from '../$types';
 import { PRIVATE_API_SERVER_DOMAIN } from '$env/static/private';
 import type { PublicPreferredCategory } from '../../types/api-contracts/category';
 import type { PublicVideoSession } from '../../types/api-contracts/video-session';
+import type { PaginatedResult } from '../../types/pagination';
 
 export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 	const search = url.searchParams.get('search')?.trim();
@@ -15,8 +16,10 @@ export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 
 	const pCategories = (await getPCategoriesRes.json()).data as PublicPreferredCategory[];
 
-	const pCategorizedVideoSessionsList = new Map<string, PublicVideoSession[]>();
-	const randomizedVideoSessions: PublicVideoSession[] = [];
+	const pCategorizedVideoSessionsBodyList = new Map<
+		string,
+		PaginatedResult<PublicVideoSession[]>
+	>();
 
 	for (const pCategory of pCategories) {
 		const getCategorizedVideoSessionsEndpointUrl = new URL(
@@ -34,14 +37,15 @@ export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 		getCategorizedVideoSessionsEndpointUrl.searchParams.set('per_page', '10');
 
 		const getVideoSessionsRes = await fetch(getCategorizedVideoSessionsEndpointUrl);
-		const categorizedVideoSessionsData = (await getVideoSessionsRes.json())
-			.data as PublicVideoSession[];
+		const categorizedVideoSessionsBody = (await getVideoSessionsRes.json()) as PaginatedResult<
+			PublicVideoSession[]
+		>;
 
-		if (!categorizedVideoSessionsData.length) {
+		if (!categorizedVideoSessionsBody.data.length) {
 			continue;
 		}
 
-		pCategorizedVideoSessionsList.set(pCategory.category_label, categorizedVideoSessionsData);
+		pCategorizedVideoSessionsBodyList.set(pCategory.category_label, categorizedVideoSessionsBody);
 	}
 
 	const getRandomizedVideoSessionsEndpointUrl = new URL(
@@ -56,10 +60,9 @@ export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 	getRandomizedVideoSessionsEndpointUrl.searchParams.set('page', '1');
 	getRandomizedVideoSessionsEndpointUrl.searchParams.set('per_page', '10');
 	const randomizedVideoSessionsRes = await fetch(getRandomizedVideoSessionsEndpointUrl);
-	const randomizedVideoSessionsData = (await randomizedVideoSessionsRes.json())
-		.data as PublicVideoSession[];
+	const randomizedVideoSessionsBody = (await randomizedVideoSessionsRes.json()) as PaginatedResult<
+		PublicVideoSession[]
+	>;
 
-	randomizedVideoSessions.push(...randomizedVideoSessionsData);
-
-	return { pCategorizedVideoSessionsList, randomizedVideoSessions };
+	return { pCategorizedVideoSessionsBodyList, randomizedVideoSessionsBody };
 };
