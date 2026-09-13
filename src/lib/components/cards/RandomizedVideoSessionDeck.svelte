@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import type { PublicVideoSession } from '../../../types/api-contracts/video-session';
 	import VideoSessionCard from './VideoSessionCard.svelte';
 	import type { PaginatedResult, PaginationMeta } from '../../../types/pagination';
@@ -9,11 +10,17 @@
 		pagination: PaginationMeta;
 	}
 
-	let { videoSessions: initialSessions, pagination }: Props = $props();
+	let { videoSessions: initialSessions, pagination: initialPagination }: Props = $props();
 	let sentinel: HTMLDivElement | null = $state(null);
 
 	let videoSessions = $state([...initialSessions]);
+	let pagination = $state({ ...initialPagination });
 	let isLoadingMore = $state(false);
+
+	$effect(() => {
+		videoSessions = [...initialSessions];
+		pagination = { ...initialPagination };
+	});
 
 	const loadMoreSkeletonCards = [0, 1, 2];
 
@@ -25,10 +32,15 @@
 		isLoadingMore = true;
 
 		try {
+			const search = page.url.searchParams.get('search')?.trim();
 			const queryParams = new URLSearchParams({
 				page: (pagination.currPage + 1).toString(),
 				per_page: pagination.per_page.toString()
 			});
+
+			if (search) {
+				queryParams.set('search', search);
+			}
 
 			const [res] = await Promise.all([
 				wwsfetch(`/sessions/video?${queryParams.toString()}`, {
