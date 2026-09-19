@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import CategorySearchDeck from '$lib/components/cards/CategorySearchDeck.svelte';
 	import CategorizedVideoSessionDeck from '$lib/components/cards/CategorizedVideoSessionDeck.svelte';
 	import TopBar from '$lib/components/bar/topbar/TopBar.svelte';
 	import RandomizedVideoSessionDeck from '$lib/components/cards/RandomizedVideoSessionDeck.svelte';
@@ -7,23 +9,31 @@
 
 	const pCategorizedVideoSessionsBodyList = $derived(data.pCategorizedVideoSessionsBodyList);
 	const randomizedVideoSessionsBody = $derived(data.randomizedVideoSessionsBody);
+	const hasCategoryQuery = $derived(Boolean(page.url.searchParams.get('category')?.trim()));
 </script>
 
 <section id="sessions">
 	<TopBar />
 	<div class="decks">
-		{#each pCategorizedVideoSessionsBodyList as pCategorizedVideoSessionBody}
-			<CategorizedVideoSessionDeck
-				category={pCategorizedVideoSessionBody[0]}
-				videoSessions={pCategorizedVideoSessionBody[1].data}
-				pagination={pCategorizedVideoSessionBody[1].pagination}
+		{#if hasCategoryQuery}
+			<CategorySearchDeck
+				videoSessions={randomizedVideoSessionsBody.data}
+				pagination={randomizedVideoSessionsBody.pagination}
 			/>
-		{/each}
+		{:else}
+			{#each pCategorizedVideoSessionsBodyList as pCategorizedVideoSessionBody}
+				<CategorizedVideoSessionDeck
+					category={pCategorizedVideoSessionBody[0]}
+					videoSessions={pCategorizedVideoSessionBody[1].data}
+					pagination={pCategorizedVideoSessionBody[1].pagination}
+				/>
+			{/each}
 
-		<RandomizedVideoSessionDeck
-			videoSessions={randomizedVideoSessionsBody.data}
-			pagination={randomizedVideoSessionsBody.pagination}
-		></RandomizedVideoSessionDeck>
+			<RandomizedVideoSessionDeck
+				videoSessions={randomizedVideoSessionsBody.data}
+				pagination={randomizedVideoSessionsBody.pagination}
+			/>
+		{/if}
 	</div>
 </section>
 

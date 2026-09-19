@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import type { PublicVideoSession } from '../../../types/api-contracts/video-session';
 	import type { PaginationMeta } from '../../../types/pagination';
 	import VideoSessionCard from './VideoSessionCard.svelte';
@@ -10,11 +12,25 @@
 	}
 
 	let { category, videoSessions, pagination }: Props = $props();
+
+	function navigateToCategory() {
+		const searchParams = new URLSearchParams(page.url.searchParams);
+		searchParams.set('category', category);
+		goto(`${page.url.pathname}?${searchParams.toString()}`);
+	}
 </script>
 
 <div class="deck middle-rounded">
 	<div class="label">
 		<span>{category}</span>
+		<button
+			class="icon-button"
+			onclick={navigateToCategory}
+			type="button"
+			aria-label="Go to category"
+		>
+			<span class="material-symbols-outlined">chevron_right</span>
+		</button>
 	</div>
 	{#if videoSessions.length}
 		<div class="sessions">
@@ -37,6 +53,20 @@
 		padding: 10px 25px;
 		background-color: var(--bg-sideBar);
 		.label {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+
+			.icon-button {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				background: none;
+				border: none;
+				padding: 0;
+				cursor: pointer;
+				color: inherit;
+			}
 		}
 		.sessions {
 			display: flex;
