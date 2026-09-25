@@ -3,17 +3,21 @@
 	import moveTo from '$lib/utils/navigation';
 	import type { PublicVideoSession } from '../../../types/contracts/video-session';
 	import UserLink from '../link/UserLink.svelte';
-
+	import CategoryTag from '../tags/CategoryTag.svelte';
 	interface Props {
 		videoSession: PublicVideoSession;
 		skipUserInfo?: boolean;
 	}
 
 	const { videoSession, skipUserInfo }: Props = $props();
+	console.log(videoSession);
 </script>
 
 <div class="card middle-rounded" onclick={() => moveTo.videoSession(videoSession.id)}>
 	<div class="body">
+		<div class="category-tag-wrapper">
+			<CategoryTag category_label={videoSession.category_label}></CategoryTag>
+		</div>
 		<div class="thumbnail-wrapper">
 			<img
 				src={new URL(videoSession.thumbnail_uri, PUBLIC_API_SERVER_DOMAIN).href}
@@ -107,6 +111,13 @@
 			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 		}
 		.body {
+			position: relative;
+			.category-tag-wrapper {
+				position: absolute;
+				top: 8px;
+				right: 8px;
+				z-index: 1;
+			}
 			.thumbnail-wrapper {
 				width: 100%;
 				position: relative;
